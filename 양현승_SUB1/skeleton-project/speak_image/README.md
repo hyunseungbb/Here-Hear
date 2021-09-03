@@ -59,7 +59,7 @@ nvidia에서 cuda 11.4를 다운로드 받아 설치한다.
 
 ## 실행 결과
 
-![zebra](C:\Users\multicampus\Desktop\특화프로젝트\S05P21B105\양현승_SUB1\skeleton-project\speak_image\README.assets\zebra.jpeg)
+![zebra](\README.assets\zebra.jpeg)
 
-![image-20210903094842192](C:\Users\multicampus\Desktop\특화프로젝트\S05P21B105\양현승_SUB1\skeleton-project\speak_image\README.assets\image-20210903094842192.png)
+![image-20210903094842192](README.assets\image-20210903094842192.png)
 
