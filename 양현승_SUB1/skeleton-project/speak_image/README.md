@@ -59,7 +59,7 @@ nvidia에서 cuda 11.4를 다운로드 받아 설치한다.
 
 ## 실행 결과
 
-![zebra](\README.assets\zebra.jpeg)
+![zebra](README.assets\zebra.jpeg)
 
 ![image-20210903094842192](README.assets\image-20210903094842192.png)
 
