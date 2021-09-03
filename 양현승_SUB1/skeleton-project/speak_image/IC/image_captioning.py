@@ -174,8 +174,8 @@ if __name__ == '__main__':
   image = cv2.imread(input)
   # 이미지에 대한 캡션 생성
   print(my_caption_model.inference(input))
-#   cv2.imshow('sample', image)
-#   cv2.waitKey(0)
-#   cv2.destroyAllWindows()
+  cv2.imshow('sample', image)
+  cv2.waitKey(0)
+  cv2.destroyAllWindows()
 
 ####TODO#### 
