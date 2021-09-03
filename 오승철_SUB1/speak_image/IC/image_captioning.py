@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__))+'./vqa_origin')
 import yaml
 import cv2
 import torch
+
 import requests
 import numpy as np
 import gc
@@ -51,12 +52,12 @@ class FeatureExtractor:
   def _build_detection_model(self):
 
       # detectron_model.yaml의 주소
-      cfg.merge_from_file('/home/multicam/multicam_project/speak_image/IC/model_data/detectron_model.yaml')
+      cfg.merge_from_file('./model_data/detectron_model.yaml')
       cfg.freeze()
 
       model = build_detection_model(cfg)
       # detectron_model.pth의 주소
-      checkpoint = torch.load('/home/multicam/checkpoints/detectron_model.pth', 
+      checkpoint = torch.load('./checkpoints/detectron_model.pth', 
                               map_location=torch.device("cpu"))
 
       load_state_dict(model, checkpoint.pop("model"))
@@ -149,12 +150,12 @@ class Caption_Model:
         
     def load_model(self):
         # infos_trans12-best.pkl의 주소
-        infos = captioning.utils.misc.pickle_load(open('/home/multicam/checkpoints/infos_trans12-best.pkl', 'rb'))
+        infos = captioning.utils.misc.pickle_load(open('./checkpoints/infos_trans12-best.pkl', 'rb'))
         infos['opt'].vocab = infos['vocab']
     
         self.model = captioning.models.setup(infos['opt'])
         self.model.cuda()
-        self.model.load_state_dict(torch.load('/home/multicam/checkpoints/model-best.pth'))
+        self.model.load_state_dict(torch.load('./checkpoints/model-best.pth'))
         
     def inference(self,img_feature):
         img_feature = self.feature_extractor(img_feature)
@@ -167,6 +168,15 @@ class Caption_Model:
 # 이미지 load : cv2.imread / 이미지 출력 : cv2.imshow
 # 이미지 캡션 생성 : Caption_Model.inference
 if __name__ == '__main__':
-  pass
+  model = Caption_Model()
+
+  PATH = './img/soccer.jpg'
+  img = cv2.imread(PATH)
+
+  model.inference(PATH)
+
+  cv2.imshow('image', img)
+  cv2.waitKey(0)
+  cv2.destroyAllWindows()
 
 ####TODO#### 
