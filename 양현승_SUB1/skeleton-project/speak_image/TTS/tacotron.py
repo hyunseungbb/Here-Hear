@@ -38,7 +38,7 @@ class TTS_Model:
         _ = self.model.cuda().eval().half()
         
         #waveglow model load
-        waveglow_path = "/home/multicam/checkpoints/waveglow.pt"
+        waveglow_path = "../../checkpoints/waveglow.pt"
         self.waveglow = torch.load(waveglow_path)['model']        
      
         self.waveglow.cuda().eval().half()
