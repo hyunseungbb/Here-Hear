@@ -485,7 +485,7 @@ class Decoder(nn.Module):
         return mel_outputs, gate_outputs, alignments
 
 
-class Tacotron2(nn.Module):
+class Tacotron2(nn.Module): 
     def __init__(self,hparams):
         super(Tacotron2, self).__init__()
 
