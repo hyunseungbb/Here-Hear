@@ -83,7 +83,12 @@ def warm_start_model(checkpoint_path, model, ignore_layers):
 # checkpoint path에 iteration,그리고 model, optimizer, scheduler의 statedict를 저장
 # torch.save() 함수 이용하여 딕셔너리 형태로 저장
 def save_checkpoint(model, optimizer, scheduler, learning_rate, iteration, filepath): 
-    pass
+    print("Saving model and optimizer state at iteration {} to {}".format(
+        iteration, filepath))
+    torch.save({'iteration': iteration,
+                'state_dict': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'learning_rate': learning_rate}, filepath)
 
 ####TODO####
 
