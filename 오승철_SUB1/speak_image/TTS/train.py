@@ -91,7 +91,7 @@ def save_checkpoint(model, optimizer, scheduler, learning_rate, iteration, filep
 ####TODO#### 6. 주기적으로 validation dataset으로 모델 성능 확인 후 log 기록
 def validate(model, criterion, valset, iteration, batch_size,collate_fn, epoch, dur):
     # model을 evalutation mode로 전환
-    
+    model.eval()
     # with torch.no_grad로 전체 연산을 묶음
     with torch.no_grad():
         # validation dataset 준비
@@ -100,7 +100,17 @@ def validate(model, criterion, valset, iteration, batch_size,collate_fn, epoch, 
                                 pin_memory=False, collate_fn=collate_fn)
 
         # validation loss 계산 (train() 코드와 동일하게 작성하지만 backpropagation을 하면 안된다)
-       
+        val_loss = 0.0
+        for i, batch in enumerate(val_loader):
+            x, y = model.parse_batch(batch)
+            y_pred = model(x)
+            loss = criterion(y_pred, y)
+            if distributed_run:
+                reduced_val_loss = reduce_tensor(loss.data, n_gpus).item()
+            else:
+                reduced_val_loss = loss.item()
+            val_loss += reduced_val_loss
+        val_loss = val_loss / (i + 1)
     #Req. 3-3 학습 로그 기록
     # validation 결과 출력 및 log 기록 
     
