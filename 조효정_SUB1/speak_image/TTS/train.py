@@ -122,8 +122,8 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
     # scheduler : hparams에서 scheduler_step, gamma 참고
     model = load_model(hparams)
     
-    optimizer = ''
-    scheduler = ''
+    optimizer = torch.optim.Adam(model.parameters(), lr=hparams.learning_rate, weight_decay=hparams.weight_decay)
+    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, scheduler_step=hparams.scheduler_step, gamma=hparams.gamma)
     
     criterion = Tacotron2Loss() # define loss function 
     ####TODO####
@@ -132,7 +132,7 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
     ####TODO#### 2. prepare_dataloaders 함수를 이용하여 dataset 준비
     # input : hparams
     # output : train_loader, valset, collate_fn 반환
-    
+    train_loader, valset, collate_fn = prepare_dataloaders(hparams)
     ####TODO####
     
     
@@ -144,7 +144,8 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
         # train from pretrained model
         if warm_start:
             # warm_start함수로 이동
-            pass
+            model = warm_start_model(
+                checkpoint_path, model, hparams.ignore_layers)
 
         #train from scratch
         ##제공##
@@ -157,7 +158,7 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
             epoch_offset = max(0, int(iteration / len(train_loader)))
         ##제공##        
     ####TODO####
-    
+    model.train()
     is_overflow = False
     ####TODO#### 4. model을 training mode로 전환 후 main loop 작성
     # hparams에서 epoch을 참고하여 mainloop 구성   
@@ -173,10 +174,14 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
             start = time.perf_counter()
             
             # set gradients to zero
-           
+            model.zero_grad()
+            x, y = model.parse_batch(batch)
+            y_pred = model(x)
 
             # loss 계산 후 backpropagation
-            
+            loss = criterion(y_pred, y)
+            reduced_loss = loss.item()
+            loss.backward()            
            
             ####TODO####
             
