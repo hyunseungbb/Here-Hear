@@ -40,7 +40,6 @@ def prepare_dataloaders(hparams):
 # load model
 def load_model(hparams):
     model = Tacotron2(hparams).cuda()  
-    # ?
     return model
 
 # load checkpoint
