@@ -122,7 +122,9 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
     # scheduler : hparams에서 scheduler_step, gamma 참고
     model = load_model(hparams)
     
-    optimizer = ''
+    learning_rate = hparams.learning_rate
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate,
+                                weight_decay=hparams.weight_decay)
     scheduler = ''
     
     criterion = Tacotron2Loss() # define loss function 
@@ -134,7 +136,7 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
     # output : train_loader, valset, collate_fn 반환
     
     ####TODO####
-    
+    train_loader, valset, collate_fn = prepare_dataloaders(hparams)
     
     ####TODO#### 3. scratch부터 학습할 것인지, pre-trained model을 load하여 warm start를 할 것인지 결정
     iteration = 0
@@ -144,8 +146,8 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
         # train from pretrained model
         if warm_start:
             # warm_start함수로 이동
-            pass
-
+            model = warm_start_model(
+                checkpoint_path, model, hparams.ignore_layers)
         #train from scratch
         ##제공##
         else:
@@ -157,11 +159,11 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
             epoch_offset = max(0, int(iteration / len(train_loader)))
         ##제공##        
     ####TODO####
-    
+    model.train()
     is_overflow = False
     ####TODO#### 4. model을 training mode로 전환 후 main loop 작성
     # hparams에서 epoch을 참고하여 mainloop 구성   
-        
+    
     # training time 측정, 최초 시작 시간
     init_start = time.perf_counter()
     
@@ -173,17 +175,28 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
             start = time.perf_counter()
             
             # set gradients to zero
-           
+            for param_group in optimizer.param_groups:
+                param_group['lr'] = learning_rate
 
+            model.zero_grad()
+            x, y = model.parse_batch(batch)
+            y_pred = model(x)
             # loss 계산 후 backpropagation
-            
-           
-            ####TODO####
-            
+            loss = criterion(y_pred, y)
+            if hparams.distributed_run:
+                reduced_loss = reduce_tensor(loss.data, n_gpus).item()
+            else:
+                reduced_loss = loss.item()
+            if hparams.fp16_run:
+                with amp.scale_loss(loss, optimizer) as scaled_loss:
+                    scaled_loss.backward()
+            else:
+                loss.backward()
+
             grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), hparams['grad_clip_thresh'])
     
             optimizer.step()
-            scheduler.step()
+            # scheduler.step()
             
             #iteration 별 loss, grad_norm, duration 결과 출력
             if not is_overflow:
