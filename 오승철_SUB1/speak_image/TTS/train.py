@@ -40,6 +40,7 @@ def prepare_dataloaders(hparams):
 # load model
 def load_model(hparams):
     model = Tacotron2(hparams).cuda()  
+    # ?
     return model
 
 # load checkpoint
@@ -117,7 +118,7 @@ def validate(model, criterion, valset, iteration, batch_size,collate_fn, epoch, 
     #Req. 3-3 학습 로그 기록
     # validation 결과 출력 및 log 기록 
     print("Validation loss {}: {:9f}  ".format(iteration, val_loss))
-    # logger.log_validation(val_loss, model, y, y_pred, iteration)
+    logging.log_validation(val_loss, model, y, y_pred, iteration)
     
     # model을 training mode로 전환
     model.train()
