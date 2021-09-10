@@ -111,6 +111,7 @@ def validate(model, criterion, valset, iteration, batch_size,collate_fn, epoch, 
     
 #Req. 2-1 모델 트레이닝    
 ####TODO####
+# https://github.com/NVIDIA/tacotron2/blob/master/train.py
 def train(output_directory, checkpoint_path, warm_start, hparams):
 
     #  pytorch random seed 고정
@@ -122,8 +123,8 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
     # scheduler : hparams에서 scheduler_step, gamma 참고
     model = load_model(hparams)
     
-    optimizer = ''
-    scheduler = ''
+    optimizer = torch.optim.Adam(model.parameters(), lr=hparams['learning_rate'], weight_decay=hparams['weight_decay'])
+    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, scheduler_step=hparams['scheduler_step'], gamma=hparams['gamma'])
     
     criterion = Tacotron2Loss() # define loss function 
     ####TODO####
@@ -210,7 +211,7 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', '--output_directory', type=str,
-                        help='directory to save checkpoints',default = "/home/multicam/checkpoints/tts_checkpoints")
+                        help='directory to save checkpoints',default = "./checkpoints/tts_checkpoints")
     parser.add_argument('-c', '--checkpoint_path', type=str, default=None,
                         required=False, help='checkpoint path')
     parser.add_argument('--warm_start', action='store_true',
@@ -223,7 +224,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print(args.hparams)
     
-    with open('/home/multicam/samsung_multicam/speak_image/TTS/config.yaml') as f:
+    with open('./config.yaml') as f:
             hparams = yaml.load(f)
     
     #pytorch random seed 고정
