@@ -100,9 +100,10 @@ def validate(model, criterion, valset, iteration, batch_size,collate_fn, epoch, 
     # with torch.no_grad로 전체 연산을 묶음
     with torch.no_grad():
         # validation dataset 준비
+        val_sample = DistributedSampler(valset)
         val_loader = DataLoader(valset, sampler=None, num_workers=1,
                                 shuffle=False, batch_size=batch_size,
-                                pin_memory=False, collate_fn=collate_fn)
+                                pin_memory=False, collate_fn=collate_fn, epoch=epoch)
 
         # validation loss 계산 (train() 코드와 동일하게 작성하지만 backpropagation을 하면 안된다)
         val_loss = 0.0
@@ -110,18 +111,16 @@ def validate(model, criterion, valset, iteration, batch_size,collate_fn, epoch, 
             x, y = model.parse_batch(batch)
             y_pred = model(x)
             loss = criterion(y_pred, y)
-            if distributed_run:
-                reduced_val_loss = reduce_tensor(loss.data, n_gpus).item()
-            else:
-                reduced_val_loss = loss.item()
+            reduced_val_loss = loss.item()
             val_loss += reduced_val_loss
         val_loss = val_loss / (i + 1)
     #Req. 3-3 학습 로그 기록
     # validation 결과 출력 및 log 기록 
-    
+    print("Validation loss {}: {:9f}  ".format(iteration, val_loss))
+    # logger.log_validation(val_loss, model, y, y_pred, iteration)
     
     # model을 training mode로 전환
-        
+    model.train()
 ####TODO####
     
 #Req. 2-1 모델 트레이닝    
@@ -216,7 +215,7 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
                 dur = time.perf_counter() - init_start
                 
                 # validation 진행
-                validate(model, criterion, valset, iteration,hparams['batch_size'], collate_fn, epoch, dur)
+                validate(model, criterion, valset, iteration,hparams['batch_size'], collate_fn, epoch, duration)
                 
                 # checkpoint model 저장
                 checkpoint_path = os.path.join(output_directory, "checkpoint_{}".format(iteration))
