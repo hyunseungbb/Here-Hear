@@ -1,6 +1,8 @@
 # Initially taken from Github's Python gitignore file
 
 checkpoints/
+ljs_dataset_folder/
+ljs_dataset_folder.bz2
 
 # Django stuff:
 *.log

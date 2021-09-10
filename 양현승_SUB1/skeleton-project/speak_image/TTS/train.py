@@ -83,7 +83,12 @@ def warm_start_model(checkpoint_path, model, ignore_layers):
 # checkpoint path에 iteration,그리고 model, optimizer, scheduler의 statedict를 저장
 # torch.save() 함수 이용하여 딕셔너리 형태로 저장
 def save_checkpoint(model, optimizer, scheduler, learning_rate, iteration, filepath): 
-    pass
+    print("Saving model and optimizer state at iteration {} to {}".format(
+        iteration, filepath))
+    torch.save({'iteration': iteration,
+                'state_dict': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'learning_rate': learning_rate}, filepath)
 
 ####TODO####
 
@@ -91,7 +96,7 @@ def save_checkpoint(model, optimizer, scheduler, learning_rate, iteration, filep
 ####TODO#### 6. 주기적으로 validation dataset으로 모델 성능 확인 후 log 기록
 def validate(model, criterion, valset, iteration, batch_size,collate_fn, epoch, dur):
     # model을 evalutation mode로 전환
-    
+    model.eval()
     # with torch.no_grad로 전체 연산을 묶음
     with torch.no_grad():
         # validation dataset 준비
@@ -100,13 +105,20 @@ def validate(model, criterion, valset, iteration, batch_size,collate_fn, epoch, 
                                 pin_memory=False, collate_fn=collate_fn)
 
         # validation loss 계산 (train() 코드와 동일하게 작성하지만 backpropagation을 하면 안된다)
-       
+        val_loss = 0.0
+        for i, batch in enumerate(val_loader):
+            x, y = model.parse_batch(batch)
+            y_pred = model(x)
+            loss = criterion(y_pred, y)
+            reduced_val_loss = loss.item()
+            val_loss += reduced_val_loss
+        val_loss = val_loss / (i + 1)
     #Req. 3-3 학습 로그 기록
     # validation 결과 출력 및 log 기록 
-    
-    
+
+    print("Validation loss {}: {:9f}  ".format(iteration, val_loss))
     # model을 training mode로 전환
-        
+    model.train()
 ####TODO####
     
 #Req. 2-1 모델 트레이닝    
@@ -122,7 +134,9 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
     # scheduler : hparams에서 scheduler_step, gamma 참고
     model = load_model(hparams)
     
-    optimizer = ''
+    learning_rate = hparams.learning_rate
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate,
+                                weight_decay=hparams.weight_decay)
     scheduler = ''
     
     criterion = Tacotron2Loss() # define loss function 
@@ -134,7 +148,7 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
     # output : train_loader, valset, collate_fn 반환
     
     ####TODO####
-    
+    train_loader, valset, collate_fn = prepare_dataloaders(hparams)
     
     ####TODO#### 3. scratch부터 학습할 것인지, pre-trained model을 load하여 warm start를 할 것인지 결정
     iteration = 0
@@ -144,8 +158,8 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
         # train from pretrained model
         if warm_start:
             # warm_start함수로 이동
-            pass
-
+            model = warm_start_model(
+                checkpoint_path, model, hparams.ignore_layers)
         #train from scratch
         ##제공##
         else:
@@ -157,11 +171,11 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
             epoch_offset = max(0, int(iteration / len(train_loader)))
         ##제공##        
     ####TODO####
-    
+    model.train()
     is_overflow = False
     ####TODO#### 4. model을 training mode로 전환 후 main loop 작성
     # hparams에서 epoch을 참고하여 mainloop 구성   
-        
+    
     # training time 측정, 최초 시작 시간
     init_start = time.perf_counter()
     
@@ -173,17 +187,21 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
             start = time.perf_counter()
             
             # set gradients to zero
-           
+            for param_group in optimizer.param_groups:
+                param_group['lr'] = learning_rate
 
+            model.zero_grad()
+            x, y = model.parse_batch(batch)
+            y_pred = model(x)
             # loss 계산 후 backpropagation
-            
-           
-            ####TODO####
-            
+            loss = criterion(y_pred, y)
+            reduced_loss = loss.item()
+            loss.backward()
+
             grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), hparams['grad_clip_thresh'])
     
             optimizer.step()
-            scheduler.step()
+            # scheduler.step()
             
             #iteration 별 loss, grad_norm, duration 결과 출력
             if not is_overflow:
