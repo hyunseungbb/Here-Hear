@@ -115,9 +115,10 @@ def validate(model, criterion, valset, iteration, batch_size,collate_fn, epoch, 
         val_loss = val_loss / (i + 1)
     #Req. 3-3 학습 로그 기록
     # validation 결과 출력 및 log 기록 
-    
+
+    print("Validation loss {}: {:9f}  ".format(iteration, val_loss))
     # model을 training mode로 전환
-        
+    model.train()
 ####TODO####
     
 #Req. 2-1 모델 트레이닝    
