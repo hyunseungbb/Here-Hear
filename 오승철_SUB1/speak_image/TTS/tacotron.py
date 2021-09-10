@@ -19,7 +19,7 @@ class TTS_Model:
     def __init__(self):
         self.base_dir = os.path.dirname(os.path.dirname(__file__))
 
-        with open('/home/multicam/samsung_multicam/speak_image/TTS/config.yaml') as f:
+        with open('./config.yaml') as f:
             self.hparams = yaml.load(f)
 
         self.load_model()
@@ -38,7 +38,7 @@ class TTS_Model:
         _ = self.model.cuda().eval().half()
         
         #waveglow model load
-        waveglow_path = "/home/multicam/checkpoints/waveglow.pt"
+        waveglow_path = "./pretrained/waveglow.pt"
         self.waveglow = torch.load(waveglow_path)['model']        
      
         self.waveglow.cuda().eval().half()
