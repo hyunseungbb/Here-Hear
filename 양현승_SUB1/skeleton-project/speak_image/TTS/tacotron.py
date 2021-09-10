@@ -30,15 +30,11 @@ class TTS_Model:
         ####TODO#### 1.학습된 모델 불러오기
         # 학습된 tacotron 모델 주소를 load하고
         # 모델에 hparam과 statedict를 load한다
-
-        pass
-        
-
         ####TODO####
         _ = self.model.cuda().eval().half()
         
         #waveglow model load
-        waveglow_path = "/home/multicam/checkpoints/waveglow.pt"
+        waveglow_path = "../../checkpoints/waveglow.pt"
         self.waveglow = torch.load(waveglow_path)['model']        
      
         self.waveglow.cuda().eval().half()

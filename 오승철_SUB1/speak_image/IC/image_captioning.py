@@ -173,7 +173,7 @@ if __name__ == '__main__':
   PATH = './img/soccer.jpg'
   img = cv2.imread(PATH)
 
-  model.inference(PATH)
+  print(model.inference(PATH))
 
   cv2.imshow('image', img)
   cv2.waitKey(0)

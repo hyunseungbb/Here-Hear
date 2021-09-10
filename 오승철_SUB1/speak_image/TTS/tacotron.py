@@ -19,7 +19,7 @@ class TTS_Model:
     def __init__(self):
         self.base_dir = os.path.dirname(os.path.dirname(__file__))
 
-        with open('/home/multicam/samsung_multicam/speak_image/TTS/config.yaml') as f:
+        with open('./config.yaml') as f:
             self.hparams = yaml.load(f)
 
         self.load_model()
@@ -31,14 +31,15 @@ class TTS_Model:
         # 학습된 tacotron 모델 주소를 load하고
         # 모델에 hparam과 statedict를 load한다
 
-        pass
-        
+        tacotron_path = "./pretrained/tts_warmstart.pt"
+        self.model = load_model(self.hparams)
+        self.model.load_state_dict(torch.load(tacotron_path)['state_dict'])
 
         ####TODO####
         _ = self.model.cuda().eval().half()
         
         #waveglow model load
-        waveglow_path = "/home/multicam/checkpoints/waveglow.pt"
+        waveglow_path = "./pretrained/waveglow.pt"
         self.waveglow = torch.load(waveglow_path)['model']        
      
         self.waveglow.cuda().eval().half()
@@ -56,7 +57,10 @@ class TTS_Model:
         # text_to_sequence() 함수를 이용하여 text 전처리   => text_to_sequence(text, ['english_cleaners'])로 sequence 출력              
         # model로 mel_spectrogram예측
         
-        pass
+        sequence = np.array(text_to_sequence(text, ['english_cleaners']))
+        sequence = torch.autograd.Variable(torch.from_numpy(sequence)).cuda().long()
+
+        mel_outputs, mel_outputs_postnet, _, alignments = self.model.inference(sequence)
         
         ####TODO####
         
@@ -73,5 +77,7 @@ class TTS_Model:
 #Req. 4-2 학습을 마친 이후 test할 수 있는 inference 코드 작성하기    
 ####TODO####        
 if __name__ == '__main__':
-    pass
+    text = input()
+    output_path = './pretrained/waveglow.pt'
+    output_path = TTS_Model.inference(text, output_path)
 ####TODO####        

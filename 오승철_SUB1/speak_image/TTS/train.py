@@ -83,7 +83,12 @@ def warm_start_model(checkpoint_path, model, ignore_layers):
 # checkpoint path에 iteration,그리고 model, optimizer, scheduler의 statedict를 저장
 # torch.save() 함수 이용하여 딕셔너리 형태로 저장
 def save_checkpoint(model, optimizer, scheduler, learning_rate, iteration, filepath): 
-    pass
+    print("Saving model and optimizer state at iteration {} to {}".format(
+        iteration, filepath))
+    torch.save({'iteration': iteration,
+                'state_dict': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'learning_rate': learning_rate}, filepath)
 
 ####TODO####
 
@@ -91,26 +96,36 @@ def save_checkpoint(model, optimizer, scheduler, learning_rate, iteration, filep
 ####TODO#### 6. 주기적으로 validation dataset으로 모델 성능 확인 후 log 기록
 def validate(model, criterion, valset, iteration, batch_size,collate_fn, epoch, dur):
     # model을 evalutation mode로 전환
-    
+    model.eval()
     # with torch.no_grad로 전체 연산을 묶음
     with torch.no_grad():
         # validation dataset 준비
+        val_sample = DistributedSampler(valset)
         val_loader = DataLoader(valset, sampler=None, num_workers=1,
                                 shuffle=False, batch_size=batch_size,
-                                pin_memory=False, collate_fn=collate_fn)
+                                pin_memory=False, collate_fn=collate_fn, epoch=epoch)
 
         # validation loss 계산 (train() 코드와 동일하게 작성하지만 backpropagation을 하면 안된다)
-       
+        val_loss = 0.0
+        for i, batch in enumerate(val_loader):
+            x, y = model.parse_batch(batch)
+            y_pred = model(x)
+            loss = criterion(y_pred, y)
+            reduced_val_loss = loss.item()
+            val_loss += reduced_val_loss
+        val_loss = val_loss / (i + 1)
     #Req. 3-3 학습 로그 기록
     # validation 결과 출력 및 log 기록 
-    
+    print("Validation loss {}: {:9f}  ".format(iteration, val_loss))
+    logging.log_validation(val_loss, model, y, y_pred, iteration)
     
     # model을 training mode로 전환
-        
+    model.train()
 ####TODO####
     
 #Req. 2-1 모델 트레이닝    
 ####TODO####
+# https://github.com/NVIDIA/tacotron2/blob/master/train.py
 def train(output_directory, checkpoint_path, warm_start, hparams):
 
     #  pytorch random seed 고정
@@ -122,8 +137,8 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
     # scheduler : hparams에서 scheduler_step, gamma 참고
     model = load_model(hparams)
     
-    optimizer = ''
-    scheduler = ''
+    optimizer = torch.optim.Adam(model.parameters(), lr=hparams['learning_rate'], weight_decay=hparams['weight_decay'])
+    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, scheduler_step=hparams['scheduler_step'], gamma=hparams['gamma'])
     
     criterion = Tacotron2Loss() # define loss function 
     ####TODO####
@@ -132,7 +147,7 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
     ####TODO#### 2. prepare_dataloaders 함수를 이용하여 dataset 준비
     # input : hparams
     # output : train_loader, valset, collate_fn 반환
-    
+    train_loader, valset, collate_fn = prepare_dataloaders(hparams)
     ####TODO####
     
     
@@ -144,7 +159,7 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
         # train from pretrained model
         if warm_start:
             # warm_start함수로 이동
-            pass
+            model = warm_start_model(checkpoint_path, model, hparams.ignore_layers)
 
         #train from scratch
         ##제공##
@@ -157,11 +172,12 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
             epoch_offset = max(0, int(iteration / len(train_loader)))
         ##제공##        
     ####TODO####
-    
+
+    model.train()
     is_overflow = False
     ####TODO#### 4. model을 training mode로 전환 후 main loop 작성
     # hparams에서 epoch을 참고하여 mainloop 구성   
-        
+    
     # training time 측정, 최초 시작 시간
     init_start = time.perf_counter()
     
@@ -173,10 +189,13 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
             start = time.perf_counter()
             
             # set gradients to zero
-           
+            model.zero_grad()
 
             # loss 계산 후 backpropagation
-            
+            x, y = model.parse_batch(batch)
+            y_pred = model(x)
+
+            reduced_loss = criterion(y_pred, y)
            
             ####TODO####
             
@@ -196,7 +215,7 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
                 dur = time.perf_counter() - init_start
                 
                 # validation 진행
-                validate(model, criterion, valset, iteration,hparams['batch_size'], collate_fn, epoch, dur)
+                validate(model, criterion, valset, iteration,hparams['batch_size'], collate_fn, epoch, duration)
                 
                 # checkpoint model 저장
                 checkpoint_path = os.path.join(output_directory, "checkpoint_{}".format(iteration))
@@ -210,7 +229,7 @@ def train(output_directory, checkpoint_path, warm_start, hparams):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', '--output_directory', type=str,
-                        help='directory to save checkpoints',default = "/home/multicam/checkpoints/tts_checkpoints")
+                        help='directory to save checkpoints',default = "./checkpoints/tts_checkpoints")
     parser.add_argument('-c', '--checkpoint_path', type=str, default=None,
                         required=False, help='checkpoint path')
     parser.add_argument('--warm_start', action='store_true',
@@ -223,7 +242,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print(args.hparams)
     
-    with open('/home/multicam/samsung_multicam/speak_image/TTS/config.yaml') as f:
+    with open('./config.yaml') as f:
             hparams = yaml.load(f)
     
     #pytorch random seed 고정

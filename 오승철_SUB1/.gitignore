@@ -17,4 +17,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
 checkpoints/
+ljs_dataset_folder/
+pre_trained/

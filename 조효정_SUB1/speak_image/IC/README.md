@@ -1,5 +1,13 @@
 # SUB1_IC
 
+### 출력 결과
+
+```
+['a group of men playing soccer on a field', 'a group of men playing soccer against each other', 'a group of young men playing a game of soccer', 'a group of men playing a game of soccer', 'a group of men playing soccer in a field']
+```
+
+![image-20210906134134254](README.assets/image-20210906134134254.png)
+
 ### Error
 
 >  PY3 => PY37로 변경
