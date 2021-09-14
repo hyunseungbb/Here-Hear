@@ -1,0 +1,9 @@
+<h1>ocr page</h1>
+
+<form caction="#" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <input type="text" id="name" name="name" placeholder="성명">
+    </div>
+    <button type="submit">제출하기</button>
+</form>
