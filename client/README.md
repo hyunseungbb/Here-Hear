@@ -9,3 +9,6 @@
 2021-09-14
 
 - kotlin 문법 학습
+- 액티비티, 컨테이너, 프래그먼트, 뷰 학습
+  - https://powerful-trouser-115.notion.site/d4d2fce532df41f4a0f5029122aba4c6
+
