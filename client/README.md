@@ -6,3 +6,6 @@
 - kotlin 문법 정리 
   - https://powerful-trouser-115.notion.site/Kotlin-c680367f9a524d5ca1282e92b86faa78
 
+2021-09-14
+
+- kotlin 문법 학습
