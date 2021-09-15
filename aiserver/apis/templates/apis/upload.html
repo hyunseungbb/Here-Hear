@@ -1,0 +1,9 @@
+<h1>upload page</h1>
+
+  <form action="{% url 'apis:ocr' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="imgs">
+    <input type="submit">
+  </form>
+
+

@@ -1,9 +1,5 @@
-<h1>ocr page</h1>
+<h2>ocr page</h2>
 
-<form caction="#" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-group">
-        <input type="text" id="name" name="name" placeholder="성명">
-    </div>
-    <button type="submit">제출하기</button>
-</form>
+<p>ocr 결과 : {{ ocr_result }}</p>
+
+<p>tts 저장된 곳 : {{ tts_result_url }}</p>
