@@ -1,2 +1,2 @@
-noti test 2
+dir test
 
