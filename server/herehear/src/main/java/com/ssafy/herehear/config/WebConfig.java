@@ -1,4 +1,4 @@
-package com.ssafy.config;
+package com.ssafy.herehear.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
