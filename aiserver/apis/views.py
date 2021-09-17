@@ -12,12 +12,13 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse 
 
 # dotenv 처리해서 보안 높이기
-appkey = '6ca73d4487a205586f13f1aebfe2f18a'
+APPKEY = os.environ.get("APPKEY")
+
 
 def test(image_path):
     
     OCR_URL = 'https://dapi.kakao.com/v2/vision/text/ocr'
-    headers = {'Authorization': 'KakaoAK {}'.format(appkey)}
+    headers = {'Authorization': 'KakaoAK {}'.format(APPKEY)}
 
     image = cv2.imread(image_path)
     jpeg_image = cv2.imencode(".jpg", image)[1]
