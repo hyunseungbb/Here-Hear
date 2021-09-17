@@ -3,6 +3,6 @@ from . import views
 
 app_name = 'apis'
 urlpatterns = [
-    path('ocr/', views.ocr, name='ocr'),
-    path('tts/', views.tts, name='tts')
+    path('upload/', views.upload, name='upload'),
+    path('ocr_tts/', views.ocr_tts, name='ocr_tts'),
 ]
