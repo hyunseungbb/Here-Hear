@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 @RestController 
-@RequestMapping("Test")
+@RequestMapping("accounts")
 public class AccountsController {
 	@Autowired 
 	AccountsService accountsService;
