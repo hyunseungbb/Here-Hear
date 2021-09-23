@@ -34,7 +34,7 @@ public class AccountController {
 	AccountService accountService;
 	
 	@PostMapping()
-	@ApiOperation(value = "회원 가입", notes = "아이디와 패스워드를 통해 회원가입 진행")
+	@ApiOperation(value = "회원 가입")
 	public ResponseEntity<?> register(
 			@RequestBody @ApiParam(value = "회원가입 정보", required = true) AccountRegisterPostReq registerInfo) {
 		
