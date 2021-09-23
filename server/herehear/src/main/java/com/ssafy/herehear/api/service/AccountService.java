@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 public interface AccountService {
 	
 	Account createAccount(AccountRegisterPostReq registerInfo);
+	Account getAccountByUsername(String username);
 	
 //	@Autowired
 //	private AccountRepository AccountRepository;

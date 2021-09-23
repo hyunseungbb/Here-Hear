@@ -23,10 +23,16 @@ public class AccountServiceImpl implements AccountService {
 		account.setUsername(registerInfo.getUsername());
 		// 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
 		account.setPassword(passwordEncoder.encode(registerInfo.getPassword()));
-		// account.setPassword(registerInfo.getPassword());
 		
 		// dsl 사용
 		return accountRepository.save(account);
+	}
+	
+	@Override
+	public Account getAccountByUsername(String username) {
+		// DB에 아이디를 바탕으로 유저 정보 조회
+		Account account = accountRepository.findByUsername(username).get();
+		return account;
 	}
 	
 }
