@@ -24,12 +24,6 @@ import java.util.Optional;
 @RequestMapping("/api/v1/accounts")
 public class AccountController {
 	
-//	private final AccountService accountService;
-//	
-//	@Autowired 
-//	public AccountController(AccountService accountService) {
-//		this.accountService = accountService;
-//	};
 	@Autowired
 	AccountService accountService;
 	

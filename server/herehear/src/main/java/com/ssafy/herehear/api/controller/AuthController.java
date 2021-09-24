@@ -36,7 +36,7 @@ public class AuthController {
 		String username = loginInfo.getUsername();
 		String password = loginInfo.getPassword();
 		
-		Account account = accountService.getAccountByUsername(username);
+		Account account = accountService.getAccount(username);
 		
 		// 로그인 요청한 유저로부터 유효한 패스워드인지 확인
 		if (passwordEncoder.matches(password, account.getPassword())) {
