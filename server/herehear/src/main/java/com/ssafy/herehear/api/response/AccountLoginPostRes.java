@@ -16,11 +16,15 @@ public class AccountLoginPostRes extends BaseResponseBody {
 	@ApiModelProperty(name="JWT 인증 토큰", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN...")
 	String accessToken;
 	
-	public static AccountLoginPostRes of(Integer statusCode, String message, String accessToken) {
+	@ApiModelProperty(name="Refresh 토큰")
+	String refreshToken;
+	
+	public static AccountLoginPostRes of(Integer statusCode, String message, String accessToken, String refreshToken) {
 		AccountLoginPostRes res = new AccountLoginPostRes();
 		res.setStatusCode(statusCode);
 		res.setMessage(message);
 		res.setAccessToken(accessToken);
+		res.setRefreshToken(refreshToken);
 		return res;
 	}
 
