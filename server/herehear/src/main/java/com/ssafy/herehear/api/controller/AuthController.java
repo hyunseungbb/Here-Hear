@@ -1,11 +1,16 @@
 package com.ssafy.herehear.api.controller;
 
+import java.security.Principal;
+
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +20,8 @@ import com.ssafy.herehear.api.request.AccountLoginPostReq;
 import com.ssafy.herehear.api.response.AccountLoginPostRes;
 import com.ssafy.herehear.api.response.BaseResponseBody;
 import com.ssafy.herehear.api.service.AccountService;
+import com.ssafy.herehear.common.auth.MyUserDetails;
+import com.ssafy.herehear.common.auth.MyUserDetailsService;
 import com.ssafy.herehear.common.util.CookieUtil;
 import com.ssafy.herehear.common.util.JwtTokenUtil;
 import com.ssafy.herehear.common.util.RedisUtil;
@@ -75,11 +82,22 @@ public class AuthController {
 		return ResponseEntity.status(401).body(AccountLoginPostRes.of(401, "Invalid Password", null, null));
 	}
 	
-//	로그아웃 기능 구현 필요
-//	@PostMapping("/logout")
-//	@ApiOperation(value = "로그아웃")
-//	public ResponseEntity<?> logout(
-//			@RequestBody HttpServletResponse res) {
-//		
-//	}
+	@GetMapping("/logout")
+	@ApiOperation(value = "로그아웃")
+	public ResponseEntity<?> logout(HttpServletRequest req, HttpServletResponse res) {
+		
+		// 1. 로그아웃할때 그냥 refresh 토큰에서 유저 추적해서 해당 유저 네임에 해당하는 토큰 초기화, redis 시간 0으로 변경
+		Cookie jwtToken = cookieUtil.getCookie(req, jwtTokenUtil.ACCESS_TOKEN_NAME);
+		String jwt = jwtToken.getValue();
+		String username = jwtTokenUtil.getUsername(jwt);
+		
+		Cookie accessToken = cookieUtil.createCookie(JwtTokenUtil.ACCESS_TOKEN_NAME, "");
+        Cookie refreshToken = cookieUtil.createCookie(JwtTokenUtil.REFRESH_TOKEN_NAME, "");
+        
+		res.addCookie(accessToken);
+		res.addCookie(refreshToken);
+		redisUtil.setDataExpire("", username, 0);
+
+		return ResponseEntity.ok("로그아웃 성공");
+	}
 }
