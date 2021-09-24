@@ -29,7 +29,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 	
 	@Override
-	public Account getAccountByUsername(String username) {
+	public Account getAccount(String username) {
 		// DB에 아이디를 바탕으로 유저 정보 조회
 		Account account = accountRepository.findByUsername(username).get();
 		return account;
