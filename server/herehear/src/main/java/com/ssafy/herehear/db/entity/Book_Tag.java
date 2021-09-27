@@ -11,16 +11,12 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Library extends BaseEntity {
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private Account account;
-	
+public class Book_Tag extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "book_id")
 	private Book book;
 	
-	private int read_status;
-	private int stars;
-	private Boolean flag;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "tag_id")
+	private Tag tag;
 }
