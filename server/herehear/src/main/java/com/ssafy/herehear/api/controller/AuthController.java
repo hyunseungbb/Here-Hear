@@ -69,11 +69,14 @@ public class AuthController {
 			// 새로 생긴 토큰을 쿠키로 변환
 			Cookie accessToken = cookieUtil.createCookie(JwtTokenUtil.ACCESS_TOKEN_NAME, jwtToken);
             Cookie refreshToken = cookieUtil.createCookie(JwtTokenUtil.REFRESH_TOKEN_NAME, refreshJwt);
-            redisUtil.setData(account.getUsername(), refreshJwt);
+
             // 쿠키에 추가 (안드로이드에서 필요없으면 제거 예정)
             res.addCookie(accessToken);
             res.addCookie(refreshToken);
-            redisUtil.setDataExpire(refreshJwt, account.getUsername(), JwtTokenUtil.REFRESH_TOKEN_VALIDATION_SECOND);
+            
+            // redis에 key: username, value: refreshToken 추가
+            redisUtil.setDataExpire(account.getUsername(), refreshJwt, JwtTokenUtil.REFRESH_TOKEN_VALIDATION_SECOND);
+            
             // 리턴 값으로도 토큰 전달 jwtToken 사용
 			return ResponseEntity.ok(AccountLoginPostRes.of(200, "Success", jwtToken, refreshJwt));
 		}
@@ -86,17 +89,23 @@ public class AuthController {
 	@ApiOperation(value = "로그아웃")
 	public ResponseEntity<?> logout(HttpServletRequest req, HttpServletResponse res) {
 		
-		// 1. 로그아웃할때 그냥 refresh 토큰에서 유저 추적해서 해당 유저 네임에 해당하는 토큰 초기화, redis 시간 0으로 변경
-		Cookie jwtToken = cookieUtil.getCookie(req, jwtTokenUtil.ACCESS_TOKEN_NAME);
+		// 현재 Access토큰을 기반으로 유저 확인
+		Cookie jwtToken = cookieUtil.getCookie(req, jwtTokenUtil.ACCESS_TOKEN_NAME);		
 		String jwt = jwtToken.getValue();
 		String username = jwtTokenUtil.getUsername(jwt);
 		
-		Cookie accessToken = cookieUtil.createCookie(JwtTokenUtil.ACCESS_TOKEN_NAME, "");
-        Cookie refreshToken = cookieUtil.createCookie(JwtTokenUtil.REFRESH_TOKEN_NAME, "");
+		// Cookie refreshToken = cookieUtil.getCookie(req, JwtTokenUtil.REFRESH_TOKEN_NAME);
+		
+		// 만료시간이 0이고 token값을 빈 값으로 하여 쿠키 발급
+		Cookie nullAccessToken = cookieUtil.LogoutCookie(JwtTokenUtil.ACCESS_TOKEN_NAME, "");
+        Cookie nullRefreshToken = cookieUtil.LogoutCookie(JwtTokenUtil.REFRESH_TOKEN_NAME, "");
         
-		res.addCookie(accessToken);
-		res.addCookie(refreshToken);
-		redisUtil.setDataExpire("", username, 0);
+        // 쿠키에 추가 -> 만료시간이 0이므로 바로 만료
+		res.addCookie(nullAccessToken);
+		res.addCookie(nullRefreshToken);
+		
+		// redis에 저장되어 있는 유저의 refreshToken 제거
+		redisUtil.deleteData(username);
 
 		return ResponseEntity.ok("로그아웃 성공");
 	}

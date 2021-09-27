@@ -16,6 +16,14 @@ public class CookieUtil {
         token.setPath("/");
         return token;
     }
+    
+    public Cookie LogoutCookie(String cookieName, String value){
+    	Cookie token = new Cookie(cookieName,value);
+    	token.setHttpOnly(true);
+    	token.setMaxAge(0);
+    	token.setPath("/");
+    	return token;
+    }
 
     public Cookie getCookie(HttpServletRequest req, String cookieName){
         final Cookie[] cookies = req.getCookies();
