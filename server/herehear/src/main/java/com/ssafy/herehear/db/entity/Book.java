@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,8 +23,12 @@ public class Book extends BaseEntity {
 	private String description;	
 	private String publisher;	
 	private String img_url;	
-//	private String vector;	
-	private int stars_sum;	
+//	private String vector;
+	
+	@ColumnDefault("0")
+	private int stars_sum;
+	
+	@ColumnDefault("0")
 	private int stars_count;
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
