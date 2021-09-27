@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.ssafy.herehear.api.request.AccountRegisterPostReq;
 import com.ssafy.herehear.db.entity.Account;
+import com.ssafy.herehear.db.entity.Book;
 import com.ssafy.herehear.db.repository.AccountRepository;
 
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ public interface AccountService {
 	
 	Account createAccount(AccountRegisterPostReq registerInfo);
 	Account getAccount(String username);
+	Account findByAccountId(Long id);
 	
 //	@Autowired
 //	private AccountRepository AccountRepository;
