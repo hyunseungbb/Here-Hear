@@ -45,6 +45,7 @@ def upload(request):
 @require_POST
 def ocr_tts(request):
     # 폼으로 받은 데이터에 접근
+
     imgs = request.FILES.get('imgs').file
 
     # 바로 읽기 : 일단 후퇴
@@ -60,8 +61,9 @@ def ocr_tts(request):
     img_path3 = default_storage.delete(img_path)    # ocr 파일은 불필요하므로 삭제
 
     # 스피치 파일 저장하기
+
     tts_path = f'/tmp/{request.user}.mp3'
-    tts_result.save(f'{settings.MEDIA_ROOT}tts_path')
+    tts_result.save(f'{settings.MEDIA_ROOT}{tts_path}')
     
     # json으로 넘겨줄 것
     context = {
