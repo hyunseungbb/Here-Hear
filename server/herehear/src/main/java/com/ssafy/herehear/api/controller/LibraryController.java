@@ -19,6 +19,7 @@ import com.ssafy.herehear.api.response.BaseResponseBody;
 import com.ssafy.herehear.api.response.LibraryGetRes;
 import com.ssafy.herehear.api.service.LibraryService;
 import com.ssafy.herehear.db.entity.Library;
+import com.ssafy.herehear.db.repository.LibraryRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +32,9 @@ public class LibraryController {
 	
 	@Autowired
 	LibraryService libraryService;
+	
+	@Autowired
+	LibraryRepository libraryRepository;
 	
 	@GetMapping("/{userId}")
 	@ApiOperation(value = "서재 책 조회")
@@ -46,9 +50,15 @@ public class LibraryController {
 	@ApiOperation(value = "서재 책 등록")
 	public ResponseEntity<?> createLibrary(
 			@RequestBody @ApiParam(value = "유저와 책 정보", required = true) LibraryPostReq libraryPostReq) {
+		// 기존에 등록된 책이면 POST 불가
+		List<Library> list = libraryRepository.findAll();
+		for(Library lib : list) {
+			if(lib.getAccount().getId()==libraryPostReq.getUser_id() & lib.getBook().getId()==libraryPostReq.getBook_id()) {
+				return ResponseEntity.status(412).body(BaseResponseBody.of(412, "이미 등록된 책 입니다."));
+			}
+		}
 		
-		Library library = libraryService.createLibrary(libraryPostReq);
-		
+		libraryService.createLibrary(libraryPostReq);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
@@ -57,7 +67,7 @@ public class LibraryController {
 	public ResponseEntity<?> updateLibrary(
 			@RequestBody @ApiParam(value = "별점, 읽음여부", required = true) LibraryPutReq libraryPutReq) {
 		
-		Library library = libraryService.updateLibrary(libraryPutReq);
+		libraryService.updateLibrary(libraryPutReq);
 		
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}

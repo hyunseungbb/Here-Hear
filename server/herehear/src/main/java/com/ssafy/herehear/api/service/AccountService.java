@@ -19,7 +19,6 @@ public interface AccountService {
 	
 	Account createAccount(AccountRegisterPostReq registerInfo);
 	Account getAccount(String username);
-	Account findByAccountId(Long id);
 	
 //	@Autowired
 //	private AccountRepository AccountRepository;
