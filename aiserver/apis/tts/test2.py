@@ -14,7 +14,7 @@ os.makedirs(save_dir, exist_ok=True)
 mel_list = glob.glob(os.path.join(save_dir, '*.npy'))
 
 
-def test_step(mel):
+def test_step(mel, idx):
     mel = np.expand_dims(mel, axis=0)
     pred = model(mel, is_training=False)
 
@@ -25,9 +25,10 @@ def test_step(mel):
     pred = np.power(10.0, pred * 0.05)
     wav = griffin_lim(pred ** 1.5)
     wav = scipy.signal.lfilter([1], [1, -preemphasis], wav)
-    wav = librosa.effects.trim(wav, frame_length=win_length, hop_length=hop_length)[0]
+    endpoint = librosa.effects.split(wav, frame_length=win_length, hop_length=hop_length)[0, 1]
+    wav = wav[:endpoint]
     wav = wav.astype(np.float32)
-    sf.write(os.path.join(save_dir, 'test.wav'), wav, sample_rate)
+    sf.write(os.path.join(save_dir, '{}.wav'.format(idx)), wav, sample_rate)
     
 
 model = post_CBHG(K=8, conv_dim=[256, mel_dim])
@@ -35,3 +36,7 @@ optimizer = Adam()
 step = tf.Variable(0)
 checkpoint = tf.train.Checkpoint(optimizer=optimizer, model=model, step=step)
 checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir)).expect_partial()
+
+for i, fn in enumerate(mel_list):
+    mel = np.load(fn)
+    test_step(mel, i)
