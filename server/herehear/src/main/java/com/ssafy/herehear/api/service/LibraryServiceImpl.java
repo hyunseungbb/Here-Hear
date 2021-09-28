@@ -13,6 +13,7 @@ import com.ssafy.herehear.db.entity.Account;
 import com.ssafy.herehear.db.entity.Book;
 import com.ssafy.herehear.db.entity.Library;
 import com.ssafy.herehear.db.repository.AccountRepository;
+import com.ssafy.herehear.db.repository.BookRepository;
 import com.ssafy.herehear.db.repository.LibraryRepository;
 
 @Service("LibraryService")
@@ -25,15 +26,11 @@ public class LibraryServiceImpl implements LibraryService {
 	AccountRepository accountRepository;
 	
 	@Autowired
-	AccountService accountService;
-	
-	@Autowired
-	BookService bookService;
+	BookRepository bookRepository;
 	
 	@Override
 	public List<LibraryGetRes> getLibrary(Long user_id) {
 		List<Library> list = libraryRepository.findByAccount_id(user_id);
-		System.out.println(list);
 		List<LibraryGetRes> copy = new ArrayList<>();
 		LibraryGetRes res;
 		for(Library q : list) {
@@ -51,10 +48,10 @@ public class LibraryServiceImpl implements LibraryService {
 	@Override
 	public Library createLibrary(LibraryPostReq libraryPostReq) {
 		Library library = new Library();
-		Book book = bookService.findByBookId(libraryPostReq.getBook_id());
+		Book book = bookRepository.findById(libraryPostReq.getBook_id()).get();
 		library.setBook(book);
 		
-		Account account = accountService.findByAccountId(libraryPostReq.getUser_id());
+		Account account = accountRepository.findById(libraryPostReq.getUser_id()).get();
 		library.setAccount(account);
 
 		library.setStars(0);
@@ -67,7 +64,7 @@ public class LibraryServiceImpl implements LibraryService {
 	@Override
 	public Library updateLibrary(LibraryPutReq libraryPutReq) {
 		Library library = libraryRepository.findById(libraryPutReq.getId()).get();
-		Book book = bookService.findByBookId(library.getBook().getId());
+		Book book = bookRepository.findById(library.getBook().getId()).get();
 		
 		// 별점을 처음 주는 경우, flag 바꾸고 책 정보에 stars_count와 stars_sum 더해주기
 		if (library.getFlag() == false) {
