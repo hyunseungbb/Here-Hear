@@ -1,10 +1,14 @@
 package com.ssafy.herehear.api.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.herehear.api.request.LibraryPostReq;
 import com.ssafy.herehear.api.request.LibraryPutReq;
+import com.ssafy.herehear.api.response.LibraryGetRes;
 import com.ssafy.herehear.db.entity.Account;
 import com.ssafy.herehear.db.entity.Book;
 import com.ssafy.herehear.db.entity.Library;
@@ -34,6 +38,24 @@ public class LibraryServiceImpl implements LibraryService {
 	public Library findByLibraryId(Long library_id) {
 		Library library = libraryRepository.findById(library_id).get();
 		return library;
+	}
+	
+	@Override
+	public List<LibraryGetRes> getLibrary(Long user_id) {
+		List<Library> list = libraryRepository.findByAccount_id(user_id);
+		System.out.println(list);
+		List<LibraryGetRes> copy = new ArrayList<>();
+		LibraryGetRes res;
+		for(Library q : list) {
+			res = new LibraryGetRes();
+			res.setId(q.getId());
+			res.setBook_id(q.getBook().getId());
+			res.setUser_id(user_id);
+			res.setRead_status(q.getRead_status());
+			res.setStars(q.getStars());
+			copy.add(res);
+		}
+		return copy;
 	}
 	
 	@Override
@@ -74,5 +96,11 @@ public class LibraryServiceImpl implements LibraryService {
 		
 		return libraryRepository.save(library);
 	}
+	
+//	@Override
+//	public void deleteLibrary(Long library_id) {
+//		Library library = libraryRepository.findById(user_id).get();
+//		return library;
+//	}
 
 }
