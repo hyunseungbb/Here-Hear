@@ -31,12 +31,14 @@ class LoginActivity : AppCompatActivity() {
 //        val password = binding.password
 //        val login = binding.loginButton2
 //        val loading = binding.loading
+
         var mainIntent = Intent(this, MainActivity::class.java)
         binding.loginButton2.setOnClickListener {
             val userId = binding.userId?.text.toString()
             val userPassword = binding.userPassword?.text.toString()
             val loginData = LoginRequest(userId, userPassword)
             RetrofitClient.api.login(loginData).enqueue(object: Callback<LoginResponse> {
+
                 override fun onResponse(
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
