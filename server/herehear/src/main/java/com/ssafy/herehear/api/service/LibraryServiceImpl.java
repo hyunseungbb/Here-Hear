@@ -25,20 +25,10 @@ public class LibraryServiceImpl implements LibraryService {
 	AccountRepository accountRepository;
 	
 	@Autowired
-	LibraryService libraryService;
-	
-	@Autowired
 	AccountService accountService;
 	
 	@Autowired
 	BookService bookService;
-	
-	
-	@Override
-	public Library findByLibraryId(Long library_id) {
-		Library library = libraryRepository.findById(library_id).get();
-		return library;
-	}
 	
 	@Override
 	public List<LibraryGetRes> getLibrary(Long user_id) {
@@ -76,7 +66,7 @@ public class LibraryServiceImpl implements LibraryService {
 	
 	@Override
 	public Library updateLibrary(LibraryPutReq libraryPutReq) {
-		Library library = libraryService.findByLibraryId(libraryPutReq.getId());
+		Library library = libraryRepository.findById(libraryPutReq.getId()).get();
 		Book book = bookService.findByBookId(library.getBook().getId());
 		
 		// 별점을 처음 주는 경우, flag 바꾸고 책 정보에 stars_count와 stars_sum 더해주기
@@ -97,10 +87,9 @@ public class LibraryServiceImpl implements LibraryService {
 		return libraryRepository.save(library);
 	}
 	
-//	@Override
-//	public void deleteLibrary(Long library_id) {
-//		Library library = libraryRepository.findById(user_id).get();
-//		return library;
-//	}
+	@Override
+	public void deleteLibrary(Long id) {
+		libraryRepository.deleteById(id);
+	}
 
 }
