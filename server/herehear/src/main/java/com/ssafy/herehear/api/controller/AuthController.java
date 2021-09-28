@@ -74,15 +74,15 @@ public class AuthController {
             res.addCookie(accessToken);
             res.addCookie(refreshToken);
             
-            // redis에 key: username, value: refreshToken 추가
-            redisUtil.setDataExpire(account.getUsername(), refreshJwt, JwtTokenUtil.REFRESH_TOKEN_VALIDATION_SECOND);
+            // redis에 key: refreshToken, value: username 추가
+            redisUtil.setDataExpire(refreshJwt, account.getUsername(), JwtTokenUtil.REFRESH_TOKEN_VALIDATION_SECOND);
             
             // 리턴 값으로도 토큰 전달 jwtToken 사용
-			return ResponseEntity.ok(AccountLoginPostRes.of(200, "Success", jwtToken, refreshJwt));
+			return ResponseEntity.ok(AccountLoginPostRes.of(200, "Success", account.getId(), username, jwtToken, refreshJwt));
 		}
 		
 		// 유효하지 않은 경우, 로그인 실패
-		return ResponseEntity.status(401).body(AccountLoginPostRes.of(401, "Invalid Password", null, null));
+		return ResponseEntity.status(401).body(AccountLoginPostRes.of(401, "Invalid Password", null, username, null, null));
 	}
 	
 	@GetMapping("/logout")
@@ -90,11 +90,8 @@ public class AuthController {
 	public ResponseEntity<?> logout(HttpServletRequest req, HttpServletResponse res) {
 		
 		// 현재 Access토큰을 기반으로 유저 확인
-		Cookie jwtToken = cookieUtil.getCookie(req, jwtTokenUtil.ACCESS_TOKEN_NAME);		
-		String jwt = jwtToken.getValue();
-		String username = jwtTokenUtil.getUsername(jwt);
-		
-		// Cookie refreshToken = cookieUtil.getCookie(req, JwtTokenUtil.REFRESH_TOKEN_NAME);
+		Cookie refreshToken = cookieUtil.getCookie(req, JwtTokenUtil.REFRESH_TOKEN_NAME);
+		String refreshJwt = refreshToken.getValue();
 		
 		// 만료시간이 0이고 token값을 빈 값으로 하여 쿠키 발급
 		Cookie nullAccessToken = cookieUtil.LogoutCookie(JwtTokenUtil.ACCESS_TOKEN_NAME, "");
@@ -105,7 +102,8 @@ public class AuthController {
 		res.addCookie(nullRefreshToken);
 		
 		// redis에 저장되어 있는 유저의 refreshToken 제거
-		redisUtil.deleteData(username);
+		System.out.println(refreshJwt);
+		redisUtil.deleteData(refreshJwt);
 
 		return ResponseEntity.ok("로그아웃 성공");
 	}
