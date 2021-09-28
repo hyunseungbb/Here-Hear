@@ -9,5 +9,5 @@ import com.ssafy.herehear.db.entity.Book;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-	Optional<Book> findById(Long id);
+	public Optional<Book> findById(Long id);
 }
