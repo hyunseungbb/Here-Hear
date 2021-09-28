@@ -78,11 +78,11 @@ public class AuthController {
             redisUtil.setDataExpire(refreshJwt, account.getUsername(), JwtTokenUtil.REFRESH_TOKEN_VALIDATION_SECOND);
             
             // 리턴 값으로도 토큰 전달 jwtToken 사용
-			return ResponseEntity.ok(AccountLoginPostRes.of(200, "Success", jwtToken, refreshJwt));
+			return ResponseEntity.ok(AccountLoginPostRes.of(200, "Success", account.getId(), username, jwtToken, refreshJwt));
 		}
 		
 		// 유효하지 않은 경우, 로그인 실패
-		return ResponseEntity.status(401).body(AccountLoginPostRes.of(401, "Invalid Password", null, null));
+		return ResponseEntity.status(401).body(AccountLoginPostRes.of(401, "Invalid Password", null, username, null, null));
 	}
 	
 	@GetMapping("/logout")
