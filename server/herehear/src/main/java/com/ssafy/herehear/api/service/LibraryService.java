@@ -11,5 +11,5 @@ public interface LibraryService {
 	List<LibraryGetRes> getLibrary(Long userId);
 	Library createLibrary(LibraryPostReq libraryPostReq);
 	Library updateLibrary(LibraryPutReq libraryPutReq);
-	Library findByLibraryId(Long id);
+	void deleteLibrary(Long id);
 }

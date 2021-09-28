@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,16 @@ public class LibraryController {
 			@RequestBody @ApiParam(value = "별점, 읽음여부", required = true) LibraryPutReq libraryPutReq) {
 		
 		Library library = libraryService.updateLibrary(libraryPutReq);
+		
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+	
+	@DeleteMapping("/{libraryId}")
+	@ApiOperation(value = "내 서재에서 책 삭제")
+	public ResponseEntity<?> deleteLibrary(
+			@RequestBody @ApiParam(value = "내 서재 ID", required = true) @PathVariable Long libraryId) {
+		
+		libraryService.deleteLibrary(libraryId);
 		
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
