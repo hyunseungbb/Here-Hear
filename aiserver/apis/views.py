@@ -76,3 +76,5 @@ def ocr_tts(request):
     # rest api 서버
     return JsonResponse(context)
 
+def naive_tts(request):
+    pass
