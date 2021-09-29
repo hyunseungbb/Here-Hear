@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class Library extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "account_id")
+	@JoinColumn(name = "user_id")
 	private Account account;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -21,5 +21,6 @@ public class Library extends BaseEntity {
 	private Book book;
 	
 	private int read_status;
-	private Double stars;
+	private int stars;
+	private Boolean flag;
 }

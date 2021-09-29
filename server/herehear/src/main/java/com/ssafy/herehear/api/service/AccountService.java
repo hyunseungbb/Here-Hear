@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.ssafy.herehear.api.request.AccountRegisterPostReq;
 import com.ssafy.herehear.db.entity.Account;
+import com.ssafy.herehear.db.entity.Book;
 import com.ssafy.herehear.db.repository.AccountRepository;
 
 import org.springframework.data.domain.Pageable;
