@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
         }.attach()
 
-        binding.tabLayout.getTabAt(0)?.setIcon(R.drawable.home)
+        binding.tabLayout.getTabAt(0)?.setIcon(R.drawable.arrow)
         binding.tabLayout.getTabAt(1)?.setIcon(R.drawable.calender)
         binding.tabLayout.getTabAt(2)?.setIcon(R.drawable.search)
         binding.tabLayout.getTabAt(3)?.setIcon(R.drawable.mypage)
