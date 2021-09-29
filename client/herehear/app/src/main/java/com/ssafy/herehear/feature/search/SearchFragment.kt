@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentSearchBinding
@@ -20,6 +22,11 @@ import retrofit2.Response
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
+private val searchInfoFragment: SearchInfoFragment
+    get() {
+        TODO()
+    }
 
 class SearchFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -56,8 +63,12 @@ class SearchFragment : Fragment() {
             }
         }
 
-        val imageId = binding.bookImage
-
+        binding.button.setOnClickListener{
+            childFragmentManager.beginTransaction()
+                .replace(R.id.button, searchInfoFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit()
+        }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -78,6 +89,13 @@ class SearchFragment : Fragment() {
                                 val url = response.toString()
                                 Glide.with(requireContext()).load(url).into(binding.bookImage)
                             }
+
+//                            binding.bookImage.setOnClickListener{
+//                                childFragmentManager.beginTransaction()
+//                                    .replace(R.id.bookImage, searchInfoFragment)
+//                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+//                                    .commit()
+//                            }
 
                         }
                     }
