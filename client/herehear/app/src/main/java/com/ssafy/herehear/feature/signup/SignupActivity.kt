@@ -1,30 +1,32 @@
-package com.ssafy.herehear.feature.login.ui.login
+package com.ssafy.herehear.feature.signup
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.widget.Toast
 import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.IntroActivity
 import com.ssafy.herehear.MainActivity
-import com.ssafy.herehear.databinding.ActivityLoginBinding
+import com.ssafy.herehear.databinding.ActivitySignupBinding
 
 import com.ssafy.herehear.model.network.RetrofitClient
 import com.ssafy.herehear.model.network.response.LoginRequest
 import com.ssafy.herehear.model.network.response.LoginResponse
+import com.ssafy.herehear.model.network.response.SignupRequest
+import com.ssafy.herehear.model.network.response.SignupResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginActivity : AppCompatActivity() {
+class SignupActivity : AppCompatActivity() {
 
-    private lateinit var loginViewModel: LoginViewModel
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 //
 //        val userId = binding.userId
@@ -32,41 +34,40 @@ class LoginActivity : AppCompatActivity() {
 //        val login = binding.loginButton2
 //        val loading = binding.loading
 
-        var mainIntent = Intent(this, MainActivity::class.java)
-        binding.loginButton2.setOnClickListener {
+        var introIntent = Intent(this, IntroActivity::class.java)
+        binding.signupButton2.setOnClickListener {
             val userId = binding.userId?.text.toString()
             val userPassword = binding.userPassword?.text.toString()
-            val loginData = LoginRequest(userId, userPassword)
-            RetrofitClient.api.login(loginData).enqueue(object: Callback<LoginResponse> {
-
-                override fun onResponse(
-                    call: Call<LoginResponse>,
-                    response: Response<LoginResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        var token = response.body()?.accessToken
-                        Log.d("test", "${token}")
-                        HereHear.prefs.setString("access_token", token)
-                        startActivity(mainIntent)
-                        finish()
+            val userPasswordConfirmation = binding.userPassword2?.text.toString()
+            if (userPassword != userPasswordConfirmation) {
+                Toast.makeText(applicationContext, "비밀번호가 다릅니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                val signupData = SignupRequest(userPassword, userId)
+                RetrofitClient.api.signup(signupData).enqueue(object: Callback<SignupResponse> {
+                    override fun onResponse(
+                        call: Call<SignupResponse>,
+                        response: Response<SignupResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                            startActivity(introIntent)
+                            finish()
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Log.d("test", "실패!!")
-                }
-            })
+                    override fun onFailure(call: Call<SignupResponse>, t: Throwable) {
+                        Log.d("test", "회원가입 실패!!")
+                    }
+
+                })
+            }
+
 
         }
-        binding.loginBackButton?.setOnClickListener {
-            Log.d("test", "click!!")
-            val loginBackIntent = Intent(this, IntroActivity::class.java)
-            startActivity(loginBackIntent)
+        binding.signupBackButton?.setOnClickListener {
+            val signupBackIntent = Intent(this, IntroActivity::class.java)
+            startActivity(signupBackIntent)
             finish()
-//            finish()
-//            val returnIntent = Intent()
-//            setResult(RESULT_OK, returnIntent)
-//            finish()
         }
 //        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
 //            .get(LoginViewModel::class.java)

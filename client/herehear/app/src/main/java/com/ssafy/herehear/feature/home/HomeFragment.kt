@@ -14,6 +14,8 @@ import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.ActivityLoginBinding
 import com.ssafy.herehear.databinding.FragmentHomeBinding
 import com.ssafy.herehear.databinding.FragmentLoginBinding
+import com.ssafy.herehear.feature.calender.mainCalenderFragment
+import com.ssafy.herehear.feature.calender.readModeFragment
 import com.ssafy.herehear.model.network.RetrofitClient
 import com.ssafy.herehear.model.network.response.LoginRequest
 import com.ssafy.herehear.model.network.response.LoginResponse
@@ -32,7 +34,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
-    var mainActivity: MainActivity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +45,17 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        // readmode 프래그먼트를 프레임에 일단 추가. 원래는 홈메인임
+        childFragmentManager.beginTransaction()
+            .add(R.id.frameHome, readModeFragment)
+            .commit()
+
         return binding.root
-        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
+
+    fun goMain() {
+        Log.d("test", "나중에는 상세페이지로 가도록 구현")
     }
 
 }
