@@ -34,5 +34,5 @@ public class AccountServiceImpl implements AccountService {
 		Account account = accountRepository.findByUsername(username).get();
 		return account;
 	}
-	
+
 }

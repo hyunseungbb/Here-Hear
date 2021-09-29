@@ -2,11 +2,13 @@ package com.ssafy.herehear
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.ActivityMainBinding
 import com.ssafy.herehear.feature.calender.CalenderFragment
 import com.ssafy.herehear.feature.home.HomeFragment
+import com.ssafy.herehear.feature.home.readmode.ReadModeFragment
 import com.ssafy.herehear.feature.mypage.MyPageFragment
 import com.ssafy.herehear.feature.search.SearchFragment
 
@@ -33,4 +35,23 @@ class MainActivity : AppCompatActivity() {
         binding.tabLayout.getTabAt(2)?.setIcon(R.drawable.search)
         binding.tabLayout.getTabAt(3)?.setIcon(R.drawable.mypage)
     }
+
+//    fun setFragment() {
+//
+//    }
+//
+//    fun goReadMode() {
+//        Log.d("mytest", "여기로 오나??")
+//        val readModeFragment = ReadModeFragment()
+//        val transaction = supportFragmentManager.beginTransaction()
+//        transaction.add(R.id.viewPager, readModeFragment)
+//        Log.d("test", "추가가 되나?")
+//        transaction.addToBackStack("readmode")
+//        transaction.commit()
+//    }
+//
+//    fun goBack() {
+//        onBackPressed()
+//    }
+
 }
