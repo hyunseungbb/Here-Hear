@@ -28,7 +28,7 @@ class IntroActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.loginbutton1.setOnClickListener {
+        binding.loginButton1.setOnClickListener {
             intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()

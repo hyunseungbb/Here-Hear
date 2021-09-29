@@ -27,16 +27,18 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 //
-        val username = binding.username
-        val password = binding.password
+//        val userId = binding.userId
+//        val password = binding.password
 //        val login = binding.loginButton2
 //        val loading = binding.loading
+
         var mainIntent = Intent(this, MainActivity::class.java)
         binding.loginButton2.setOnClickListener {
-            val userId = username.text.toString()
-            val userPassword = password.text.toString()
+            val userId = binding.userId?.text.toString()
+            val userPassword = binding.userPassword?.text.toString()
             val loginData = LoginRequest(userId, userPassword)
             RetrofitClient.api.login(loginData).enqueue(object: Callback<LoginResponse> {
+
                 override fun onResponse(
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
