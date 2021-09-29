@@ -28,6 +28,7 @@ private val searchInfoFragment: SearchInfoFragment
         TODO()
     }
 
+
 class SearchFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
