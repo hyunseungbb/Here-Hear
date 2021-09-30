@@ -19,7 +19,6 @@ import com.ssafy.herehear.db.repository.BookRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 @Api(value = "책 API", tags = {"Book"})
 @RestController 
@@ -33,25 +32,18 @@ public class BookController {
 	
 	@GetMapping("/{bookId}")
 	@ApiOperation(value = "책 상세정보")
-	public ResponseEntity<BookGetRes> getBook(
-			@RequestBody @ApiParam(value = "책 정보", required = true) @PathVariable Long bookId) {
-		
+	public ResponseEntity<BookGetRes> getBook(@RequestBody @PathVariable Long bookId) {
 		BookGetRes bookInfo = bookService.getBook(bookId);
-		
 		return ResponseEntity.status(200).body(bookInfo);
 	}
 	
 	@GetMapping("/search")
 	@ApiOperation(value = "책 검색 정보")
-	public ResponseEntity<List<BookSearchGetRes>> getBookBySearch(
-			@RequestParam @ApiParam(value = "제목: title, 작가: author", required = true) String type, @ApiParam(value = "검색키워드", required = true) String keyword) {
-		
+	public ResponseEntity<List<BookSearchGetRes>> getBookBySearch(@RequestParam String type, String keyword) {
 		Search search = new Search();
 		search.setType(type);
 		search.setKeyword(keyword);
-	
 		List<BookSearchGetRes> bookList = bookService.getBookBySearch(search);
-		
 		return ResponseEntity.status(200).body(bookList);
 	}
 
