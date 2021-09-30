@@ -45,7 +45,7 @@ class IntroActivity : AppCompatActivity() {
 //
         binding.signupButton.setOnClickListener {
             val signupIntent = Intent(this, SignupActivity::class.java)
-            getResultText.launch(signupIntent)
+//            getResultText.launch(signupIntent)
             startActivity(signupIntent)
             finish()
         }

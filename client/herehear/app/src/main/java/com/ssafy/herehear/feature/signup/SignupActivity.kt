@@ -52,11 +52,13 @@ class SignupActivity : AppCompatActivity() {
                             Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
                             startActivity(introIntent)
                             finish()
+                        } else {
+                            Toast.makeText(applicationContext, "이미 존재하는 아이디입니다.", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                     override fun onFailure(call: Call<SignupResponse>, t: Throwable) {
-                        Log.d("test", "회원가입 실패!!")
+                        Toast.makeText(applicationContext, "이미 존재하는 아이디입니다.", Toast.LENGTH_SHORT).show()
                     }
 
                 })

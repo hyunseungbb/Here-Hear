@@ -52,13 +52,13 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password"
-        android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
         android:hint="비밀번호">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:inputType="textPassword"
             android:id="@+id/userPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
