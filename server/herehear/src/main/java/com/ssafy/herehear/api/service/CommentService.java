@@ -10,4 +10,6 @@ public interface CommentService {
 	
 	Comment createComment(Long bookId, CommentPostReq req);
 	List<CommentGetRes> getAllCommentOfBook(Long bookId);
+	List<CommentGetRes> getAllMyCommentOfBook(Long bookId, Long userId);
+	
 }

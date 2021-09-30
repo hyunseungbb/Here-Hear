@@ -50,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
         // 4. RefreshToken 저장
-        redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
+        redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), 1000 * 60 * 60 * 24 * 14);
 
         // 5. 토큰 발급
         return tokenDto;
@@ -79,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
         // 6. 저장소 정보 업데이트
-        redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), 1000 * 60 * 60 * 24 * 7);
+        redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), 1000 * 60 * 60 * 24 * 14);
 
         // 토큰 발급
         return tokenDto;
