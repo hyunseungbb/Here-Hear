@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.herehear.api.request.LibraryPostReq;
 import com.ssafy.herehear.api.request.LibraryPutReq;
 import com.ssafy.herehear.api.response.LibraryGetRes;
 import com.ssafy.herehear.db.entity.Account;
@@ -46,14 +45,12 @@ public class LibraryServiceImpl implements LibraryService {
 	}
 	
 	@Override
-	public Library createLibrary(LibraryPostReq libraryPostReq) {
+	public Library createLibrary(Long bookId, Long userId) {
 		Library library = new Library();
-		Book book = bookRepository.findById(libraryPostReq.getBook_id()).get();
+		Book book = bookRepository.findById(bookId).get();
 		library.setBook(book);
-		
-		Account account = accountRepository.findById(libraryPostReq.getUser_id()).get();
+		Account account = accountRepository.findById(userId).get();
 		library.setAccount(account);
-
 		library.setStars(0);
 		library.setRead_status(0);
 		library.setFlag(false);
