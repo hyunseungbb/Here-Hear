@@ -15,7 +15,7 @@ import com.ssafy.herehear.common.jwt.TokenReqDto;
 
 import io.swagger.annotations.Api;
 
-@Api(value = "회원 인증관리 API", tags = {"Auth"})
+@Api(value = "회원 인증 관련 API", tags = {"Auth"})
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {

@@ -39,14 +39,14 @@ public class CommentController {
 	}
 	
 	@GetMapping("/{bookId}")
-	@ApiOperation(value = "��ü ������ ��ȸ")
+	@ApiOperation(value = "전체 감상평 조회")
 	public ResponseEntity<List<CommentGetRes>> getAllComment(@PathVariable(name = "bookId") Long bookId) {
 		List<CommentGetRes> commentList = commentService.getAllCommentOfBook(bookId);
 		return ResponseEntity.status(200).body(commentList);
 	}
 	
 	@GetMapping("/my/{bookId}")
-	@ApiOperation(value = "���� ������ ��ȸ")
+	@ApiOperation(value = "나의 감상평 조회")
 	public ResponseEntity<List<CommentGetRes>> gellAllMyComment(@PathVariable(name = "bookId") Long bookId, @ApiIgnore Authentication authentication) {
 		Long userId = Long.parseLong(authentication.getName());
 		List<CommentGetRes> commentList = commentService.getAllMyCommentOfBook(bookId, userId);

@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public AccountRes signup(AccountReq accountReq) {
         if (accountRepository.existsByUsername(accountReq.getUsername())) {
-            throw new RuntimeException("ÀÌ¹Ì °¡ÀÔµÇ¾î ÀÖ´Â À¯ÀúÀÔ´Ï´Ù");
+            throw new RuntimeException("ì´ë¯¸ ê°€ì…ë˜ì–´ ìˆëŠ” ìœ ì €ì…ë‹ˆë‹¤");
         }
 
         Account account = accountReq.toAccount(passwordEncoder);
@@ -39,49 +39,49 @@ public class AuthServiceImpl implements AuthService {
     
     @Transactional
     public TokenDto login(AccountReq accountReq) {
-        // 1. Login ID/PW ¸¦ ±â¹İÀ¸·Î AuthenticationToken »ı¼º
+        // 1. Login ID/PW ë¥¼ ê¸°ë°˜ìœ¼ë¡œ AuthenticationToken ìƒì„±
         UsernamePasswordAuthenticationToken authenticationToken = accountReq.toAuthentication();
 
-        // 2. ½ÇÁ¦·Î °ËÁõ (»ç¿ëÀÚ ºñ¹Ğ¹øÈ£ Ã¼Å©) ÀÌ ÀÌ·ç¾îÁö´Â ºÎºĞ
-        //    authenticate ¸Ş¼­µå°¡ ½ÇÇàÀÌ µÉ ¶§ CustomUserDetailsService ¿¡¼­ ¸¸µé¾ú´ø loadUserByUsername ¸Ş¼­µå°¡ ½ÇÇàµÊ
+        // 2. ì‹¤ì œë¡œ ê²€ì¦ (ì‚¬ìš©ì ë¹„ë°€ë²ˆí˜¸ ì²´í¬) ì´ ì´ë£¨ì–´ì§€ëŠ” ë¶€ë¶„
+        //    authenticate ë©”ì„œë“œê°€ ì‹¤í–‰ì´ ë  ë•Œ CustomUserDetailsService ì—ì„œ ë§Œë“¤ì—ˆë˜ loadUserByUsername ë©”ì„œë“œê°€ ì‹¤í–‰ë¨
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // 3. ÀÎÁõ Á¤º¸¸¦ ±â¹İÀ¸·Î JWT ÅäÅ« »ı¼º
+        // 3. ì¸ì¦ ì •ë³´ë¥¼ ê¸°ë°˜ìœ¼ë¡œ JWT í† í° ìƒì„±
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
-        // 4. RefreshToken ÀúÀå
+        // 4. RefreshToken ì €ì¥
         redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), 1000 * 60 * 60 * 24 * 14);
 
-        // 5. ÅäÅ« ¹ß±Ş
+        // 5. í† í° ë°œê¸‰
         return tokenDto;
     }
     
     @Transactional
     public TokenDto reissue(TokenReqDto toeknReqDto) {
-        // 1. Refresh Token °ËÁõ
+        // 1. Refresh Token ê²€ì¦
         if (!tokenProvider.validateToken(toeknReqDto.getRefreshToken())) {
-            throw new RuntimeException("Refresh Token ÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
+            throw new RuntimeException("Refresh Token ì´ ìœ íš¨í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
         }
 
-        // 2. Access Token ¿¡¼­ username °¡Á®¿À±â
+        // 2. Access Token ì—ì„œ username ê°€ì ¸ì˜¤ê¸°
         Authentication authentication = tokenProvider.getAuthentication(toeknReqDto.getAccessToken());
 
-        // 3. redis ÀúÀå¼Ò¿¡¼­ username ¸¦ ±â¹İÀ¸·Î Refresh Token °ª °¡Á®¿È
+        // 3. redis ì €ì¥ì†Œì—ì„œ username ë¥¼ ê¸°ë°˜ìœ¼ë¡œ Refresh Token ê°’ ê°€ì ¸ì˜´
         String refreshToken = redisUtil.getData(authentication.getName())
-        		.orElseThrow(() -> new RuntimeException("·Î±×¾Æ¿ô µÈ »ç¿ëÀÚÀÔ´Ï´Ù."));
+        		.orElseThrow(() -> new RuntimeException("ë¡œê·¸ì•„ì›ƒ ëœ ì‚¬ìš©ìì…ë‹ˆë‹¤."));
 
-        // 4. Refresh Token ÀÏÄ¡ÇÏ´ÂÁö °Ë»ç
+        // 4. Refresh Token ì¼ì¹˜í•˜ëŠ”ì§€ ê²€ì‚¬
         if (!refreshToken.equals(toeknReqDto.getRefreshToken())) {
-            throw new RuntimeException("ÅäÅ«ÀÇ À¯Àú Á¤º¸°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+            throw new RuntimeException("í† í°ì˜ ìœ ì € ì •ë³´ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
         }
 
-        // 5. »õ·Î¿î ÅäÅ« »ı¼º
+        // 5. ìƒˆë¡œìš´ í† í° ìƒì„±
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
-        // 6. ÀúÀå¼Ò Á¤º¸ ¾÷µ¥ÀÌÆ®
+        // 6. ì €ì¥ì†Œ ì •ë³´ ì—…ë°ì´íŠ¸
         redisUtil.setDataExpire(authentication.getName(), tokenDto.getRefreshToken(), 1000 * 60 * 60 * 24 * 14);
 
-        // ÅäÅ« ¹ß±Ş
+        // í† í° ë°œê¸‰
         return tokenDto;
     }
 }
