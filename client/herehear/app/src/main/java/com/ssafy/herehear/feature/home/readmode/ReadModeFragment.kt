@@ -1,14 +1,18 @@
 package com.ssafy.herehear.feature.home.readmode
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentReadModeBinding
 import com.ssafy.herehear.feature.calender.CalenderFragment
+import com.ssafy.herehear.feature.home.HomeFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,10 +42,23 @@ class ReadModeFragment : Fragment() {
         val binding = FragmentReadModeBinding.inflate(inflater, container, false)
 
         binding.readModeBackButton.setOnClickListener{
-            (parentFragment as CalenderFragment).goMain()
+            (parentFragment as HomeFragment).goMain()
         }
 
+        binding.audioButton.setOnClickListener {
+            mainActivity.goCameraActivity(2)
+        }
+
+        binding.paperButton.setOnClickListener {
+
+        }
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            mainActivity = context
+        }
+    }
 }
