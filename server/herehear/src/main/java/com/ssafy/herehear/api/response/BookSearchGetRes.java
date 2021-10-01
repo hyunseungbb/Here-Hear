@@ -10,13 +10,13 @@ import lombok.Setter;
 @ApiModel("BookSearchGetResponse")
 public class BookSearchGetRes {
 	
-	@ApiModelProperty(name="Ã¥ ID")
+	@ApiModelProperty(name="ì±… ID")
 	private Long id;
 	
-	@ApiModelProperty(name="Ã¥ Á¦¸ñ")
+	@ApiModelProperty(name="ì±… ì œëª©")
 	private String title;
 	
-	@ApiModelProperty(name="Ã¥ Ç¥Áö")
+	@ApiModelProperty(name="ì±… í‘œì§€")
 	private String img_url;
 	
 }

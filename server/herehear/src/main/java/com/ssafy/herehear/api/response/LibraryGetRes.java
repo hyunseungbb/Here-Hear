@@ -9,18 +9,18 @@ import lombok.Setter;
 @Setter
 @ApiModel("LibraryGetResponse")
 public class LibraryGetRes {
-	@ApiModelProperty(name="³» ¼­Àç ID")
+	@ApiModelProperty(name="ë‚´ ì„œì¬ ID")
 	private Long id;
 	
-	@ApiModelProperty(name="Ã¥ ID")
+	@ApiModelProperty(name="ì±… ID")
 	private Long book_id;
 	
-	@ApiModelProperty(name="À¯Àú ID")
+	@ApiModelProperty(name="ìœ ì € ID")
 	private Long user_id;
 	
-	@ApiModelProperty(name="ÀĞÀ½ »óÅÂ", example = "Àü:0, Áß:1, ÈÄ:2")
+	@ApiModelProperty(name="ì½ìŒ ìƒíƒœ", example = "ì „:0, ì¤‘:1, í›„:2")
 	private int read_status;
 	
-	@ApiModelProperty(name="º°Á¡")
+	@ApiModelProperty(name="ë³„ì ")
 	private int stars;
 }

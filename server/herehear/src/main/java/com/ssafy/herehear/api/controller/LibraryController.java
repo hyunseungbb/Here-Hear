@@ -25,7 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
-@Api(value = "서재 API", tags = {"Library"})
+@Api(value = "내 서재 API", tags = {"Library"})
 @RestController 
 @RequestMapping("/api/v1/libraries")
 public class LibraryController {
@@ -37,7 +37,7 @@ public class LibraryController {
 	LibraryRepository libraryRepository;
 	
 	@GetMapping("/mine")
-	@ApiOperation(value = "���� å ��ȸ")
+	@ApiOperation(value = "서재 책 조회")
 	public ResponseEntity<List<LibraryGetRes>> getLibrary(@ApiIgnore Authentication authentication) {
 		Long userId = Long.parseLong(authentication.getName());
 		System.out.println(userId);
@@ -46,14 +46,14 @@ public class LibraryController {
 	}
 	
 	@PostMapping("/{bookId}")
-	@ApiOperation(value = "���� å ���")
+	@ApiOperation(value = "서재 책 등록")
 	public ResponseEntity<?> createLibrary(@PathVariable(name = "bookId") Long bookId, @ApiIgnore Authentication authentication) {
 		List<Library> list = libraryRepository.findAll();
 		Long userId = Long.parseLong(authentication.getName());
-		// ������ ��ϵ� å�̸� POST �Ұ�
+		// 기존에 등록된 책이면 POST 불가
 		for(Library lib : list) {
 			if(lib.getAccount().getId()==userId && lib.getBook().getId()==bookId) {
-				return ResponseEntity.status(412).body(BaseResponseBody.of(412, "�̹� ��ϵ� å �Դϴ�."));
+				return ResponseEntity.status(412).body(BaseResponseBody.of(412, "이미 등록된 책 입니다."));
 			}
 		}
 		libraryService.createLibrary(userId, bookId);
@@ -61,14 +61,14 @@ public class LibraryController {
 	}
 	
 	@PutMapping()
-	@ApiOperation(value = "���� �� ���� ���� ����")
+	@ApiOperation(value = "별점 및 상태 수정")
 	public ResponseEntity<?> updateLibrary(@RequestBody LibraryPutReq libraryPutReq) {
 		libraryService.updateLibrary(libraryPutReq);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
 	@DeleteMapping("/{libraryId}")
-	@ApiOperation(value = "�� ���翡�� å ����")
+	@ApiOperation(value = "내 서재에서 책 삭제")
 	public ResponseEntity<?> deleteLibrary(@PathVariable Long libraryId) {
 		libraryService.deleteLibrary(libraryId);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));

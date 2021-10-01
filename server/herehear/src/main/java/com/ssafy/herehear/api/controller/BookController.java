@@ -20,7 +20,7 @@ import com.ssafy.herehear.db.repository.BookRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value = "도서 관련 API", tags = {"Book"})
+@Api(value = "책 API", tags = {"Book"})
 @RestController 
 @RequestMapping("/api/v1/books")
 public class BookController {
@@ -31,14 +31,14 @@ public class BookController {
 	BookRepository bookRepository;
 	
 	@GetMapping("/{bookId}")
-	@ApiOperation(value = "å ������")
+	@ApiOperation(value = "책 상세정보")
 	public ResponseEntity<BookGetRes> getBook(@RequestBody @PathVariable Long bookId) {
 		BookGetRes bookInfo = bookService.getBook(bookId);
 		return ResponseEntity.status(200).body(bookInfo);
 	}
 	
 	@GetMapping("/search")
-	@ApiOperation(value = "å �˻� ����")
+	@ApiOperation(value = "책 검색 정보")
 	public ResponseEntity<List<BookSearchGetRes>> getBookBySearch(@RequestParam String type, String keyword) {
 		Search search = new Search();
 		search.setType(type);
