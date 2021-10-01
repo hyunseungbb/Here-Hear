@@ -1,38 +1,36 @@
 package com.ssafy.herehear.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.herehear.api.request.AccountRegisterPostReq;
-import com.ssafy.herehear.db.entity.Account;
+import com.ssafy.herehear.api.response.AccountRes;
+import com.ssafy.herehear.common.util.SecurityUtil;
 import com.ssafy.herehear.db.repository.AccountRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service("accountService")
+@RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 	
 	@Autowired
 	AccountRepository accountRepository;
 	
-	@Autowired
-	PasswordEncoder passwordEncoder;
-		
-	@Override
-	public Account createAccount(AccountRegisterPostReq registerInfo) {
-		Account account = new Account();
-		account.setUsername(registerInfo.getUsername());
-		// 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
-		account.setPassword(passwordEncoder.encode(registerInfo.getPassword()));
-		
-		// dsl 사용
-		return accountRepository.save(account);
+	@Transactional(readOnly=true)
+	public AccountRes getAccountInfo(String username) {
+		return accountRepository.findByUsername(username)
+				.map(AccountRes::of)
+				.orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
 	}
 	
-	@Override
-	public Account getAccount(String username) {
-		// DB에 아이디를 바탕으로 유저 정보 조회
-		Account account = accountRepository.findByUsername(username).get();
-		return account;
-	}
-
+	// 현재 SecurityContext 에 있는 유저 정보 가져오기
+	@Transactional(readOnly = true)
+    public AccountRes getMyInfo() {
+        return accountRepository.findById(SecurityUtil.getCurrentAccountId())
+                .map(AccountRes::of)
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
+    }
+	
+	
 }
