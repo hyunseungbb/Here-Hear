@@ -15,7 +15,7 @@ import com.ssafy.herehear.common.jwt.TokenReqDto;
 
 import io.swagger.annotations.Api;
 
-@Api(value = "È¸¿ø ÀÎÁõ °ü·Ã API", tags = {"Auth"})
+@Api(value = "íšŒì› ì¸ì¦ê´€ë¦¬ API", tags = {"Auth"})
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
