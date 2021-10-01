@@ -13,7 +13,7 @@ import com.ssafy.herehear.api.service.AccountService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
-@Api(value = "ȸ�� ��ȸ API", tags = {"Account"})
+@Api(value = "회원 정보조회 API", tags = {"Account"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/account")
