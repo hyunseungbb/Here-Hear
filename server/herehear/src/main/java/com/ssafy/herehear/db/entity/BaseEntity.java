@@ -9,12 +9,12 @@ import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
-// ¸ğµ¨ °£ °øÅë»çÇ× Á¤ÀÇ
+// ëª¨ë¸ ê°„ ê³µí†µì‚¬í•­ ì •ì˜
 @Getter
 @Setter
 @MappedSuperclass
 public abstract class BaseEntity {
-	// °øÅë ¼Ó¼º
+	// ê³µí†µ ì†ì„±
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(insertable = false, updatable = false)

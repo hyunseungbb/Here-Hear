@@ -10,13 +10,13 @@ import com.ssafy.herehear.common.jwt.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
-//Á÷Á¢ ¸¸µç TokenProvider ¿Í JwtFilter ¸¦ SecurityConfig ¿¡ Àû¿ëÇÒ ¶§ »ç¿ë
+//ì§ì ‘ ë§Œë“  TokenProvider ì™€ JwtFilter ë¥¼ SecurityConfig ì— ì ìš©í•  ë•Œ ì‚¬ìš©
 @RequiredArgsConstructor
 public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 	
 	private final TokenProvider tokenProvider;
 	
-	// TokenProvider ¸¦ ÁÖÀÔ¹Ş¾Æ¼­ JwtFilter ¸¦ ÅëÇØ Security ·ÎÁ÷¿¡ ÇÊÅÍ¸¦ µî·Ï
+	// TokenProvider ë¥¼ ì£¼ì…ë°›ì•„ì„œ JwtFilter ë¥¼ í†µí•´ Security ë¡œì§ì— í•„í„°ë¥¼ ë“±ë¡
     @Override
     public void configure(HttpSecurity http) {
         JwtFilter customFilter = new JwtFilter(tokenProvider);
