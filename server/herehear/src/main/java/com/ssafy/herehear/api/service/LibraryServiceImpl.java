@@ -28,18 +28,22 @@ public class LibraryServiceImpl implements LibraryService {
 	BookRepository bookRepository;
 	
 	@Override
-	public List<LibraryGetRes> getLibrary(Long user_id) {
-		List<Library> list = libraryRepository.findByAccount_id(user_id);
+	public List<LibraryGetRes> getLibrary(Long userId) {
+		List<Library> list = libraryRepository.findAll();
 		List<LibraryGetRes> copy = new ArrayList<>();
+		
 		LibraryGetRes res;
 		for(Library q : list) {
-			res = new LibraryGetRes();
-			res.setId(q.getId());
-			res.setBook_id(q.getBook().getId());
-			res.setUser_id(user_id);
-			res.setRead_status(q.getRead_status());
-			res.setStars(q.getStars());
-			copy.add(res);
+			if(q.getAccount().getId() == userId) {
+				res = new LibraryGetRes();
+				res.setId(q.getId());
+				res.setBook_id(q.getBook().getId());
+				res.setUser_id(userId);
+				res.setRead_status(q.getRead_status());
+				res.setStars(q.getStars());
+				res.setImg_url(q.getBook().getImg_url());
+				copy.add(res);
+			}
 		}
 		return copy;
 	}
@@ -63,18 +67,18 @@ public class LibraryServiceImpl implements LibraryService {
 		Library library = libraryRepository.findById(libraryPutReq.getId()).get();
 		Book book = bookRepository.findById(library.getBook().getId()).get();
 		
-		// º°Á¡À» Ã³À½ ÁÖ´Â °æ¿ì, flag ¹Ù²Ù°í Ã¥ Á¤º¸¿¡ stars_count¿Í stars_sum ´õÇØÁÖ±â
+		// ë³„ì ì„ ì²˜ìŒ ì£¼ëŠ” ê²½ìš°, flag ë°”ê¾¸ê³  ì±… ì •ë³´ì— stars_countì™€ stars_sum ë”í•´ì£¼ê¸°
 		if (library.getFlag() == false) {
 			library.setFlag(true);
 			book.setStars_count(book.getStars_count()+1);
 			book.setStars_sum(book.getStars_sum()+libraryPutReq.getStars());
 		} 
-		// ±âÁ¸ º°Á¡ÀÌ ÀÖ´Â °æ¿ì, Ã¥ Á¤º¸¿¡¼­ stars_count¿¡ ±âÁ¸ º°Á¡ »©ÁÖ°í »õ·Î¿î º°Á¡ ´õÇÏ±â
+		// ê¸°ì¡´ ë³„ì ì´ ìˆëŠ” ê²½ìš°, ì±… ì •ë³´ì—ì„œ stars_countì— ê¸°ì¡´ ë³„ì  ë¹¼ì£¼ê³  ìƒˆë¡œìš´ ë³„ì  ë”í•˜ê¸°
 		else {
 			book.setStars_sum(book.getStars_sum()-library.getStars());
 			book.setStars_sum(book.getStars_sum()+libraryPutReq.getStars());
 		}
-		// Ã¥ Á¤º¸ÀÇ stars_count¿Í stars_sum ¼öÁ¤ ÈÄ, libraryÀÇ °ª º¯°æ
+		// ì±… ì •ë³´ì˜ stars_countì™€ stars_sum ìˆ˜ì • í›„, libraryì˜ ê°’ ë³€ê²½
 		library.setStars(libraryPutReq.getStars());
 		library.setRead_status(libraryPutReq.getRead_status());
 		

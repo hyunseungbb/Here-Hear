@@ -25,7 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
-@Api(value = "³» ¼­Àç API", tags = {"Library"})
+@Api(value = "ë‚´ ì„œì¬ API", tags = {"Library"})
 @RestController 
 @RequestMapping("/api/v1/libraries")
 public class LibraryController {
@@ -37,23 +37,22 @@ public class LibraryController {
 	LibraryRepository libraryRepository;
 	
 	@GetMapping("/mine")
-	@ApiOperation(value = "¼­Àç Ã¥ Á¶È¸")
+	@ApiOperation(value = "ì„œì¬ ì±… ì¡°íšŒ")
 	public ResponseEntity<List<LibraryGetRes>> getLibrary(@ApiIgnore Authentication authentication) {
 		Long userId = Long.parseLong(authentication.getName());
-		System.out.println(userId);
 		List<LibraryGetRes> libraryList = libraryService.getLibrary(userId);		
 		return ResponseEntity.status(200).body(libraryList);
 	}
 	
 	@PostMapping("/{bookId}")
-	@ApiOperation(value = "¼­Àç Ã¥ µî·Ï")
+	@ApiOperation(value = "ì„œì¬ ì±… ë“±ë¡")
 	public ResponseEntity<?> createLibrary(@PathVariable(name = "bookId") Long bookId, @ApiIgnore Authentication authentication) {
 		List<Library> list = libraryRepository.findAll();
 		Long userId = Long.parseLong(authentication.getName());
-		// ±âÁ¸¿¡ µî·ÏµÈ Ã¥ÀÌ¸é POST ºÒ°¡
+		// ê¸°ì¡´ì— ë“±ë¡ëœ ì±…ì´ë©´ POST ë¶ˆê°€
 		for(Library lib : list) {
 			if(lib.getAccount().getId()==userId && lib.getBook().getId()==bookId) {
-				return ResponseEntity.status(412).body(BaseResponseBody.of(412, "ÀÌ¹Ì µî·ÏµÈ Ã¥ ÀÔ´Ï´Ù."));
+				return ResponseEntity.status(412).body(BaseResponseBody.of(412, "ì´ë¯¸ ë“±ë¡ëœ ì±… ì…ë‹ˆë‹¤."));
 			}
 		}
 		libraryService.createLibrary(userId, bookId);
@@ -61,14 +60,14 @@ public class LibraryController {
 	}
 	
 	@PutMapping()
-	@ApiOperation(value = "º°Á¡ ¹× ÀĞÀ½ »óÅÂ ¼öÁ¤")
+	@ApiOperation(value = "ë³„ì  ë° ìƒíƒœ ìˆ˜ì •")
 	public ResponseEntity<?> updateLibrary(@RequestBody LibraryPutReq libraryPutReq) {
 		libraryService.updateLibrary(libraryPutReq);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
 	@DeleteMapping("/{libraryId}")
-	@ApiOperation(value = "³» ¼­Àç¿¡¼­ Ã¥ »èÁ¦")
+	@ApiOperation(value = "ë‚´ ì„œì¬ì—ì„œ ì±… ì‚­ì œ")
 	public ResponseEntity<?> deleteLibrary(@PathVariable Long libraryId) {
 		libraryService.deleteLibrary(libraryId);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));

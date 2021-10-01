@@ -26,7 +26,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
 /*
- * À¯Àú Á¤º¸·Î JWT ÅäÅ«À» ¸¸µé°Å³ª ÅäÅ«¿¡¼­ À¯Àú Á¤º¸¸¦ °¡Á®¿È
+ * ìœ ì € ì •ë³´ë¡œ JWT í† í°ì„ ë§Œë“¤ê±°ë‚˜ í† í°ì—ì„œ ìœ ì € ì •ë³´ë¥¼ ê°€ì ¸ì˜´
  */
 @Slf4j
 @Component
@@ -34,8 +34,8 @@ public class TokenProvider {
 	
 	private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60;			 // 1½Ã°£
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 14;  // 2ÁÖ
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60;			 // 1ì‹œê°„
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 14;  // 2ì£¼
     
     private final Key key;
     
@@ -45,23 +45,23 @@ public class TokenProvider {
     }
     
     public TokenDto generateTokenDto(Authentication authentication) {
-    	// ±ÇÇÑ °¡Á®¿À±â
+    	// ê¶Œí•œ ê°€ì ¸ì˜¤ê¸°
     	String authorities = authentication.getAuthorities().stream()
     			.map(GrantedAuthority::getAuthority)
     			.collect(Collectors.joining(","));
     	
     	long now = (new Date()).getTime();
     	
-    	// Access Token »ı¼º
+    	// Access Token ìƒì„±
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
         		.setSubject(authentication.getName())		// payload "sub": "name"
                 .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
-                .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (¿¹½Ã)
+                .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (ì˜ˆì‹œ)
                 .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
                 .compact();
         
-        // Refresh Token »ı¼º
+        // Refresh Token ìƒì„±
         String refreshToken = Jwts.builder()
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS512)
@@ -76,20 +76,20 @@ public class TokenProvider {
     }
     
     public Authentication getAuthentication(String accessToken) {
-        // ÅäÅ« º¹È£È­
+        // í† í° ë³µí˜¸í™”
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("±ÇÇÑ Á¤º¸°¡ ¾ø´Â ÅäÅ«ÀÔ´Ï´Ù.");
+            throw new RuntimeException("ê¶Œí•œ ì •ë³´ê°€ ì—†ëŠ” í† í°ì…ë‹ˆë‹¤.");
         }
 
-        // Å¬·¹ÀÓ¿¡¼­ ±ÇÇÑ Á¤º¸ °¡Á®¿À±â
+        // í´ë ˆì„ì—ì„œ ê¶Œí•œ ì •ë³´ ê°€ì ¸ì˜¤ê¸°
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        // UserDetails °´Ã¼¸¦ ¸¸µé¾î¼­ Authentication ¸®ÅÏ
+        // UserDetails ê°ì²´ë¥¼ ë§Œë“¤ì–´ì„œ Authentication ë¦¬í„´
         UserDetails principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
@@ -100,13 +100,13 @@ public class TokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Àß¸øµÈ JWT ¼­¸íÀÔ´Ï´Ù.");
+            log.info("ì˜ëª»ëœ JWT ì„œëª…ì…ë‹ˆë‹¤.");
         } catch (ExpiredJwtException e) {
-            log.info("¸¸·áµÈ JWT ÅäÅ«ÀÔ´Ï´Ù.");
+            log.info("ë§Œë£Œëœ JWT í† í°ì…ë‹ˆë‹¤.");
         } catch (UnsupportedJwtException e) {
-            log.info("Áö¿øµÇÁö ¾Ê´Â JWT ÅäÅ«ÀÔ´Ï´Ù.");
+            log.info("ì§€ì›ë˜ì§€ ì•ŠëŠ” JWT í† í°ì…ë‹ˆë‹¤.");
         } catch (IllegalArgumentException e) {
-            log.info("JWT ÅäÅ«ÀÌ Àß¸øµÇ¾ú½À´Ï´Ù.");
+            log.info("JWT í† í°ì´ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.");
         }
         return false;
     }

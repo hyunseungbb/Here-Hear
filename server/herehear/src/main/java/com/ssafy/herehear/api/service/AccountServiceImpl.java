@@ -21,15 +21,15 @@ public class AccountServiceImpl implements AccountService {
 	public AccountRes getAccountInfo(String username) {
 		return accountRepository.findByUsername(username)
 				.map(AccountRes::of)
-				.orElseThrow(() -> new RuntimeException("À¯Àú Á¤º¸°¡ ¾ø½À´Ï´Ù."));
+				.orElseThrow(() -> new RuntimeException("ìœ ì € ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤."));
 	}
 	
-	// ÇöÀç SecurityContext ¿¡ ÀÖ´Â À¯Àú Á¤º¸ °¡Á®¿À±â
+	// í˜„ìž¬ SecurityContext ì— ìžˆëŠ” ìœ ì € ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 	@Transactional(readOnly = true)
     public AccountRes getMyInfo() {
         return accountRepository.findById(SecurityUtil.getCurrentAccountId())
                 .map(AccountRes::of)
-                .orElseThrow(() -> new RuntimeException("·Î±×ÀÎ À¯Àú Á¤º¸°¡ ¾ø½À´Ï´Ù."));
+                .orElseThrow(() -> new RuntimeException("ë¡œê·¸ì¸ ìœ ì € ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤."));
     }
 	
 	

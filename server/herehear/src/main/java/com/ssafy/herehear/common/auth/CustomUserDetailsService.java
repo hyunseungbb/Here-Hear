@@ -27,10 +27,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return accountRepository.findByUsername(username)
                 .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(username + " -> µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ Ã£À» ¼ö ¾ø½À´Ï´Ù."));
+                .orElseThrow(() -> new UsernameNotFoundException(username + " -> ë°ì´í„°ë² ì´ìŠ¤ì—ì„œ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."));
     }
 
-    // DB ¿¡ User °ªÀÌ Á¸ÀçÇÑ´Ù¸é UserDetails °´Ã¼·Î ¸¸µé¾î¼­ ¸®ÅÏ
+    // DB ï¿½ï¿½ User ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½ UserDetails ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½î¼­ ï¿½ï¿½ï¿½ï¿½
     private UserDetails createUserDetails(Account account) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(account.getAuthority().toString());
 
