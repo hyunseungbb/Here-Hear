@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         val tabFragmentList = listOf(HomeFragment(), CalenderFragment(), SearchFragment(), MyPageFragment())
         val adapter = FragmentAdapter(this)
         adapter.fragmentList = tabFragmentList
+        binding.viewPager.scroll
         binding.viewPager.adapter = adapter
 
         // 탭과 프래그먼트들을 연결하는 메서드
@@ -56,8 +57,12 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, Camera2Activity::class.java)
         intent.putExtra("bookId", bookId)
         getResultText.launch(intent)
-//        startActivity(intent)
-//        finish()
+    }
+
+    fun goIntroAcitivity() {
+        val intent = Intent(this, IntroActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
 //    fun setFragment() {

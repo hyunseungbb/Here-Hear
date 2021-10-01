@@ -15,7 +15,8 @@ import com.ssafy.herehear.databinding.ActivityLoginBinding
 import com.ssafy.herehear.databinding.FragmentHomeBinding
 import com.ssafy.herehear.databinding.FragmentLoginBinding
 import com.ssafy.herehear.feature.calender.mainCalenderFragment
-import com.ssafy.herehear.feature.calender.readModeFragment
+import com.ssafy.herehear.feature.home.myLibrary.LibraryMainFragment
+import com.ssafy.herehear.feature.home.readmode.ReadModeFragment
 import com.ssafy.herehear.model.network.RetrofitClient
 import com.ssafy.herehear.model.network.response.LoginRequest
 import com.ssafy.herehear.model.network.response.LoginResponse
@@ -33,6 +34,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+
 class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +51,7 @@ class HomeFragment : Fragment() {
 
         // readmode 프래그먼트를 프레임에 일단 추가. 원래는 홈메인임
         childFragmentManager.beginTransaction()
-            .add(R.id.frameHome, readModeFragment)
+            .add(R.id.frameHome, LibraryMainFragment())
             .commit()
 
         return binding.root
