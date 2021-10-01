@@ -1,11 +1,7 @@
 package com.ssafy.herehear.db.entity;
 
-// import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
-// import javax.persistence.FetchType;
-// import javax.persistence.JoinColumn;
-// import javax.persistence.OneToMany;
 import javax.persistence.Enumerated;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,9 +13,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * À¯Àú ¸ğµ¨ Á¤ÀÇ.
+ * ìœ ì € ëª¨ë¸ ì •ì˜.
  */
-//Entity°¡ ºÙÀº Å¬·¡½º´Â JPA°¡ °ü¸®ÇÏ´Â Å¬·¡½ºÀÌ°í, Å×ÀÌºí°ú ¸ÅÇÎÇÒ Å×ÀÌºí¿¡ ÇØ´ç ¾î³ëÅ×ÀÌ¼ÇÀ» ºÙÀÎ´Ù.
+//Entityê°€ ë¶™ì€ í´ë˜ìŠ¤ëŠ” JPAê°€ ê´€ë¦¬í•˜ëŠ” í´ë˜ìŠ¤ì´ê³ , í…Œì´ë¸”ê³¼ ë§¤í•‘í•  í…Œì´ë¸”ì— í•´ë‹¹ ì–´ë…¸í…Œì´ì…˜ì„ ë¶™ì¸ë‹¤.
 @Entity
 @Getter
 @Setter

@@ -29,13 +29,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 	
-	// Password ÀÎÄÚµù ¹æ½Ä¿¡ BCrypt ¾ÏÈ£È­ ¹æ½Ä »ç¿ë
+	// Password ì¸ì½”ë”© ë°©ì‹ì— BCrypt ì•”í˜¸í™” ë°©ì‹ ì‚¬ìš©
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
     
-    // swagger Å×½ºÆ®°¡ ¿øÈ°ÇÏµµ·Ï °ü·Ã API µéÀº ÀüºÎ ¹«½Ã
+    // swagger í…ŒìŠ¤íŠ¸ê°€ ì›í™œí•˜ë„ë¡ ê´€ë ¨ API ë“¤ì€ ì „ë¶€ ë¬´ì‹œ
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
@@ -49,28 +49,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // CSRF ¼³Á¤ Disable
+        // CSRF ì„¤ì • Disable
     	http.csrf().disable()
     	
-    		// exception hanlding ÇÒ¶§ Á÷Á¢ ¸¸µç Å¬·¡½º Ãß°¡
+    		// exception hanlding í• ë•Œ ì§ì ‘ ë§Œë“  í´ë˜ìŠ¤ ì¶”ê°€
     		.exceptionHandling()
     		.authenticationEntryPoint(jwtAuthenticationEntryPoint)
     		.accessDeniedHandler(jwtAccessDeniedHandler)
     		
-    		// ½ÃÅ¥¸®Æ¼´Â ±âº»ÀûÀ¸·Î ¼¼¼Ç »ç¿ë
-    		// ±Ùµ¥ ¿ì¸®´Â ¼¼¼Ç »ç¿ëÀ» ¾ÈÇÒ°ÍÀÌ¹Ç·Î stateless·Î ¼³Á¤
+    		// ì‹œíë¦¬í‹°ëŠ” ê¸°ë³¸ì ìœ¼ë¡œ ì„¸ì…˜ ì‚¬ìš©
+    		// ê·¼ë° ìš°ë¦¬ëŠ” ì„¸ì…˜ ì‚¬ìš©ì„ ì•ˆí• ê²ƒì´ë¯€ë¡œ statelessë¡œ ì„¤ì •
     		.and()
     		.sessionManagement()
     		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     		
-    		// ·Î±×ÀÎ, È¸¿ø°¡ÀÔ API´Â ÅäÅ« ¾ø¾îµµ ¿äÃ»ÀÌ °¡´ÉÇØ¾ß ÇÔ
+    		// ë¡œê·¸ì¸, íšŒì›ê°€ì… APIëŠ” í† í° ì—†ì–´ë„ ìš”ì²­ì´ ê°€ëŠ¥í•´ì•¼ í•¨
     		.and()
     		.authorizeRequests()
     		.antMatchers("/api/v1/auth/**").permitAll()
     		.antMatchers("/swagger-ui/**").permitAll()
-    		.anyRequest().authenticated()	// ³ª¸ÓÁö API´Â ÀüºÎ ÀÎÁõ ÇÊ¿ä
+    		.anyRequest().authenticated()	// ë‚˜ë¨¸ì§€ APIëŠ” ì „ë¶€ ì¸ì¦ í•„ìš”
     		
-    		// JwtFilter¸¦ addFilterBefore·Î µî·ÏÇß´ø JwtSecurityConfig Å¬·¡½º Àû¿ë
+    		// JwtFilterë¥¼ addFilterBeforeë¡œ ë“±ë¡í–ˆë˜ JwtSecurityConfig í´ë˜ìŠ¤ ì ìš©
     		.and()
     		.apply(new JwtSecurityConfig(tokenProvider));
     }
