@@ -6,4 +6,5 @@ urlpatterns = [
     path('upload/', views.upload, name='upload'),
     path('ocr_tts/', views.ocr_tts, name='ocr_tts'),
     # path('naive_tts/', views.naive_tts, name='naive_tts'),
+    path('download/', views.download, name='download')
 ]

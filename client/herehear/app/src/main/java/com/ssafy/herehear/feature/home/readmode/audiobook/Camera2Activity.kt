@@ -1,8 +1,10 @@
 package com.ssafy.herehear.feature.home.readmode.audiobook
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.hardware.Camera
@@ -13,12 +15,23 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ssafy.herehear.BaseActivity
+import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.databinding.ActivityCamera2Binding
+import com.ssafy.herehear.model.network.RetrofitClientAI
+import com.ssafy.herehear.model.network.response.OCRTTSResponse
+import com.ssafy.herehear.util.FormDataUtil
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+import java.io.File
 import java.io.IOException
+import java.lang.Exception
 import java.text.SimpleDateFormat
 
 class Camera2Activity : BaseActivity() {
@@ -28,7 +41,8 @@ class Camera2Activity : BaseActivity() {
     val REQ_CAMERA = 101 // 카메라 촬영 요청
 
     val binding by lazy { ActivityCamera2Binding.inflate(layoutInflater) }
-    var realUri: Uri? = null
+    var realUri:Uri? = null
+    var realPath: String? = null
 
     val getResultText = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result ->
@@ -37,10 +51,12 @@ class Camera2Activity : BaseActivity() {
             Log.d("test", "들어옴")
 
             realUri?.let { uri ->
-                Log.d("test", "왔${uri}")
+                Log.d("test", "제발..${getRealPathFromURI(uri)}")
+                Log.d("test", "카메라찍었을때${uri}")
                 val bitmap = loadBitmap(uri)
+                Log.d("test", "비트맵${loadBitmap(uri)}")
                 binding.imagePreview.setImageBitmap(bitmap)
-
+                realPath = getRealPathFromURI(uri)
                 realUri = null
             }
 
@@ -53,7 +69,9 @@ class Camera2Activity : BaseActivity() {
         ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
            result.data?.data?.let { uri ->
-
+               Log.d("test", "제발..${getRealPathFromURI(uri)}")
+               Log.d("test", "갤러리에서 ${uri}")
+               realPath = getRealPathFromURI(uri)
                binding.imagePreview.setImageURI(uri)
            }
         }
@@ -69,16 +87,41 @@ class Camera2Activity : BaseActivity() {
             finish()
         }
         binding.cameraNextButton.setOnClickListener {
-            // jpg 파일 혹은 파일 uri랑 bookId를 넘겨줘야함
-            val bookId = intent.getIntExtra("bookId", 0)
-            val playIntent = Intent()
-            playIntent.putExtra("bookId", bookId)
-            playIntent.putExtra("uri", realUri)
-            startActivity(playIntent)
-            finish()
+            // 여기서 ai서버에 ocr_tts 요청을 해야하는구나 그게 왜 안되어 있지??
+            var file = File(realPath)
+            Log.d("test", "오디오변환 요청 전 파일경로 : ${file.path}")
+            var fileBody = FormDataUtil.getImageBody("imgs", file)
+            RetrofitClientAI.api.downloadAudio(fileBody).enqueue(object: Callback<OCRTTSResponse> {
+                override fun onResponse(
+                    call: Call<OCRTTSResponse>,
+                    response: Response<OCRTTSResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        goAudioPlayActivity()
+                    } else {
+                        Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<OCRTTSResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
-
+    fun goAudioPlayActivity() {
+        // jpg 파일 혹은 파일 uri랑 bookId를 넘겨줘야함
+        val bookId = intent.getIntExtra("bookId", 0)
+        val playIntent = Intent(this, AudioPlayActivity::class.java)
+        playIntent.putExtra("bookId", bookId)
+        playIntent.putExtra("path", realPath)
+        try {
+            startActivity(playIntent)
+            finish()
+        } catch (e: Exception) {
+            Log.d("err", "${e}")
+        }
+    }
     override fun permissionGranted(requestCode: Int) {
         when (requestCode) {
             PERM_STORAGE -> setViews()
@@ -155,6 +198,15 @@ class Camera2Activity : BaseActivity() {
         }
 
         return image
+    }
+
+    @SuppressLint("Range")
+    fun getRealPathFromURI(uri: Uri): String? {
+        val cursor = HereHear.context().contentResolver.query(uri, null, null, null, null)
+        cursor?.moveToNext()
+        val path = cursor?.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
+        cursor?.close()
+        return path
     }
 
 }

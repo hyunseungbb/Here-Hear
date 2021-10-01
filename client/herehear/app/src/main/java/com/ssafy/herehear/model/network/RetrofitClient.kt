@@ -11,7 +11,7 @@ object RetrofitClient {
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://j5b105.p.ssafy.io:8081/api/v1/")
+            .baseUrl("http://10.0.2.2:8081/api/v1/")
             .client(OkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
