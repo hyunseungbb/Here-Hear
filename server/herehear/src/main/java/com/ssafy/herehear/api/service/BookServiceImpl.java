@@ -40,13 +40,13 @@ public class BookServiceImpl implements BookService {
 		
 		String type = search.getType();
 		
-		// °Ë»ö Å¸ÀÔ¿¡ µû¶ó Á¦¸ñ/ÀÛ°¡¸íÀÌ Æ÷ÇÔµÈ Ã¥ ¸®½ºÆ® ÃßÃâ
+		// ê²€ìƒ‰ íƒ€ì…ì— ë”°ë¼ ì œëª©/ì‘ê°€ëª…ì´ í¬í•¨ëœ ì±… ë¦¬ìŠ¤íŠ¸ ì¶”ì¶œ
 		if(type.equals("title")){
 			list =  bookRepository.findByTitleLike("%"+search.getKeyword()+"%");
 		}else if(type.equals("author")){
 			list = bookRepository.findByAuthorLike("%"+search.getKeyword()+"%");
 		}
-		// GetRes Çü½Ä¿¡ ¸Â°Ô ÁöÁ¤
+		// GetRes í˜•ì‹ì— ë§ê²Œ ì§€ì •
 		BookSearchGetRes res;
 		for(Book b : list){
 			res = new BookSearchGetRes();
@@ -54,7 +54,7 @@ public class BookServiceImpl implements BookService {
 			res.setTitle(b.getTitle());
 			res.setImg_url(b.getImg_url());
 
-			// °Ë»ö¾î¿Í ¿ÏÀüÈ÷ µ¿ÀÏÇÏ¸é bookList / ¾Æ´Ï¸é bookLikeList¿¡ ´ã±â
+			// ê²€ìƒ‰ì–´ì™€ ì™„ì „íˆ ë™ì¼í•˜ë©´ bookList / ì•„ë‹ˆë©´ bookLikeListì— ë‹´ê¸°
 			if(type.equals("title")) {
 				if(b.getTitle().equals(search.getKeyword())){	
 					bookList.add(res);
@@ -69,7 +69,7 @@ public class BookServiceImpl implements BookService {
 				}
 			} 		
 		}
-		// BookLikeList¸¦ ¼øÈ¸ÇÏ¸ç bookList¿¡ ´Ù½Ã ´ã¾ÆÁÖ±â ( °Ë»ö¾î¿Í µ¿ÀÏÇÑ Ã¥À» Ã¹¹øÂ°·Î ³ª¿À°Ô ÇÏ±â À§ÇÔ)
+		// BookLikeListë¥¼ ìˆœíšŒí•˜ë©° bookListì— ë‹¤ì‹œ ë‹´ì•„ì£¼ê¸° ( ê²€ìƒ‰ì–´ì™€ ë™ì¼í•œ ì±…ì„ ì²«ë²ˆì§¸ë¡œ ë‚˜ì˜¤ê²Œ í•˜ê¸° ìœ„í•¨)
 		for(BookSearchGetRes b : bookLikeList){
 			bookList.add(b);
 		}

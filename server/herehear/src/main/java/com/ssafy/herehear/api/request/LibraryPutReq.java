@@ -10,12 +10,12 @@ import lombok.Setter;
 @ApiModel("LibraryPutRequest")
 public class LibraryPutReq {
 	
-	@ApiModelProperty(name="¼­Àç ID")
+	@ApiModelProperty(name="ì„œì¬ ID")
 	private Long id;
 	
-	@ApiModelProperty(name="ÀĞÀ½ »óÅÂ", example = "Àü:0, Áß:1, ÈÄ:2")
+	@ApiModelProperty(name="ì½ìŒ ìƒíƒœ", example = "ì „:0, ì¤‘:1, í›„:2")
 	private int read_status;
 	
-	@ApiModelProperty(name="º°Á¡")
+	@ApiModelProperty(name="ë³„ì ")
 	private int stars;
 }

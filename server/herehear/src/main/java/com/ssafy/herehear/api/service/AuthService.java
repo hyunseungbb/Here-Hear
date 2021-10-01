@@ -6,7 +6,7 @@ import com.ssafy.herehear.common.jwt.TokenDto;
 import com.ssafy.herehear.common.jwt.TokenReqDto;
 
 /**
- *	ÀÎÁõ °ü·Ã ºñÁî´Ï½º ·ÎÁ÷ Ã³¸®¸¦ À§ÇÑ ¼­ºñ½º ÀÎÅÍÆäÀÌ½º Á¤ÀÇ.
+ *	ì¸ì¦ ê´€ë ¨ ë¹„ì¦ˆë‹ˆìŠ¤ ë¡œì§ ì²˜ë¦¬ë¥¼ ìœ„í•œ ì„œë¹„ìŠ¤ ì¸í„°í˜ì´ìŠ¤ ì •ì˜.
  */
 public interface AuthService {
 	

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * À¯Àú ·Î±×ÀÎ API ([POST] /api/v1/auth) ¿äÃ»¿¡ ´ëÇÑ ÀÀ´ä°ª Á¤ÀÇ.
+ * ìœ ì € ë¡œê·¸ì¸ API ([POST] /api/v1/auth) ìš”ì²­ì— ëŒ€í•œ ì‘ë‹µê°’ ì •ì˜.
  */
 @Getter
 @Setter

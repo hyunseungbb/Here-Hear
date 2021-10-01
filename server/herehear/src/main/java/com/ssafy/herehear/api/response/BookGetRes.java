@@ -10,22 +10,22 @@ import lombok.Setter;
 @ApiModel("BookGetResponse")
 public class BookGetRes {
 	
-	@ApiModelProperty(name="Ã¥ ID")
+	@ApiModelProperty(name="ì±… ID")
 	private Long id;
 	
-	@ApiModelProperty(name="Ã¥ Á¦¸ñ")
+	@ApiModelProperty(name="ì±… ì œëª©")
 	private String title;
 	
-	@ApiModelProperty(name="Ã¥ Ç¥Áö")
+	@ApiModelProperty(name="ì±… í‘œì§€")
 	private String img_url;
 	
-	@ApiModelProperty(name="Ã¥ ¼Ò°³")
+	@ApiModelProperty(name="ì±… ì†Œê°œ")
 	private String description;	
 	
-	@ApiModelProperty(name="º°Á¡ ÃÑ ÇÕ")
+	@ApiModelProperty(name="ë³„ì  ì´ í•©")
 	private int stars_sum;
 	
-	@ApiModelProperty(name="º°Á¡ °¹¼ö")
+	@ApiModelProperty(name="ë³„ì  ê°¯ìˆ˜")
 	private int stars_count;
 
 }
