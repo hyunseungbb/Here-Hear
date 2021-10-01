@@ -31,7 +31,7 @@ public class CommentController {
 	CommentService commentService;
 	
 	@PostMapping("/{bookId}")
-	@ApiOperation(value = "������ ���")
+	@ApiOperation(value = "감상평 등록")
 	public ResponseEntity<BaseResponseBody> createComment(@PathVariable(name = "bookId") Long bookId, 
 			@RequestBody CommentPostReq req) {
 		commentService.createComment(bookId, req);
