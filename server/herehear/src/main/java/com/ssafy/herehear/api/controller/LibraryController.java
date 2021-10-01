@@ -61,7 +61,7 @@ public class LibraryController {
 	}
 	
 	@PutMapping()
-	@ApiOperation(value = "별점 및 읽음 상태 수정")
+	@ApiOperation(value = "별점 및 상태 수정")
 	public ResponseEntity<?> updateLibrary(@RequestBody LibraryPutReq libraryPutReq) {
 		libraryService.updateLibrary(libraryPutReq);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
