@@ -22,16 +22,16 @@ public class JwtFilter extends OncePerRequestFilter {
     		
     private final TokenProvider tokenProvider;
     
-    // ½ÇÁ¦ ÇÊÅÍ¸µ ·ÎÁ÷Àº doFilterInternal ¿¡ µé¾î°¨
-    // JWT ÅäÅ«ÀÇ ÀÎÁõ Á¤º¸¸¦ ÇöÀç ¾²·¹µåÀÇ SecurityContext ¿¡ ÀúÀåÇÏ´Â ¿ªÇÒ ¼öÇà
+    // ì‹¤ì œ í•„í„°ë§ ë¡œì§ì€ doFilterInternal ì— ë“¤ì–´ê°
+    // JWT í† í°ì˜ ì¸ì¦ ì •ë³´ë¥¼ í˜„ì¬ ì“°ë ˆë“œì˜ SecurityContext ì— ì €ì¥í•˜ëŠ” ì—­í•  ìˆ˜í–‰
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
-        // 1. Request Header ¿¡¼­ ÅäÅ«À» ²¨³¿
+    	// 1. Request Header ì—ì„œ í† í°ì„ êº¼ëƒ„
         String jwt = resolveToken(request);
 
-        // 2. validateToken À¸·Î ÅäÅ« À¯È¿¼º °Ë»ç
-        // Á¤»ó ÅäÅ«ÀÌ¸é ÇØ´ç ÅäÅ«À¸·Î Authentication À» °¡Á®¿Í¼­ SecurityContext ¿¡ ÀúÀå
+        // 2. validateToken ìœ¼ë¡œ í† í° ìœ íš¨ì„± ê²€ì‚¬
+        // ì •ìƒ í† í°ì´ë©´ í•´ë‹¹ í† í°ìœ¼ë¡œ Authentication ì„ ê°€ì ¸ì™€ì„œ SecurityContext ì— ì €ì¥
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -40,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
     
-    // Request Header ¿¡¼­ ÅäÅ« Á¤º¸¸¦ ²¨³»¿À±â
+    // Request Header ì—ì„œ í† í° ì •ë³´ë¥¼ êº¼ë‚´ì˜¤ê¸°
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {

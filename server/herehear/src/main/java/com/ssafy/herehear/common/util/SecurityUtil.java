@@ -10,13 +10,13 @@ public class SecurityUtil {
 	
 	private SecurityUtil() {}
 	
-	// SecurityContext ¿¡ À¯Àú Á¤º¸°¡ ÀúÀåµÇ´Â ½ÃÁ¡
-    // Request °¡ µé¾î¿Ã ¶§ JwtFilter ÀÇ doFilter ¿¡¼­ ÀúÀå
+	// SecurityContext ì— ìœ ì € ì •ë³´ê°€ ì €ì¥ë˜ëŠ” ì‹œì 
+    // Request ê°€ ë“¤ì–´ì˜¬ ë•Œ JwtFilter ì˜ doFilter ì—ì„œ ì €ì¥
 	public static Long getCurrentAccountId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getName() == null) {
-            throw  new RuntimeException("Security Context ¿¡ ÀÎÁõ Á¤º¸°¡ ¾ø½À´Ï´Ù.");
+            throw  new RuntimeException("Security Context ì— ì¸ì¦ ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
 
         return Long.parseLong(authentication.getName());

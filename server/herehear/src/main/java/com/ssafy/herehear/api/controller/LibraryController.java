@@ -40,7 +40,6 @@ public class LibraryController {
 	@ApiOperation(value = "서재 책 조회")
 	public ResponseEntity<List<LibraryGetRes>> getLibrary(@ApiIgnore Authentication authentication) {
 		Long userId = Long.parseLong(authentication.getName());
-		System.out.println(userId);
 		List<LibraryGetRes> libraryList = libraryService.getLibrary(userId);		
 		return ResponseEntity.status(200).body(libraryList);
 	}

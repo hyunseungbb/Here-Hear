@@ -23,4 +23,7 @@ public class LibraryGetRes {
 	
 	@ApiModelProperty(name="별점")
 	private int stars;
+	
+	@ApiModelProperty(name="책 표지")
+	private String img_url;
 }

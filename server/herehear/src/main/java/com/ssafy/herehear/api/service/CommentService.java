@@ -8,7 +8,7 @@ import com.ssafy.herehear.db.entity.Comment;
 
 public interface CommentService {
 	
-	Comment createComment(Long bookId, CommentPostReq req);
+	Comment createComment(Long bookId, CommentPostReq req, Long userId);
 	List<CommentGetRes> getAllCommentOfBook(Long bookId);
 	List<CommentGetRes> getAllMyCommentOfBook(Long bookId, Long userId);
 	
