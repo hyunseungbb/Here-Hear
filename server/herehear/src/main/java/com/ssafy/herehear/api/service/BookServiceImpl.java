@@ -19,9 +19,7 @@ public class BookServiceImpl implements BookService {
 	
 	@Override
 	public BookGetRes getBook(Long id) {
-		
 		Book book = bookRepository.findById(id).get();
-
 		BookGetRes bookinfo;
 		bookinfo = new BookGetRes();
 		bookinfo.setId(id);
@@ -32,7 +30,6 @@ public class BookServiceImpl implements BookService {
 		bookinfo.setStars_count(book.getStars_count());
 
 		return bookinfo;
-		
 	}
 	
 	@Override
@@ -49,7 +46,6 @@ public class BookServiceImpl implements BookService {
 		}else if(type.equals("author")){
 			list = bookRepository.findByAuthorLike("%"+search.getKeyword()+"%");
 		}
-		
 		// GetRes 형식에 맞게 지정
 		BookSearchGetRes res;
 		for(Book b : list){
@@ -57,7 +53,7 @@ public class BookServiceImpl implements BookService {
 			res.setId(b.getId());
 			res.setTitle(b.getTitle());
 			res.setImg_url(b.getImg_url());
-			
+
 			// 검색어와 완전히 동일하면 bookList / 아니면 bookLikeList에 담기
 			if(type.equals("title")) {
 				if(b.getTitle().equals(search.getKeyword())){	
@@ -72,9 +68,7 @@ public class BookServiceImpl implements BookService {
 					bookLikeList.add(res);
 				}
 			} 		
-			
 		}
-		
 		// BookLikeList를 순회하며 bookList에 다시 담아주기 ( 검색어와 동일한 책을 첫번째로 나오게 하기 위함)
 		for(BookSearchGetRes b : bookLikeList){
 			bookList.add(b);

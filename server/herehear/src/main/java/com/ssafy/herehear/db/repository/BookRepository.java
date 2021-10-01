@@ -12,7 +12,5 @@ import com.ssafy.herehear.db.entity.Book;
 public interface BookRepository extends JpaRepository<Book, Long> {
 	public Optional<Book> findById(Long id);
 	public List<Book> findByTitleLike(String title);
-	public List<Book> findByAuthorLike(String author);
-	public List<Book> findByTitleContains(String title);
-	
+	public List<Book> findByAuthorLike(String author);	
 }
