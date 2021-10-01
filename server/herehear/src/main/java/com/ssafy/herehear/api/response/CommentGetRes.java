@@ -15,8 +15,8 @@ public class CommentGetRes {
 	@ApiModelProperty(name = "감상평 ID")
 	private Long id;
 	
-	@ApiModelProperty(name = "유저 ID")
-	private Long userId;
+	@ApiModelProperty(name = "유저이름")
+	private String username;
 	
 	@ApiModelProperty(name = "책 ID")
 	private Long bookId;
