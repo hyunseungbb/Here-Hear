@@ -33,8 +33,9 @@ public class CommentController {
 	@PostMapping("/{bookId}")
 	@ApiOperation(value = "감상평 등록")
 	public ResponseEntity<BaseResponseBody> createComment(@PathVariable(name = "bookId") Long bookId, 
-			@RequestBody CommentPostReq req) {
-		commentService.createComment(bookId, req);
+			@RequestBody CommentPostReq req, @ApiIgnore Authentication authentication) {
+		Long userId = Long.parseLong(authentication.getName());
+		commentService.createComment(bookId, req, userId);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	

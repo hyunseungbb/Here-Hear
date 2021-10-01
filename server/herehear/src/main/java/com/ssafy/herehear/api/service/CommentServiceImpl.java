@@ -28,9 +28,9 @@ public class CommentServiceImpl implements CommentService {
 	BookRepository bookRepository;
 	
 	@Override
-	public Comment createComment(Long bookId, CommentPostReq req) {
+	public Comment createComment(Long bookId, CommentPostReq req, Long userId) {
 		Comment comment = new Comment();
-		comment.setAccount(accountRepository.findById(req.getUserId()).get());
+		comment.setAccount(accountRepository.findById(userId).get());
 		comment.setBook(bookRepository.findById(bookId).get());
 		comment.setContent(req.getContent());
 		comment.setDate(new Date());
