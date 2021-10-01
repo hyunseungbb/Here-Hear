@@ -28,18 +28,22 @@ public class LibraryServiceImpl implements LibraryService {
 	BookRepository bookRepository;
 	
 	@Override
-	public List<LibraryGetRes> getLibrary(Long user_id) {
-		List<Library> list = libraryRepository.findByAccount_id(user_id);
+	public List<LibraryGetRes> getLibrary(Long userId) {
+		List<Library> list = libraryRepository.findAll();
 		List<LibraryGetRes> copy = new ArrayList<>();
+		
 		LibraryGetRes res;
 		for(Library q : list) {
-			res = new LibraryGetRes();
-			res.setId(q.getId());
-			res.setBook_id(q.getBook().getId());
-			res.setUser_id(user_id);
-			res.setRead_status(q.getRead_status());
-			res.setStars(q.getStars());
-			copy.add(res);
+			if(q.getAccount().getId() == userId) {
+				res = new LibraryGetRes();
+				res.setId(q.getId());
+				res.setBook_id(q.getBook().getId());
+				res.setUser_id(userId);
+				res.setRead_status(q.getRead_status());
+				res.setStars(q.getStars());
+				res.setImg_url(q.getBook().getImg_url());
+				copy.add(res);
+			}
 		}
 		return copy;
 	}
