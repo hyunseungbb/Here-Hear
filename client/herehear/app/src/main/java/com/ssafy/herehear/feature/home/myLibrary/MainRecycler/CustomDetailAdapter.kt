@@ -3,22 +3,13 @@ package com.ssafy.herehear.feature.home.myLibrary.MainRecycler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.HomeBookRecyclerBinding
-import com.ssafy.herehear.feature.home.libraryMainFragment
-import com.ssafy.herehear.feature.home.myLibrary.LibraryDetailFragment
 import com.ssafy.herehear.homeFragment
-
-
-import com.ssafy.herehear.model.data.MainBook
 import com.ssafy.herehear.model.network.response.GetMyLibraryResponseItem
 import com.ssafy.herehear.util.GlideApp
 
-class CustomMainAdapter: RecyclerView.Adapter<CustomMainAdapter.Holder>() {
+class CustomDetailAdapter: RecyclerView.Adapter<CustomDetailAdapter.Holder>() {
 
     var listData = mutableListOf<GetMyLibraryResponseItem>()
 

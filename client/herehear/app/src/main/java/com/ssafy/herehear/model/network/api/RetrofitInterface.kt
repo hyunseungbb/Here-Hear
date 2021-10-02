@@ -28,7 +28,10 @@ interface RetrofitInterface {
     @GET("libraries/mine")
     fun getMyLibrary(): Call<GetMyLibraryResponse>
 
-    @GET("account/me")
-    fun getMyAccountInfo(): Call<MyAccountInfoResponse>
+    @GET
+    fun getHomeBookDetail(@Url url: String): Call<BookDetailResponse>
+
+    @GET
+    fun getAllComments(@Url url: String): Call<AllCommentsResponse>
 }
 
