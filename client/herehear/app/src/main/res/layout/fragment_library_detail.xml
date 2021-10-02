@@ -17,7 +17,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <ImageButton
@@ -34,24 +33,22 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <ImageView
-                android:id="@+id/imageView2"
+            <ImageButton
+                android:id="@+id/readDoneButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
+                android:backgroundTint="@color/white"
                 android:contentDescription="TODO"
-                android:src="@drawable/readdone"
-                app:srcCompat="@drawable/readdone" />
+                android:src="@drawable/readdone" />
 
-            <ImageView
-                android:id="@+id/imageView"
+            <ImageButton
+                android:id="@+id/goReadModeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="20dp"
+                android:backgroundTint="@color/white"
                 android:contentDescription="TODO"
-                android:src="@drawable/gotoreadmode"
-                app:srcCompat="@drawable/gotoreadmode" />
+                android:src="@drawable/gotoreadmode" />
 
         </LinearLayout>
 

@@ -18,7 +18,9 @@ import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.ActivityLoginBinding
 import com.ssafy.herehear.databinding.FragmentHomeBinding
 import com.ssafy.herehear.databinding.FragmentLoginBinding
+import com.ssafy.herehear.databinding.FragmentReadModeBinding
 import com.ssafy.herehear.feature.calender.mainCalenderFragment
+import com.ssafy.herehear.feature.calender.readModeFragment
 import com.ssafy.herehear.feature.home.myLibrary.LibraryDetailFragment
 import com.ssafy.herehear.feature.home.myLibrary.LibraryMainFragment
 import com.ssafy.herehear.feature.home.readmode.ReadModeFragment
@@ -83,6 +85,14 @@ class HomeFragment : Fragment() {
         childTransaction.replace(R.id.frameHome, libraryMainFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
+    }
+
+    fun goReadModeFragment(bookId: Int) {
+        val childTransaction = childFragmentManager.beginTransaction()
+        childTransaction.replace(R.id.frameHome, readModeFragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .commit()
+        libraryMainFragment.setFragmentResult("readModeRequest", bundleOf("valueKey" to bookId))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

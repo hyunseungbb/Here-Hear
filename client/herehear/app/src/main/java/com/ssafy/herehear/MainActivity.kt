@@ -17,6 +17,7 @@ import com.ssafy.herehear.feature.home.HomeFragment
 import com.ssafy.herehear.feature.home.readmode.ReadModeFragment
 import com.ssafy.herehear.feature.home.readmode.audiobook.Camera2Activity
 import com.ssafy.herehear.feature.home.readmode.audiobook.CameraActivity
+import com.ssafy.herehear.feature.home.readmode.paperbook.TimerActivity
 import com.ssafy.herehear.feature.mypage.MyPageFragment
 import com.ssafy.herehear.feature.search.SearchFragment
 
@@ -93,6 +94,12 @@ class MainActivity : AppCompatActivity() {
 
     fun goCameraActivity(bookId: Int) {
         val intent = Intent(this, Camera2Activity::class.java)
+        intent.putExtra("bookId", bookId)
+        getResultText.launch(intent)
+    }
+
+    fun goTimerActivity(bookId: Int) {
+        val intent = Intent(this, TimerActivity::class.java)
         intent.putExtra("bookId", bookId)
         getResultText.launch(intent)
     }
