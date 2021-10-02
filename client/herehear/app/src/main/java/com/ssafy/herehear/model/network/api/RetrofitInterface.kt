@@ -1,11 +1,6 @@
 package com.ssafy.herehear.model.network.api
 
-import com.ssafy.herehear.model.network.response.LoginRequest
-import com.ssafy.herehear.model.network.response.LoginResponse
-import com.ssafy.herehear.model.network.response.SignupRequest
-import com.ssafy.herehear.model.network.response.SignupResponse
-import com.ssafy.herehear.model.network.response.SearchRequest
-import com.ssafy.herehear.model.network.response.SearchResponse
+import com.ssafy.herehear.model.network.response.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -18,7 +13,7 @@ interface RetrofitInterface {
     ): Call<LoginResponse>
 
 
-    @POST("accounts")
+    @POST("auth/signup")
     fun signup(
         @Body signupBody: SignupRequest
     ): Call<SignupResponse>
@@ -30,5 +25,10 @@ interface RetrofitInterface {
         @Query("searchNo") searchNo: Int
     ): Call<SearchResponse>
 
+    @GET("libraries/mine")
+    fun getMyLibrary(): Call<GetMyLibraryResponse>
+
+    @GET("account/me")
+    fun getMyAccountInfo(): Call<MyAccountInfoResponse>
 }
 

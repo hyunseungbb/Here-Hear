@@ -13,12 +13,14 @@ import java.io.IOException
 object RetrofitClient {
 
     var api: RetrofitInterface
+    val retrofit: Retrofit
 
     init {
 
-        val retrofit = Retrofit.Builder()
+        retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2:8081/api/v1/")
             .client(provideOkHttpClient(AppInterceptor()))
+//            .client(OkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -36,8 +38,9 @@ object RetrofitClient {
     class AppInterceptor : Interceptor {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
+            val token = "Bearer " + HereHear.prefs.getString("access_token", "")
             val newRequest = request().newBuilder()
-                .addHeader("Authorization", HereHear.prefs.getString("access_token", null))
+                .addHeader("Authorization", token)
                 .build()
 
             proceed(newRequest)

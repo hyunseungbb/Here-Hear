@@ -25,12 +25,12 @@ class IntroActivity : AppCompatActivity() {
         setContentView(binding.root)
         val token = HereHear.prefs.getString("access_token", null)
 
-        if (token != "null") {
-            Toast.makeText(applicationContext, "자동 로그인 되었습니다.", Toast.LENGTH_SHORT).show()
-            intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+//        if (token != "null") {
+//            Toast.makeText(applicationContext, "자동 로그인 되었습니다.", Toast.LENGTH_SHORT).show()
+//            intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
         getResultText = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
