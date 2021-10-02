@@ -25,9 +25,10 @@ import retrofit2.Response
 
 class LibraryMainFragment : Fragment() {
 
-//    lateinit var mainActivity: MainActivity
+    lateinit var mainActivity: MainActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -84,22 +85,17 @@ class LibraryMainFragment : Fragment() {
                 t.printStackTrace()
             }
         })
-//        val adapter0 = CustomMainAdapter()
-//        val adapter1 = CustomMainAdapter()
-//        val adapter2 = CustomMainAdapter()
-//        adapter0.listData = data0
-//        adapter1.listData = data1
-//        adapter2.listData = data2
-//
-//        binding.mainRecyclerView0.adapter = adapter0
-//        binding.mainRecyclerView1.adapter = adapter1
-//        binding.mainRecyclerView2.adapter = adapter2
-//        binding.mainRecyclerView0.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
-//        binding.mainRecyclerView1.layoutManager = LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false)
-//        binding.mainRecyclerView2.layoutManager = LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false)
-
         return binding.root
     }
+
+    fun goHomeDetailFragment() {
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.frameHome, LibraryDetailFragment())
+            addToBackStack(null)
+            commit()
+        }
+    }
+
 
     // 전체 서재 요청
 //    fun requestData(): Triple<MutableList<GetMyLibraryResponseItem>, MutableList<GetMyLibraryResponseItem>, MutableList<GetMyLibraryResponseItem>> {
@@ -144,10 +140,10 @@ class LibraryMainFragment : Fragment() {
 //        return Triple(data0, data1, data2)
 //    }
 
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        if (context is MainActivity) {
-//            mainActivity = context
-//        }
-//    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            mainActivity = context
+        }
+    }
 }

@@ -20,6 +20,7 @@ import com.ssafy.herehear.feature.home.readmode.audiobook.CameraActivity
 import com.ssafy.herehear.feature.mypage.MyPageFragment
 import com.ssafy.herehear.feature.search.SearchFragment
 
+lateinit var homeFragment : HomeFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,7 +38,8 @@ class MainActivity : AppCompatActivity() {
 //        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
 //        }.attach()
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.frameMain, HomeFragment())
+        homeFragment = HomeFragment()
+        transaction.add(R.id.frameMain, homeFragment)
         transaction.addToBackStack(null)
         transaction.commit()
         binding.tabLayout.getTabAt(0)?.setIcon(R.drawable.home)
@@ -71,7 +73,8 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         when(flag) {
             0 -> {
-                transaction.replace(R.id.frameMain, HomeFragment())
+                homeFragment = HomeFragment()
+                transaction.replace(R.id.frameMain, homeFragment)
             }
             1 -> {
                 transaction.replace(R.id.frameMain, CalenderFragment())
@@ -99,7 +102,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
 
 
 //    fun setFragment() {
