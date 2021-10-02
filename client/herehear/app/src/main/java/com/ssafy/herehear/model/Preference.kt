@@ -8,11 +8,11 @@ class Preference(context: Context) {
 //    private val ACCESS_TOKEN = "access_token"
     private val prefs=context.getSharedPreferences(preference, MODE_PRIVATE)
 
-    fun getString(key: String, defValue: String?): String {
+    fun getString(key: String?, defValue: String?): String {
         return prefs.getString(key, defValue).toString()
     }
 
-    fun setString(key: String, str: String?) {
+    fun setString(key: String?, str: String?) {
         prefs.edit().putString(key, str).apply()
     }
 

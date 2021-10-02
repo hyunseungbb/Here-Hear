@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.ActivityMainBinding
@@ -24,24 +25,38 @@ class MainActivity : AppCompatActivity() {
 
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var getResultText: ActivityResultLauncher<Intent>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        val tabFragmentList = listOf(HomeFragment(), CalenderFragment(), SearchFragment(), MyPageFragment())
-        val adapter = FragmentAdapter(this)
-        adapter.fragmentList = tabFragmentList
-        binding.viewPager.adapter = adapter
+//        val tabFragmentList = listOf(HomeFragment(), CalenderFragment(), SearchFragment(), MyPageFragment())
+//        val adapter = FragmentAdapter(this)
+//        adapter.fragmentList = tabFragmentList
+//        binding.viewPager.adapter = adapter
 
         // 탭과 프래그먼트들을 연결하는 메서드
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-        }.attach()
-
+//        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+//        }.attach()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.frameMain, HomeFragment())
+        transaction.addToBackStack(null)
+        transaction.commit()
         binding.tabLayout.getTabAt(0)?.setIcon(R.drawable.home)
         binding.tabLayout.getTabAt(1)?.setIcon(R.drawable.calender)
         binding.tabLayout.getTabAt(2)?.setIcon(R.drawable.search)
         binding.tabLayout.getTabAt(3)?.setIcon(R.drawable.mypage)
+
+        binding.tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                switchFragment(tab!!.position)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
+
 
         getResultText = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()) { result ->
@@ -52,13 +67,40 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun switchFragment(flag: Int) {
+        val transaction = supportFragmentManager.beginTransaction()
+        when(flag) {
+            0 -> {
+                transaction.replace(R.id.frameMain, HomeFragment())
+            }
+            1 -> {
+                transaction.replace(R.id.frameMain, CalenderFragment())
+            }
+            2 -> {
+                transaction.replace(R.id.frameMain, SearchFragment())
+            }
+            3 -> {
+                transaction.replace(R.id.frameMain, MyPageFragment())
+            }
+        }
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+
     fun goCameraActivity(bookId: Int) {
         val intent = Intent(this, Camera2Activity::class.java)
         intent.putExtra("bookId", bookId)
         getResultText.launch(intent)
-//        startActivity(intent)
-//        finish()
     }
+
+    fun goIntroAcitivity() {
+        val intent = Intent(this, IntroActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+
 
 //    fun setFragment() {
 //
