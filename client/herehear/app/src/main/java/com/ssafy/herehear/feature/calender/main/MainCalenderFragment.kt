@@ -25,7 +25,6 @@ class MainCalenderFragment : Fragment() {
 
         // goReadMode 버튼 클릭시 리드모드로 가기
         binding.btnGoReadMode.setOnClickListener {
-
         }
 
         return binding.root

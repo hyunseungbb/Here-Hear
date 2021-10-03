@@ -38,6 +38,7 @@ class LoginActivity : AppCompatActivity() {
             val userId = binding.userId?.text.toString()
             val userPassword = binding.userPassword?.text.toString()
             val loginData = LoginRequest(userId, userPassword)
+            Log.d("test", "로그인 클릭 ${userId} & ${userPassword}")
             RetrofitClient.api.login(loginData).enqueue(object: Callback<LoginResponse> {
 
                 override fun onResponse(
@@ -46,7 +47,6 @@ class LoginActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         var token = response.body()?.accessToken
-                        Log.d("test", "${token}")
                         HereHear.prefs.setString("access_token", token)
                         startActivity(mainIntent)
                         finish()
@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
+                    t.printStackTrace()
                 }
             })
 

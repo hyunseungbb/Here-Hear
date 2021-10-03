@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
 			if(comment.getBook().getId() == bookId) {
 				tmpRes = new CommentGetRes();
 				tmpRes.setId(comment.getId());
-				tmpRes.setUserId(comment.getAccount().getId());
+				tmpRes.setUsername(comment.getAccount().getUsername());
 				tmpRes.setBookId(comment.getBook().getId());
 				tmpRes.setContent(comment.getContent());
 				tmpRes.setDate(comment.getDate());
@@ -74,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
 			if(comment.getBook().getId() == bookId && comment.getAccount().getId() == userId) {
 				tmpRes = new CommentGetRes();
 				tmpRes.setId(comment.getId());
-				tmpRes.setUserId(comment.getAccount().getId());
+				tmpRes.setUsername(comment.getAccount().getUsername());
 				tmpRes.setBookId(comment.getBook().getId());
 				tmpRes.setContent(comment.getContent());
 				tmpRes.setDate(comment.getDate());

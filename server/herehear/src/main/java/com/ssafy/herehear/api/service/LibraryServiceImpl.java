@@ -49,7 +49,7 @@ public class LibraryServiceImpl implements LibraryService {
 	}
 	
 	@Override
-	public Library createLibrary(Long bookId, Long userId) {
+	public Library createLibrary(Long userId, Long bookId) {
 		Library library = new Library();
 		Book book = bookRepository.findById(bookId).get();
 		library.setBook(book);
