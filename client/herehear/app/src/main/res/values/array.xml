@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="searchCategory">
+        <item>제목 검색</item>
+        <item>작가 검색</item>
+        <item>사용자 검색</item>
+        <item>AI 검색</item>
+    </string-array>
+</resources>
