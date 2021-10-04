@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.herehear.api.request.CommentPostReq;
 import com.ssafy.herehear.api.response.CommentGetRes;
+import com.ssafy.herehear.db.entity.Account;
 import com.ssafy.herehear.db.entity.Comment;
 import com.ssafy.herehear.db.repository.AccountRepository;
 import com.ssafy.herehear.db.repository.BookRepository;
@@ -27,9 +28,9 @@ public class CommentServiceImpl implements CommentService {
 	BookRepository bookRepository;
 	
 	@Override
-	public Comment createComment(Long bookId, CommentPostReq req) {
+	public Comment createComment(Long bookId, CommentPostReq req, Long userId) {
 		Comment comment = new Comment();
-		comment.setAccount(accountRepository.findById(req.getUserId()).get());
+		comment.setAccount(accountRepository.findById(userId).get());
 		comment.setBook(bookRepository.findById(bookId).get());
 		comment.setContent(req.getContent());
 		comment.setDate(new Date());
@@ -50,7 +51,30 @@ public class CommentServiceImpl implements CommentService {
 			if(comment.getBook().getId() == bookId) {
 				tmpRes = new CommentGetRes();
 				tmpRes.setId(comment.getId());
-				tmpRes.setUserId(comment.getAccount().getId());
+				tmpRes.setUsername(comment.getAccount().getUsername());
+				tmpRes.setBookId(comment.getBook().getId());
+				tmpRes.setContent(comment.getContent());
+				tmpRes.setDate(comment.getDate());
+				tmpRes.setReading_time(comment.getReading_time());
+				tmpRes.setIsshow(comment.getIsshow());
+				res.add(tmpRes);
+			}
+		}
+		return res;
+	}
+	
+	@Override
+	public List<CommentGetRes> getAllMyCommentOfBook(Long bookId, Long userId) {
+		List<Comment> commentList = commentRepository.findAll();
+		List<CommentGetRes> res = new ArrayList<>();
+		
+		CommentGetRes tmpRes;
+		
+		for(Comment comment : commentList) {
+			if(comment.getBook().getId() == bookId && comment.getAccount().getId() == userId) {
+				tmpRes = new CommentGetRes();
+				tmpRes.setId(comment.getId());
+				tmpRes.setUsername(comment.getAccount().getUsername());
 				tmpRes.setBookId(comment.getBook().getId());
 				tmpRes.setContent(comment.getContent());
 				tmpRes.setDate(comment.getDate());

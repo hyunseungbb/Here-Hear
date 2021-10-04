@@ -9,15 +9,16 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.herehear.db.entity.Account;
 
 /**
- * À¯Àú ¸ğµ¨ °ü·Ã µğºñ Äõ¸® »ı¼ºÀ» À§ÇÑ JPA Query Method ÀÎÅÍÆäÀÌ½º Á¤ÀÇ.
+ * ìœ ì € ëª¨ë¸ ê´€ë ¨ ë””ë¹„ ì¿¼ë¦¬ ìƒì„±ì„ ìœ„í•œ JPA Query Method ì¸í„°í˜ì´ìŠ¤ ì •ì˜.
  */
-//JpaRepository »ó¼Ó¹ŞÀ¸¸é¼­ Á¦³×¸¯¿¡ »ç¿ëÇÒ entity¿Í IDÅ¸ÀÔÀÌ µÉ ¼ö ÀÖ´Â Å¬·¡½º 
+//JpaRepository ìƒì†ë°›ìœ¼ë©´ì„œ ì œë„¤ë¦­ì— ì‚¬ìš©í•  entityì™€ IDíƒ€ì…ì´ ë  ìˆ˜ ìˆëŠ” í´ë˜ìŠ¤ 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-	// ¾Æ·¡¿Í °°ÀÌ, Query Method ÀÎÅÍÆäÀÌ½º(¹İÈ¯°ª, ¸Ş¼Òµå¸í, ÀÎÀÚ) Á¤ÀÇ¸¦ ÇÏ¸é ÀÚµ¿À¸·Î Query Method ±¸ÇöµÊ.
-	// ÇÊµå °Ë»öÀ» À§ÇØ¼­ ¸Ş¼­µå ÀÌ¸§À¸·Î Äõ¸® »ı¼º °¡´É Á¢µÎ¾î·Î findBy¸¦ »ç¿ëÇØ¾ßÇÔ
+	// ì•„ë˜ì™€ ê°™ì´, Query Method ì¸í„°í˜ì´ìŠ¤(ë°˜í™˜ê°’, ë©”ì†Œë“œëª…, ì¸ì) ì •ì˜ë¥¼ í•˜ë©´ ìë™ìœ¼ë¡œ Query Method êµ¬í˜„ë¨.
+	// í•„ë“œ ê²€ìƒ‰ì„ ìœ„í•´ì„œ ë©”ì„œë“œ ì´ë¦„ìœ¼ë¡œ ì¿¼ë¦¬ ìƒì„± ê°€ëŠ¥ ì ‘ë‘ì–´ë¡œ findByë¥¼ ì‚¬ìš©í•´ì•¼í•¨
 	
 	public Optional<Account> findById(Long id);
 	public Optional<Account> findByUsername(String username);
+	public boolean existsByUsername(String username);
 
 }

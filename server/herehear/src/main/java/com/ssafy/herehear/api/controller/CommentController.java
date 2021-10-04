@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +20,9 @@ import com.ssafy.herehear.api.service.CommentService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
-@Api(value = "∞®ªÛ∆Ú API", tags = {"Comment"})
+@Api(value = "Í∞êÏÉÅÌèâ API", tags = {"Comment"})
 @RestController
 @RequestMapping("/api/v1/comment")
 public class CommentController {
@@ -28,17 +31,26 @@ public class CommentController {
 	CommentService commentService;
 	
 	@PostMapping("/{bookId}")
-	@ApiOperation(value = "∞®ªÛ∆Ú µÓ∑œ")
+	@ApiOperation(value = "Í∞êÏÉÅÌèâ Îì±Î°ù")
 	public ResponseEntity<BaseResponseBody> createComment(@PathVariable(name = "bookId") Long bookId, 
-			@RequestBody CommentPostReq req) {
-		commentService.createComment(bookId, req);
+			@RequestBody CommentPostReq req, @ApiIgnore Authentication authentication) {
+		Long userId = Long.parseLong(authentication.getName());
+		commentService.createComment(bookId, req, userId);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
 	@GetMapping("/{bookId}")
-	@ApiOperation(value = "¿¸√º ∞®ªÛ∆Ú ¡∂»∏")
+	@ApiOperation(value = "Ï†ÑÏ≤¥ Í∞êÏÉÅÌèâ Ï°∞Ìöå")
 	public ResponseEntity<List<CommentGetRes>> getAllComment(@PathVariable(name = "bookId") Long bookId) {
 		List<CommentGetRes> commentList = commentService.getAllCommentOfBook(bookId);
+		return ResponseEntity.status(200).body(commentList);
+	}
+	
+	@GetMapping("/my/{bookId}")
+	@ApiOperation(value = "ÎÇòÏùò Í∞êÏÉÅÌèâ Ï°∞Ìöå")
+	public ResponseEntity<List<CommentGetRes>> gellAllMyComment(@PathVariable(name = "bookId") Long bookId, @ApiIgnore Authentication authentication) {
+		Long userId = Long.parseLong(authentication.getName());
+		List<CommentGetRes> commentList = commentService.getAllMyCommentOfBook(bookId, userId);
 		return ResponseEntity.status(200).body(commentList);
 	}
 }

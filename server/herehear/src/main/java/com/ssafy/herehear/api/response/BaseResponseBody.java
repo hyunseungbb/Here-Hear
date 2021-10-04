@@ -8,15 +8,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * ¼­¹ö ¿äÃ»¿¡´ëÇÑ ±âº» ÀÀ´ä°ª(¹Ùµğ) Á¤ÀÇ.
+ * ì„œë²„ ìš”ì²­ì—ëŒ€í•œ ê¸°ë³¸ ì‘ë‹µê°’(ë°”ë””) ì •ì˜.
  */
 @Getter
 @Setter
 @ApiModel("BaseResponseBody")
 public class BaseResponseBody {
-	@ApiModelProperty(name="ÀÀ´ä ¸Ş½ÃÁö", example = "Á¤»ó")
+	@ApiModelProperty(name="ì‘ë‹µ ë©”ì‹œì§€", example = "ì •ìƒ")
 	String message = null;
-	@ApiModelProperty(name="ÀÀ´ä ÄÚµå", example = "200")
+	@ApiModelProperty(name="ì‘ë‹µ ì½”ë“œ", example = "200")
 	Integer statusCode = null;
 	
 	public BaseResponseBody() {}

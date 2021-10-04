@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.herehear.api.request.LibraryPostReq;
 import com.ssafy.herehear.api.request.LibraryPutReq;
 import com.ssafy.herehear.api.response.BaseResponseBody;
 import com.ssafy.herehear.api.response.LibraryGetRes;
@@ -23,9 +23,9 @@ import com.ssafy.herehear.db.repository.LibraryRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
-@Api(value = "≥ª º≠¿Á API", tags = {"Library"})
+@Api(value = "ÎÇ¥ ÏÑúÏû¨ API", tags = {"Library"})
 @RestController 
 @RequestMapping("/api/v1/libraries")
 public class LibraryController {
@@ -36,49 +36,40 @@ public class LibraryController {
 	@Autowired
 	LibraryRepository libraryRepository;
 	
-	@GetMapping("/{userId}")
-	@ApiOperation(value = "º≠¿Á √• ¡∂»∏")
-	public ResponseEntity<List<LibraryGetRes>> getLibrary(
-			@RequestBody @ApiParam(value = "¿Ø¿˙ ¡§∫∏", required = true) @PathVariable Long userId) {
-		
-		List<LibraryGetRes> libraryList = libraryService.getLibrary(userId);
-		
+	@GetMapping("/mine")
+	@ApiOperation(value = "ÏÑúÏû¨ Ï±Ö Ï°∞Ìöå")
+	public ResponseEntity<List<LibraryGetRes>> getLibrary(@ApiIgnore Authentication authentication) {
+		Long userId = Long.parseLong(authentication.getName());
+		List<LibraryGetRes> libraryList = libraryService.getLibrary(userId);		
 		return ResponseEntity.status(200).body(libraryList);
 	}
 	
-	@PostMapping()
-	@ApiOperation(value = "º≠¿Á √• µÓ∑œ")
-	public ResponseEntity<?> createLibrary(
-			@RequestBody @ApiParam(value = "¿Ø¿˙øÕ √• ¡§∫∏", required = true) LibraryPostReq libraryPostReq) {
-		// ±‚¡∏ø° µÓ∑œµ» √•¿Ã∏È POST ∫“∞°
+	@PostMapping("/{bookId}")
+	@ApiOperation(value = "ÏÑúÏû¨ Ï±Ö Îì±Î°ù")
+	public ResponseEntity<?> createLibrary(@PathVariable(name = "bookId") Long bookId, @ApiIgnore Authentication authentication) {
 		List<Library> list = libraryRepository.findAll();
+		Long userId = Long.parseLong(authentication.getName());
+		// Í∏∞Ï°¥Ïóê Îì±Î°ùÎêú Ï±ÖÏù¥Î©¥ POST Î∂àÍ∞Ä
 		for(Library lib : list) {
-			if(lib.getAccount().getId()==libraryPostReq.getUser_id() & lib.getBook().getId()==libraryPostReq.getBook_id()) {
-				return ResponseEntity.status(412).body(BaseResponseBody.of(412, "¿ÃπÃ µÓ∑œµ» √• ¿‘¥œ¥Ÿ."));
+			if(lib.getAccount().getId()==userId && lib.getBook().getId()==bookId) {
+				return ResponseEntity.status(412).body(BaseResponseBody.of(412, "Ïù¥ÎØ∏ Îì±Î°ùÎêú Ï±Ö ÏûÖÎãàÎã§."));
 			}
 		}
-		
-		libraryService.createLibrary(libraryPostReq);
+		libraryService.createLibrary(userId, bookId);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
 	@PutMapping()
-	@ApiOperation(value = "∫∞¡° π◊ ¿–¿Ω ªÛ≈¬ ºˆ¡§")
-	public ResponseEntity<?> updateLibrary(
-			@RequestBody @ApiParam(value = "∫∞¡°, ¿–¿Ωø©∫Œ", required = true) LibraryPutReq libraryPutReq) {
-		
+	@ApiOperation(value = "Î≥ÑÏ†ê Î∞è ÏÉÅÌÉú ÏàòÏ†ï")
+	public ResponseEntity<?> updateLibrary(@RequestBody LibraryPutReq libraryPutReq) {
 		libraryService.updateLibrary(libraryPutReq);
-		
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 	
 	@DeleteMapping("/{libraryId}")
-	@ApiOperation(value = "≥ª º≠¿Áø°º≠ √• ªË¡¶")
-	public ResponseEntity<?> deleteLibrary(
-			@RequestBody @ApiParam(value = "≥ª º≠¿Á ID", required = true) @PathVariable Long libraryId) {
-		
+	@ApiOperation(value = "ÎÇ¥ ÏÑúÏû¨ÏóêÏÑú Ï±Ö ÏÇ≠Ï†ú")
+	public ResponseEntity<?> deleteLibrary(@PathVariable Long libraryId) {
 		libraryService.deleteLibrary(libraryId);
-		
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 

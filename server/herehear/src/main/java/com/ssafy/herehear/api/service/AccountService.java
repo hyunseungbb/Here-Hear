@@ -1,24 +1,14 @@
 package com.ssafy.herehear.api.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import com.ssafy.herehear.api.request.AccountRegisterPostReq;
-import com.ssafy.herehear.db.entity.Account;
-import com.ssafy.herehear.db.entity.Book;
-import com.ssafy.herehear.db.repository.AccountRepository;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.beans.factory.annotation.Autowired; 
-import org.springframework.stereotype.Service;
+import com.ssafy.herehear.api.response.AccountRes;
 
 /**
- *	À¯Àú °ü·Ã ºñÁî´Ï½º ·ÎÁ÷ Ã³¸®¸¦ À§ÇÑ ¼­ºñ½º ÀÎÅÍÆäÀÌ½º Á¤ÀÇ.
+ *	ìœ ì € ê´€ë ¨ ë¹„ì¦ˆë‹ˆìŠ¤ ë¡œì§ ì²˜ë¦¬ë¥¼ ìœ„í•œ ì„œë¹„ìŠ¤ ì¸í„°í˜ì´ìŠ¤ ì •ì˜.
  */
 public interface AccountService {
 	
-	Account createAccount(AccountRegisterPostReq registerInfo);
-	Account getAccount(String username);
+	AccountRes getAccountInfo(String username);
+	AccountRes getMyInfo();
 	
 //	@Autowired
 //	private AccountRepository AccountRepository;

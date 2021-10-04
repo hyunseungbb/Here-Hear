@@ -10,7 +10,7 @@ import com.ssafy.herehear.db.entity.Library;
 
 @Repository
 public interface LibraryRepository extends JpaRepository<Library, Long> {
-	List<Library> findByAccount_id(Long user_id);
-	List<Library> findByBook_id(Long book_id);
-	Optional<Library> findById(Long id);
+	public List<Library> findAll();
+	public List<Library> findByBook_id(Long book_id);
+	public Optional<Library> findById(Long id);
 }

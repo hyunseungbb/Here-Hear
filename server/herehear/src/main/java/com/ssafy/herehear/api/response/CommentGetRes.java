@@ -12,25 +12,25 @@ import lombok.Setter;
 @ApiModel("CommentGetResponse")
 public class CommentGetRes {
 	
-	@ApiModelProperty(name = "°¨»óÆò ID")
+	@ApiModelProperty(name = "ê°ìƒí‰ ID")
 	private Long id;
 	
-	@ApiModelProperty(name = "À¯Àú ID")
-	private Long userId;
+	@ApiModelProperty(name = "ìœ ì €ì´ë¦„")
+	private String username;
 	
-	@ApiModelProperty(name = "Ã¥ ID")
+	@ApiModelProperty(name = "ì±… ID")
 	private Long bookId;
 	
-	@ApiModelProperty(name = "°¨»óÆò ³»¿ë")
+	@ApiModelProperty(name = "ê°ìƒí‰ ë‚´ìš©")
 	private String content;
 	
-	@ApiModelProperty(name = "µ¶¼­ ½Ã°£")
+	@ApiModelProperty(name = "ë…ì„œ ì‹œê°„")
 	private Double reading_time;
 	
-	@ApiModelProperty(name = "µ¶¼­ ³¯Â¥")
+	@ApiModelProperty(name = "ë…ì„œ ë‚ ì§œ")
 	private Date date;
 	
-	@ApiModelProperty(name = "´ñ±Û °ø°³ ¿©ºÎ", example = "true: °ø°³, false: ºñ°ø°³")
+	@ApiModelProperty(name = "ëŒ“ê¸€ ê³µê°œ ì—¬ë¶€", example = "true: ê³µê°œ, false: ë¹„ê³µê°œ")
 	private Boolean isshow;
 	
 }

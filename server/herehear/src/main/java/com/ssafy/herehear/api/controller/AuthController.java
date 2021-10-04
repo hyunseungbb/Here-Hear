@@ -1,110 +1,41 @@
 package com.ssafy.herehear.api.controller;
 
-import java.security.Principal;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.herehear.api.request.AccountLoginPostReq;
-import com.ssafy.herehear.api.response.AccountLoginPostRes;
-import com.ssafy.herehear.api.response.BaseResponseBody;
-import com.ssafy.herehear.api.service.AccountService;
-import com.ssafy.herehear.common.auth.MyUserDetails;
-import com.ssafy.herehear.common.auth.MyUserDetailsService;
-import com.ssafy.herehear.common.util.CookieUtil;
-import com.ssafy.herehear.common.util.JwtTokenUtil;
-import com.ssafy.herehear.common.util.RedisUtil;
-import com.ssafy.herehear.db.entity.Account;
+import com.ssafy.herehear.api.request.AccountReq;
+import com.ssafy.herehear.api.response.AccountRes;
+import com.ssafy.herehear.api.service.AuthService;
+import com.ssafy.herehear.common.jwt.TokenDto;
+import com.ssafy.herehear.common.jwt.TokenReqDto;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
-@Api(value = "»∏ø¯ ¿Œ¡ı API", tags = {"Auth"})
+@Api(value = "ÌöåÏõê Ïù∏Ï¶ù Í¥ÄÎ†® API", tags = {"Auth"})
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 	
 	@Autowired
-	AccountService accountService;
+	AuthService authService;
 	
-	@Autowired
-	PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-	
-	@Autowired
-    private CookieUtil cookieUtil;
-	
-	@Autowired
-	private RedisUtil redisUtil;
-	
-	@PostMapping("/login")
-	@ApiOperation(value = "∑Œ±◊¿Œ")
-	public ResponseEntity<AccountLoginPostRes> login(
-			@RequestBody @ApiParam(value="∑Œ±◊¿Œ ¡§∫∏", required=true) AccountLoginPostReq loginInfo, HttpServletResponse res) {
-		String username = loginInfo.getUsername();
-		String password = loginInfo.getPassword();
-		
-		Account account = accountService.getAccount(username);
-		
-		// ∑Œ±◊¿Œ ø‰√ª«— ¿Ø¿˙∑Œ∫Œ≈Õ ¿Ø»ø«— ∆–Ω∫øˆµÂ¿Œ¡ˆ »Æ¿Œ
-		if (passwordEncoder.matches(password, account.getPassword())) {
-			// ¿Ø»ø«— ∆–Ω∫øˆµÂ¿Œ ∞ÊøÏ, ∑Œ±◊¿Œ º∫∞¯
-			final String jwtToken = jwtTokenUtil.generateToken(account);
-			final String refreshJwt = jwtTokenUtil.generateRefreshToken(account);
-			
-			// ªı∑Œ ª˝±‰ ≈‰≈´¿ª ƒÌ≈∞∑Œ ∫Ø»Ø
-			Cookie accessToken = cookieUtil.createCookie(JwtTokenUtil.ACCESS_TOKEN_NAME, jwtToken);
-            Cookie refreshToken = cookieUtil.createCookie(JwtTokenUtil.REFRESH_TOKEN_NAME, refreshJwt);
+	@PostMapping("/signup")
+    public ResponseEntity<AccountRes> signup(@RequestBody AccountReq accountReq) {
+        return ResponseEntity.ok(authService.signup(accountReq));
+    }
 
-            // ƒÌ≈∞ø° √ﬂ∞° (æ»µÂ∑Œ¿ÃµÂø°º≠ « ø‰æ¯¿∏∏È ¡¶∞≈ øπ¡§)
-            res.addCookie(accessToken);
-            res.addCookie(refreshToken);
-            
-            // redisø° key: refreshToken, value: username √ﬂ∞°
-            redisUtil.setDataExpire(refreshJwt, account.getUsername(), JwtTokenUtil.REFRESH_TOKEN_VALIDATION_SECOND);
-            
-            // ∏Æ≈œ ∞™¿∏∑Œµµ ≈‰≈´ ¿¸¥ﬁ jwtToken ªÁøÎ
-			return ResponseEntity.ok(AccountLoginPostRes.of(200, "Success", account.getId(), username, jwtToken, refreshJwt));
-		}
-		
-		// ¿Ø»ø«œ¡ˆ æ ¿∫ ∞ÊøÏ, ∑Œ±◊¿Œ Ω«∆–
-		return ResponseEntity.status(401).body(AccountLoginPostRes.of(401, "Invalid Password", null, username, null, null));
-	}
-	
-	@GetMapping("/logout")
-	@ApiOperation(value = "∑Œ±◊æ∆øÙ")
-	public ResponseEntity<?> logout(HttpServletRequest req, HttpServletResponse res) {
-		
-		// «ˆ¿Á Access≈‰≈´¿ª ±‚π›¿∏∑Œ ¿Ø¿˙ »Æ¿Œ
-		Cookie refreshToken = cookieUtil.getCookie(req, JwtTokenUtil.REFRESH_TOKEN_NAME);
-		String refreshJwt = refreshToken.getValue();
-		
-		// ∏∏∑·Ω√∞£¿Ã 0¿Ã∞Ì token∞™¿ª ∫Û ∞™¿∏∑Œ «œø© ƒÌ≈∞ πﬂ±ﬁ
-		Cookie nullAccessToken = cookieUtil.LogoutCookie(JwtTokenUtil.ACCESS_TOKEN_NAME, "");
-        Cookie nullRefreshToken = cookieUtil.LogoutCookie(JwtTokenUtil.REFRESH_TOKEN_NAME, "");
-        
-        // ƒÌ≈∞ø° √ﬂ∞° -> ∏∏∑·Ω√∞£¿Ã 0¿Ãπ«∑Œ πŸ∑Œ ∏∏∑·
-		res.addCookie(nullAccessToken);
-		res.addCookie(nullRefreshToken);
-		
-		// redisø° ¿˙¿Âµ«æÓ ¿÷¥¬ ¿Ø¿˙¿« refreshToken ¡¶∞≈
-		System.out.println(refreshJwt);
-		redisUtil.deleteData(refreshJwt);
+    @PostMapping("/login")
+    public ResponseEntity<TokenDto> login(@RequestBody AccountReq accountReq) {
+        return ResponseEntity.ok(authService.login(accountReq));
+    }
 
-		return ResponseEntity.ok("∑Œ±◊æ∆øÙ º∫∞¯");
-	}
+    @PostMapping("/reissue")
+    public ResponseEntity<TokenDto> reissue(@RequestBody TokenReqDto tokenReqDto) {
+        return ResponseEntity.ok(authService.reissue(tokenReqDto));
+    }
+
 }

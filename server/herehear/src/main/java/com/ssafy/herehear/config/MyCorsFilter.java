@@ -8,21 +8,21 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class MyCorsFilter extends CorsFilter {
 	
-	//ÇÊÅÍ°¡ »ı¼ºµÉ ¶§ ÇÊÅÍ¸¦ ¼³Á¤
+	//í•„í„°ê°€ ìƒì„±ë  ë•Œ í•„í„°ë¥¼ ì„¤ì •
 	public MyCorsFilter() {
 		super(configurationSource());
 	}
 
-	//@CrossoriginÀ¸·Î Ã³¸®ÇÒ ¼ö ¾ø´Â security·Î ÀÎÇÑ cors¸¦ ÆĞ½º½ÃÅ´
+	//@Crossoriginìœ¼ë¡œ ì²˜ë¦¬í•  ìˆ˜ ì—†ëŠ” securityë¡œ ì¸í•œ corsë¥¼ íŒ¨ìŠ¤ì‹œí‚´
 	private static UrlBasedCorsConfigurationSource configurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true); //ÀÚ°İÁõ¸í Çã¿ë 
-        config.addAllowedOriginPattern("*"); //ÀÚ°İÁõ¸íÀ» Çã¿ëÇÒ ¶§ ÃâÃ³¸¦ Çã¿ëÇÏ´Â ¸Ş¼Òµå
-        config.addAllowedHeader("*"); //Çã¿ëÇÒ Çì´õ ¼³Á¤
-        config.addAllowedMethod("*"); //Çã¿ëÇÒ ¿äÃ» (get post put delete µîµî)
-        config.addExposedHeader("Authorization"); //³ëÃâÇÒ Çì´õ ¼³Á¤ ¿ø·¡ authorizationÀº ³ëÃâÀÌ ¾ÈµÇ¼­ ¸í½ÃÀûÀ¸·Î ¼±¾ğÇØ¾ß º¸¿©Áü
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(); //corsconfigurationÀ» url°æ·Î ÆĞÅÏÀ¸·Î »ç¿ëÇÏ±âÀ§ÇÑ ±¸ÇöÃ¼ 
-        source.registerCorsConfiguration("/**", config); //¸ÅÇÎ url ÆĞÅÏ , cors¼³Á¤ °´Ã¼
+        config.setAllowCredentials(true); //ìê²©ì¦ëª… í—ˆìš© 
+        config.addAllowedOriginPattern("*"); //ìê²©ì¦ëª…ì„ í—ˆìš©í•  ë•Œ ì¶œì²˜ë¥¼ í—ˆìš©í•˜ëŠ” ë©”ì†Œë“œ
+        config.addAllowedHeader("*"); //í—ˆìš©í•  í—¤ë” ì„¤ì •
+        config.addAllowedMethod("*"); //í—ˆìš©í•  ìš”ì²­ (get post put delete ë“±ë“±)
+        config.addExposedHeader("Authorization"); //ë…¸ì¶œí•  í—¤ë” ì„¤ì • ì›ë˜ authorizationì€ ë…¸ì¶œì´ ì•ˆë˜ì„œ ëª…ì‹œì ìœ¼ë¡œ ì„ ì–¸í•´ì•¼ ë³´ì—¬ì§
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(); //corsconfigurationì„ urlê²½ë¡œ íŒ¨í„´ìœ¼ë¡œ ì‚¬ìš©í•˜ê¸°ìœ„í•œ êµ¬í˜„ì²´ 
+        source.registerCorsConfiguration("/**", config); //ë§¤í•‘ url íŒ¨í„´ , corsì„¤ì • ê°ì²´
         return source;
     }
 

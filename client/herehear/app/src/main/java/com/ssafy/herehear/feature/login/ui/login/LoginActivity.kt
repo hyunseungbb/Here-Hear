@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.widget.Toast
 import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.IntroActivity
 import com.ssafy.herehear.MainActivity
@@ -37,6 +38,7 @@ class LoginActivity : AppCompatActivity() {
             val userId = binding.userId?.text.toString()
             val userPassword = binding.userPassword?.text.toString()
             val loginData = LoginRequest(userId, userPassword)
+            Log.d("test", "로그인 클릭 ${userId} & ${userPassword}")
             RetrofitClient.api.login(loginData).enqueue(object: Callback<LoginResponse> {
 
                 override fun onResponse(
@@ -44,20 +46,31 @@ class LoginActivity : AppCompatActivity() {
                     response: Response<LoginResponse>
                 ) {
                     if (response.isSuccessful) {
-                        var token = response.body()?.auth_token
+                        var token = response.body()?.accessToken
                         HereHear.prefs.setString("access_token", token)
                         startActivity(mainIntent)
                         finish()
+                    } else {
+                        Toast.makeText(applicationContext, "아이디나 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Log.d("test", "실패!!")
+                    t.printStackTrace()
                 }
             })
 
         }
-
+        binding.loginBackButton?.setOnClickListener {
+            Log.d("test", "click!!")
+            val loginBackIntent = Intent(this, IntroActivity::class.java)
+            startActivity(loginBackIntent)
+            finish()
+//            finish()
+//            val returnIntent = Intent()
+//            setResult(RESULT_OK, returnIntent)
+//            finish()
+        }
 //        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
 //            .get(LoginViewModel::class.java)
 //

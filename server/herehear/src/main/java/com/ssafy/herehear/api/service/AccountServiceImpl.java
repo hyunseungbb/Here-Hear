@@ -1,38 +1,36 @@
 package com.ssafy.herehear.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.ssafy.herehear.api.request.AccountRegisterPostReq;
-import com.ssafy.herehear.db.entity.Account;
+import com.ssafy.herehear.api.response.AccountRes;
+import com.ssafy.herehear.common.util.SecurityUtil;
 import com.ssafy.herehear.db.repository.AccountRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service("accountService")
+@RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 	
 	@Autowired
 	AccountRepository accountRepository;
 	
-	@Autowired
-	PasswordEncoder passwordEncoder;
-		
-	@Override
-	public Account createAccount(AccountRegisterPostReq registerInfo) {
-		Account account = new Account();
-		account.setUsername(registerInfo.getUsername());
-		// º¸¾ÈÀ» À§ÇØ¼­ À¯Àú ÆÐ½º¿öµå ¾ÏÈ£È­ ÇÏ¿© µðºñ¿¡ ÀúÀå.
-		account.setPassword(passwordEncoder.encode(registerInfo.getPassword()));
-		
-		// dsl »ç¿ë
-		return accountRepository.save(account);
+	@Transactional(readOnly=true)
+	public AccountRes getAccountInfo(String username) {
+		return accountRepository.findByUsername(username)
+				.map(AccountRes::of)
+				.orElseThrow(() -> new RuntimeException("ìœ ì € ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤."));
 	}
 	
-	@Override
-	public Account getAccount(String username) {
-		// DB¿¡ ¾ÆÀÌµð¸¦ ¹ÙÅÁÀ¸·Î À¯Àú Á¤º¸ Á¶È¸
-		Account account = accountRepository.findByUsername(username).get();
-		return account;
-	}
-
+	// í˜„ìž¬ SecurityContext ì— ìžˆëŠ” ìœ ì € ì •ë³´ ê°€ì ¸ì˜¤ê¸°
+	@Transactional(readOnly = true)
+    public AccountRes getMyInfo() {
+        return accountRepository.findById(SecurityUtil.getCurrentAccountId())
+                .map(AccountRes::of)
+                .orElseThrow(() -> new RuntimeException("ë¡œê·¸ì¸ ìœ ì € ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤."));
+    }
+	
+	
 }
