@@ -66,7 +66,7 @@ class MainSearchFragment : Fragment() {
             }
         }
 
-        var url = ""
+        var url = "http://image.aladin.co.kr/product/10789/58/cover/8964359208_1.jpg"
         Glide.with(requireContext()).load(url).override(150, 200).into(binding.imageView2)
 
         // 검색바에서 텍스트 입력시 수행하는 함수
@@ -86,11 +86,12 @@ class MainSearchFragment : Fragment() {
                         if (response.isSuccessful){
                             // need to modify
                             // To print book image
-                            url = response.body()?.imageUrl.toString()
-//                            // 책 이미지 클릭시 goInfo 로 책정보 화면으로 가기
-//                            binding.bookImage.setOnClickListener{
-//                                (parentFragment as SearchFragment).goInfo()
-//                            }
+                            var body = response.body()
+                            if (body != null){
+                                for (item in body){
+                                    urlList.add(item.img_url)
+                                }
+                            }
                         }
                     }
 
