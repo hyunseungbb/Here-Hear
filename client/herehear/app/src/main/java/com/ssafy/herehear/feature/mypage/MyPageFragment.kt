@@ -47,6 +47,8 @@ class MyPageFragment : Fragment() {
 
         binding.buttonLogout.setOnClickListener {
             HereHear.prefs.setString("access_token", null)
+            HereHear.prefs.setString("userId", "")
+            HereHear.prefs.setString("userPassword", "")
             mainActivity.goIntroAcitivity()
         }
 

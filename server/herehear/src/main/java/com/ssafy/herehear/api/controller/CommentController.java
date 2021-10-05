@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.herehear.api.request.CommentPostReq;
 import com.ssafy.herehear.api.response.BaseResponseBody;
+import com.ssafy.herehear.api.response.CommentGetMyRes;
 import com.ssafy.herehear.api.response.CommentGetRes;
 import com.ssafy.herehear.api.service.CommentService;
 
@@ -55,9 +56,9 @@ public class CommentController {
 	
 	@GetMapping("/my")
 	@ApiOperation(value = "나의 감상평 전체 조회")
-	public ResponseEntity<List<CommentGetRes>> getAllMyComment(@ApiIgnore Authentication authentication) {
+	public ResponseEntity<List<CommentGetMyRes>> getAllMyComment(@ApiIgnore Authentication authentication) {
 		Long userId = Long.parseLong(authentication.getName());
-		List<CommentGetRes> commentList = commentService.getAllMyComment(userId);
+		List<CommentGetMyRes> commentList = commentService.getAllMyComment(userId);
 		return ResponseEntity.status(200).body(commentList);
 	}
 }

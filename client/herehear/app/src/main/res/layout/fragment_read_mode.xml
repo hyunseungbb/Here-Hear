@@ -19,63 +19,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5">
+        android:layout_weight="10"
+        android:orientation="horizontal"
+        android:weightSum="13">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/paperButton"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:contentDescription="paperbook"
-                android:drawableLeft="@drawable/paperbook"
-                android:fontFamily="@font/bmjua"
-                android:text="종이책 읽기"
-                android:textColor="@color/main"
-                android:textSize="20sp"
-                app:backgroundTint="@color/white" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/paperButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:contentDescription="paperbook"
+            android:drawableTop="@drawable/paperbook"
+            android:fontFamily="@font/bmjua"
+            android:text="종이책"
+            android:textColor="@color/main"
+            android:textSize="20sp"
+            app:backgroundTint="@color/white" />
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="50dp"
-        android:layout_weight="5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialButton"
-        app:layout_constraintVertical_bias="1.0">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/audioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:contentDescription="audiobook"
+            android:drawableTop="@drawable/audiobook"
+            android:fontFamily="@font/bmjua"
+            android:text="오디오"
+            android:textColor="@color/main"
+            android:textSize="20sp"
+            app:backgroundTint="@color/white" />
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/audioButton"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:contentDescription="audiobook"
-                android:drawableLeft="@drawable/audiobook"
-                android:fontFamily="@font/bmjua"
-                android:text="오디오책 듣기"
-                android:textColor="@color/main"
-                android:textSize="20sp"
-                app:backgroundTint="@color/white" />
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
+    </LinearLayout>
 
 </LinearLayout>

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.herehear.api.request.CommentPostReq;
+import com.ssafy.herehear.api.response.CommentGetMyRes;
 import com.ssafy.herehear.api.response.CommentGetRes;
 import com.ssafy.herehear.db.entity.Comment;
 import com.ssafy.herehear.db.repository.AccountRepository;
@@ -86,18 +87,18 @@ public class CommentServiceImpl implements CommentService {
 	}
 	
 	@Override
-	public List<CommentGetRes> getAllMyComment(Long userId) {
+	public List<CommentGetMyRes> getAllMyComment(Long userId) {
 		List<Comment> commentList = commentRepository.findAll();
-		List<CommentGetRes> res = new ArrayList<>();
+		List<CommentGetMyRes> res = new ArrayList<>();
 		
-		CommentGetRes tmpRes;
+		CommentGetMyRes tmpRes;
 		
 		for(Comment comment : commentList) {
 			if(comment.getAccount().getId() == userId) {
-				tmpRes = new CommentGetRes();
+				tmpRes = new CommentGetMyRes();
 				tmpRes.setId(comment.getId());
 				tmpRes.setUsername(comment.getAccount().getUsername());
-				tmpRes.setBookId(comment.getBook().getId());
+				tmpRes.setBook(comment.getBook());
 				tmpRes.setContent(comment.getContent());
 				tmpRes.setDate(comment.getDate());
 				tmpRes.setReading_time(comment.getReading_time());

@@ -33,14 +33,13 @@ class LoginActivity : AppCompatActivity() {
 //        val login = binding.loginButton2
 //        val loading = binding.loading
 
-        var mainIntent = Intent(this, MainActivity::class.java)
+        val mainIntent = Intent(this, MainActivity::class.java)
         binding.loginButton2.setOnClickListener {
             val userId = binding.userId?.text.toString()
             val userPassword = binding.userPassword?.text.toString()
             val loginData = LoginRequest(userId, userPassword)
-            Log.d("test", "로그인 클릭 ${userId} & ${userPassword}")
-            RetrofitClient.api.login(loginData).enqueue(object: Callback<LoginResponse> {
 
+            RetrofitClient.api.login(loginData).enqueue(object: Callback<LoginResponse> {
                 override fun onResponse(
                     call: Call<LoginResponse>,
                     response: Response<LoginResponse>
@@ -48,6 +47,8 @@ class LoginActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         var token = response.body()?.accessToken
                         HereHear.prefs.setString("access_token", token)
+                        HereHear.prefs.setString("userId", userId)
+                        HereHear.prefs.setString("userPassword", userPassword)
                         startActivity(mainIntent)
                         finish()
                     } else {

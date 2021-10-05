@@ -17,6 +17,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ssafy.herehear.BaseActivity
@@ -86,8 +87,9 @@ class Camera2Activity : BaseActivity() {
             setResult(RESULT_OK, returnIntent)
             finish()
         }
+//        binding.progressFrameLayout.visibility = View.INVISIBLE
         binding.cameraNextButton.setOnClickListener {
-            // 여기서 ai서버에 ocr_tts 요청을 해야하는구나 그게 왜 안되어 있지??
+            binding.progressLayout.visibility = View.VISIBLE
             var file = File(realPath)
             Log.d("test", "오디오변환 요청 전 파일경로 : ${file.path}")
             var fileBody = FormDataUtil.getImageBody("imgs", file)
@@ -96,6 +98,7 @@ class Camera2Activity : BaseActivity() {
                     call: Call<OCRTTSResponse>,
                     response: Response<OCRTTSResponse>
                 ) {
+                    binding.progressLayout.visibility = View.INVISIBLE
                     if (response.isSuccessful) {
                         goAudioPlayActivity()
                     } else {
@@ -104,6 +107,8 @@ class Camera2Activity : BaseActivity() {
                 }
 
                 override fun onFailure(call: Call<OCRTTSResponse>, t: Throwable) {
+                    binding.progressLayout.visibility = View.INVISIBLE
+                    t.printStackTrace()
                     Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
                 }
             })
@@ -112,15 +117,21 @@ class Camera2Activity : BaseActivity() {
     fun goAudioPlayActivity() {
         // jpg 파일 혹은 파일 uri랑 bookId를 넘겨줘야함
         val bookId = intent.getIntExtra("bookId", 0)
+        val libraryId = intent.getIntExtra("libraryId", 0)
         val playIntent = Intent(this, AudioPlayActivity::class.java)
         playIntent.putExtra("bookId", bookId)
+        playIntent.putExtra("libraryId", libraryId)
         playIntent.putExtra("path", realPath)
-        try {
-            startActivity(playIntent)
-            finish()
-        } catch (e: Exception) {
-            Log.d("err", "${e}")
-        }
+        val returnIntent = Intent()
+        setResult(RESULT_CANCELED, returnIntent)
+        startActivity(playIntent)
+        finish()
+//        try {
+//            startActivity(playIntent)
+//            finish()
+//        } catch (e: Exception) {
+//            Log.d("err", "${e}")
+//        }
     }
     override fun permissionGranted(requestCode: Int) {
         when (requestCode) {
