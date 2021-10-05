@@ -67,18 +67,25 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    fun goMain() {
-        Log.d("test", "나중에는 상세페이지로 가도록 구현")
-    }
+//    fun goMain() {
+//        Log.d("test", "나중에는 상세페이지로 가도록 구현")
+//        val childTransaction = childFragmentManager.beginTransaction()
+//        childTransaction.replace(R.id.frameHome, libraryDetailFragment)
+//            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+//            .addToBackStack(null)
+//            .commit()
+//    }
 
-    fun goDetailFragment(bookId: Int) {
-        Log.d("test", "go detail!!")
+    fun goDetailFragment(bookId: Int, id: Int) {
         val childTransaction = childFragmentManager.beginTransaction()
         childTransaction.replace(R.id.frameHome, libraryDetailFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .addToBackStack(null)
             .commit()
-        libraryMainFragment.setFragmentResult("request", bundleOf("valueKey" to bookId))
+        val bundle = Bundle()
+        bundle.putInt("valueKey", bookId)
+        bundle.putInt("libraryId", id)
+        libraryMainFragment.setFragmentResult("request", bundle)
     }
     fun goMainFragment() {
         val childTransaction = childFragmentManager.beginTransaction()
@@ -87,12 +94,16 @@ class HomeFragment : Fragment() {
             .commit()
     }
 
-    fun goReadModeFragment(bookId: Int) {
+    fun goReadModeFragment(bookId: Int, bookImgUrl: String, libraryId: Int) {
         val childTransaction = childFragmentManager.beginTransaction()
         childTransaction.replace(R.id.frameHome, readModeFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
-        libraryMainFragment.setFragmentResult("readModeRequest", bundleOf("valueKey" to bookId))
+        val bundle = Bundle()
+        bundle.putInt("bookId", bookId)
+        bundle.putString("bookImgUrl", bookImgUrl)
+        bundle.putInt("libraryId", libraryId)
+        libraryMainFragment.setFragmentResult("readModeRequest", bundle)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

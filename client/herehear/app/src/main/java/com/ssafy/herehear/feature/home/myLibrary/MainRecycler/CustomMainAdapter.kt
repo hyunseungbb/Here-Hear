@@ -1,5 +1,6 @@
 package com.ssafy.herehear.feature.home.myLibrary.MainRecycler
 
+import android.icu.number.NumberFormatter.with
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,6 +8,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.HomeBookRecyclerBinding
 import com.ssafy.herehear.feature.home.libraryMainFragment
@@ -16,7 +19,8 @@ import com.ssafy.herehear.homeFragment
 
 import com.ssafy.herehear.model.data.MainBook
 import com.ssafy.herehear.model.network.response.GetMyLibraryResponseItem
-import com.ssafy.herehear.util.GlideApp
+
+import com.ssafy.herehear.util.MyGlideApp
 
 class CustomMainAdapter: RecyclerView.Adapter<CustomMainAdapter.Holder>() {
 
@@ -49,15 +53,16 @@ class CustomMainAdapter: RecyclerView.Adapter<CustomMainAdapter.Holder>() {
         fun setImage(mainBook: GetMyLibraryResponseItem) {
             Log.d("test", "dfsdfsdf ${mainBook.img_url} ${mainBook.book_id}")
             // url로 어떻게 이미지 세팅하는 지 내일 알아보기
-            GlideApp.with(binding.homeBookImageView).load(mainBook.img_url)
-                .override(200, 300)
+            Glide.with(binding.homeBookImageView).load(mainBook.img_url)
                 .into(binding.homeBookImageView)
         }
 
         fun setClick(mainBook: GetMyLibraryResponseItem) {
             binding.root.setOnClickListener {
+                HereHear.setBookStars(mainBook.stars)
+                HereHear.setBookStatus(mainBook.read_status)
 //                libraryMainFragment.setFragmentResult("request", bundleOf("valueKey" to mainBook.book_id))
-                homeFragment.goDetailFragment(mainBook.book_id)
+                homeFragment.goDetailFragment(mainBook.book_id, mainBook.id)
             }
         }
 
