@@ -12,7 +12,6 @@ interface RetrofitInterface {
         @Body loginbody: LoginRequest
     ): Call<LoginResponse>
 
-
     @POST("auth/signup")
     fun signup(
         @Body signupBody: SignupRequest
@@ -45,7 +44,7 @@ interface RetrofitInterface {
         @Body commentBody: CreateCommentRequest
     ): Call<CreateCommentResponse>
 
-    @GET
-    fun getMyComments(@Url url: String): Call<AllCommentsResponse>
+    @GET("comment/my")
+    fun getMyComments(): Call<MyCommentsResponse>
 }
 
