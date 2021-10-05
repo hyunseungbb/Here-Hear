@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.builders.DatePickerBuilder
@@ -17,9 +18,8 @@ import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentMainCalenderBinding
 import com.ssafy.herehear.feature.calender.CalenderFragment
 import com.ssafy.herehear.model.network.RetrofitClient
-import com.ssafy.herehear.model.network.RetrofitClientAI
-import com.ssafy.herehear.model.network.response.AllCommentsResponse
-import com.ssafy.herehear.model.network.response.AllCommentsResponseItem
+import com.ssafy.herehear.model.network.response.MyCommentsResponse
+import com.ssafy.herehear.model.network.response.MyCommentsResponseItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +30,7 @@ import kotlin.collections.ArrayList
 class MainCalenderFragment : Fragment() {
     lateinit var events: ArrayList<EventDay>
     lateinit var binding: FragmentMainCalenderBinding
-    lateinit var commentList: AllCommentsResponse
+    lateinit var commentList: MyCommentsResponse
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,10 +43,10 @@ class MainCalenderFragment : Fragment() {
         binding = FragmentMainCalenderBinding.inflate(inflater, container, false)
 
         events= ArrayList()
-        RetrofitClient.api.getMyComments().enqueue(object: Callback<AllCommentsResponse> {
+        RetrofitClient.api.getMyComments().enqueue(object: Callback<MyCommentsResponse> {
             override fun onResponse(
-                call: Call<AllCommentsResponse>,
-                response: Response<AllCommentsResponse>
+                call: Call<MyCommentsResponse>,
+                response: Response<MyCommentsResponse>
             ) {
                 if (response.isSuccessful) {
                     commentList = response.body()!!
@@ -65,9 +65,9 @@ class MainCalenderFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<AllCommentsResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MyCommentsResponse>, t: Throwable) {
                 t.printStackTrace()
-                Toast.makeText(activity, "정보를 불러오지 못했습니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "정보를 불러오지 못했습니다..", Toast.LENGTH_LONG).show()
             }
         })
         return binding.root
@@ -82,13 +82,16 @@ class MainCalenderFragment : Fragment() {
             Log.d("test", "클릭됨${it.calendar.time.javaClass}")
 
             var date = it.calendar.time.dateToString("yyyy-MM-dd")
-            val data: MutableList<AllCommentsResponseItem> = mutableListOf()
+            val data: MutableList<MyCommentsResponseItem> = mutableListOf()
             for (item in commentList) {
                 if (item.date.split("T")[0] == date) {
                     data.add(item)
                 }
             }
-//            val adapter =
+            val adapter = CustomCalendarAdpater()
+            adapter.listData = data
+            binding.calendarRecyclerView.adapter = adapter
+            binding.calendarRecyclerView.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
 
         })
 

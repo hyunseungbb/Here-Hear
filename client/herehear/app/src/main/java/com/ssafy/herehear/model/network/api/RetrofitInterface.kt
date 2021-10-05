@@ -45,6 +45,6 @@ interface RetrofitInterface {
     ): Call<CreateCommentResponse>
 
     @GET("comment/my")
-    fun getMyComments(): Call<AllCommentsResponse>
+    fun getMyComments(): Call<MyCommentsResponse>
 }
 
