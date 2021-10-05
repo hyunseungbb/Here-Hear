@@ -21,8 +21,8 @@ interface RetrofitInterface {
     @GET("search")
     @Headers("Content-type: application/json")
     fun search(
-        @Query("searchText") searchText: String,
-        @Query("searchNo") searchNo: Int
+        @Query("keyword") searchText: String,
+        @Query("type") searchType: String
     ): Call<SearchResponse>
 
     @GET("libraries/mine")

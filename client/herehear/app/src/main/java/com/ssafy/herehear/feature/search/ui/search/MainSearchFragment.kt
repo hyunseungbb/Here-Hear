@@ -25,7 +25,7 @@ import retrofit2.Response
 
 class MainSearchFragment : Fragment() {
 
-    private var searchCategoryNo: Int = 1
+    private var type: String = "title"
     private lateinit var binding: FragmentMainSearchBinding
     private var urlList: MutableList<String> = mutableListOf()
 
@@ -42,6 +42,12 @@ class MainSearchFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMainSearchBinding.inflate(inflater, container, false)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         // spinner (드롭다운) 바인딩
         val items = resources.getStringArray(R.array.searchCategory)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, items)
@@ -50,7 +56,10 @@ class MainSearchFragment : Fragment() {
         // 드롭다운에서 선택한 정보 저장 (텍스트 입력으로 검색했을 때의 결과를 다르게 받기 위해)
         binding.spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (position != 0) searchCategoryNo = position
+                when (position){
+                    0 -> type = "title"
+                    1 -> type = "author"
+                }
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -65,10 +74,10 @@ class MainSearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // 검색 버튼 누를 때 호출
                 val searchText = binding.searchView.query
-                val searchData = SearchRequest(searchText.toString(), searchCategoryNo)
+                val searchData = SearchRequest(searchText.toString(), type)
 
 
-                RetrofitClient.api.search(searchText.toString(), searchCategoryNo).enqueue(object:
+                RetrofitClient.api.search(searchText.toString(), type).enqueue(object:
                     Callback<SearchResponse> {
                     override fun onResponse(
                         call: Call<SearchResponse>,
@@ -77,11 +86,7 @@ class MainSearchFragment : Fragment() {
                         if (response.isSuccessful){
                             // need to modify
                             // To print book image
-                            while (true){
-                                urlList.add(response.toString())
-
-                            }
-
+                            response.body()?.let { loadData(url)}
 //                            // 책 이미지 클릭시 goInfo 로 책정보 화면으로 가기
 //                            binding.bookImage.setOnClickListener{
 //                                (parentFragment as SearchFragment).goInfo()
@@ -90,7 +95,7 @@ class MainSearchFragment : Fragment() {
                     }
 
                     override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                        Log.d("onQueryTextSubmitFail", "fail")
+                        t.printStackTrace()
                     }
                 })
 
@@ -119,11 +124,10 @@ class MainSearchFragment : Fragment() {
         binding.recycler.adapter = recyclerAdapter
         binding.recycler.layoutManager = GridLayoutManager(requireContext(), 3)
 
-        return binding.root
     }
 
     // recycler 이용하기 위한 데이터로드 함수
-    fun loadData(url: String): MutableList<BookUrl>{
+    private fun loadData(url: String): MutableList<BookUrl>{
         val data: MutableList<BookUrl> = mutableListOf()
 
         for (index in 1..10){
