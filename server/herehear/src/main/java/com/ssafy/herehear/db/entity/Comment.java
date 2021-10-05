@@ -22,7 +22,7 @@ public class Comment extends BaseEntity {
 	@JsonIgnore
 	private Account account;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "book_id")
 	@JsonIgnore
 	private Book book;
