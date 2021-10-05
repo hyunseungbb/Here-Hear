@@ -38,5 +38,14 @@ interface RetrofitInterface {
     fun updateBookStatus(
         @Body bookStatusBody: UpdateBookStatusRequest
     ): Call<UpdateBookStatusResponse>
+
+    @POST
+    fun createComment(
+        @Url url: String,
+        @Body commentBody: CreateCommentRequest
+    ): Call<CreateCommentResponse>
+
+    @GET
+    fun getMyComments(@Url url: String): Call<AllCommentsResponse>
 }
 

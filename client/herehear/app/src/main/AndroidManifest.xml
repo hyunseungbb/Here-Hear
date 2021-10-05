@@ -22,6 +22,9 @@
         android:theme="@style/Theme.Herehear"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".feature.home.readmode.CommentActivity"
+            android:exported="true" />
+        <activity
             android:name=".feature.home.readmode.paperbook.TimerActivity"
             android:exported="true" />
         <activity

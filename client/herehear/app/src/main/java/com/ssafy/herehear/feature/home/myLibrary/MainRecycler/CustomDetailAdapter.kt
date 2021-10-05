@@ -6,11 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.herehear.databinding.DetailBookRecyclerBinding
 import com.ssafy.herehear.databinding.HomeBookRecyclerBinding
-import com.ssafy.herehear.homeFragment
 import com.ssafy.herehear.model.network.response.AllCommentsResponse
 import com.ssafy.herehear.model.network.response.AllCommentsResponseItem
 import com.ssafy.herehear.model.network.response.GetMyLibraryResponseItem
-import com.ssafy.herehear.util.GlideApp
 import java.util.*
 
 class CustomDetailAdapter: RecyclerView.Adapter<CustomDetailAdapter.Holder>() {
