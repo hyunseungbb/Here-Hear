@@ -50,7 +50,6 @@ class CustomMainAdapter: RecyclerView.Adapter<CustomMainAdapter.Holder>() {
             Log.d("test", "dfsdfsdf ${mainBook.img_url} ${mainBook.book_id}")
             // url로 어떻게 이미지 세팅하는 지 내일 알아보기
             GlideApp.with(binding.homeBookImageView).load(mainBook.img_url)
-                .override(200, 300)
                 .into(binding.homeBookImageView)
         }
 

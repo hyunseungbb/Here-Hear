@@ -95,13 +95,17 @@ class MainActivity : AppCompatActivity() {
     fun goCameraActivity(bookId: Int) {
         val intent = Intent(this, Camera2Activity::class.java)
         intent.putExtra("bookId", bookId)
+//        startActivity(intent)
+//        finish()
         getResultText.launch(intent)
     }
 
-    fun goTimerActivity(bookId: Int) {
-        val intent = Intent(this, TimerActivity::class.java)
-        intent.putExtra("bookId", bookId)
-        getResultText.launch(intent)
+    fun goTimerActivity(bookId: Int, bookImgUrl: String) {
+        val mainIntent = Intent(this, TimerActivity::class.java)
+        mainIntent.putExtra("bookId", bookId)
+        mainIntent.putExtra("bookImgUrl", bookImgUrl)
+        startActivity(mainIntent)
+        finish()
     }
 
     fun goIntroAcitivity() {

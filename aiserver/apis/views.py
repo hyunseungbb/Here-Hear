@@ -15,13 +15,20 @@ import mimetypes
 # dotenv 처리해서 보안 높이기
 # APPKEY = os.environ.get("APPKEY")
 APPKEY = '6ca73d4487a205586f13f1aebfe2f18a'
-
+LIMIT_PX = 1024
+LIMIT_BYTE = 1024*1024  # 1MB
+LIMIT_BOX = 40
 def test(image_path):
-    
+
     OCR_URL = 'https://dapi.kakao.com/v2/vision/text/ocr'
     headers = {'Authorization': 'KakaoAK {}'.format(APPKEY)}
 
     image = cv2.imread(image_path)
+    height, width, _ = image.shape
+    if LIMIT_PX < height or LIMIT_PX < width:
+        ratio = float(LIMIT_PX) / max(height, width)
+        image = cv2.resize(image, None, fx=ratio, fy=ratio)
+
     jpeg_image = cv2.imencode(".jpg", image)[1]
 
     ocr_response = requests.post(OCR_URL, headers=headers, files={"image": jpeg_image.tobytes()}).json()

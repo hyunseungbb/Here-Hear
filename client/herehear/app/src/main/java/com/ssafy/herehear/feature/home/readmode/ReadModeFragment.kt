@@ -27,9 +27,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ReadModeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     lateinit var mainActivity: MainActivity
     lateinit var binding: FragmentReadModeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,11 +52,12 @@ class ReadModeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setFragmentResultListener("readModeRequest") {key, bundle ->
-            val bookId = bundle.getInt("valueKey")
+            val bookId = bundle.getInt("bookId")
+            val bookImgUrl = bundle.getString("bookImgUrl")
+
             binding.readModeBackButton.setOnClickListener{
-                (parentFragment as HomeFragment).goMain()
+                (parentFragment as HomeFragment).goDetailFragment(bookId)
             }
 
             binding.audioButton.setOnClickListener {
@@ -66,7 +65,11 @@ class ReadModeFragment : Fragment() {
             }
 
             binding.paperButton.setOnClickListener {
-                mainActivity.goTimerActivity(bookId)
+                if (bookImgUrl != null) {
+                    mainActivity.goTimerActivity(bookId, bookImgUrl)
+                } else {
+                    mainActivity.goTimerActivity(bookId, "")
+                }
             }
         }
     }

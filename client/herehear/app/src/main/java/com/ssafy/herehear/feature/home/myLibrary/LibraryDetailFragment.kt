@@ -33,7 +33,7 @@ private const val ARG_PARAM2 = "param2"
 lateinit var binding: FragmentLibraryDetailBinding
 class LibraryDetailFragment : Fragment() {
 
-
+    lateinit var bookImgUrl: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -59,6 +59,7 @@ class LibraryDetailFragment : Fragment() {
                     response: Response<BookDetailResponse>
                 ) {
                     if (response.isSuccessful) {
+                        bookImgUrl = response.body()!!.img_url
                         response.body()?.let { setView(it) }
                     } else {
                         Toast.makeText(activity, "kslfjlk", Toast.LENGTH_SHORT).show()
@@ -122,7 +123,7 @@ class LibraryDetailFragment : Fragment() {
             binding.goReadModeButton.setOnClickListener {
                 // readmodefragment로 replace 똑같은 Home fragment를 부모프래그먼트로 가지고 있음
                 // 책 id도 보내줘야함
-                homeFragment.goReadModeFragment(bookId)
+                homeFragment.goReadModeFragment(bookId, bookImgUrl)
             }
         }
 

@@ -1,22 +1,27 @@
 package com.ssafy.herehear.feature.home.readmode.audiobook
 
 import android.Manifest
+import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.app.DownloadManager
 import android.content.*
 import android.media.MediaPlayer
 import android.net.Uri
 import android.net.Uri.withAppendedPath
-import android.os.Build
-import android.os.Environment
+import android.os.*
 import android.util.Log
 import android.widget.Toast
 import android.provider.MediaStore
+import android.view.LayoutInflater
+import android.widget.TextView
 import com.ssafy.herehear.BaseActivity
 import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.ActivityAudioPlayBinding
+import com.ssafy.herehear.feature.home.readmode.CommentActivity
 import java.io.File
+import java.util.*
+import kotlin.concurrent.timer
 
 
 class AudioPlayActivity : AppCompatActivity() {
@@ -27,6 +32,14 @@ class AudioPlayActivity : AppCompatActivity() {
     private lateinit var file: File
     private lateinit var mediaPlayer: MediaPlayer
     private var position = 0
+    val handler = Handler(Looper.getMainLooper()) {
+        changeImage()
+        true
+    }
+    private var sec = 0
+    private var min = 0
+    private var timerTask: Timer? = null
+
     private val onDownloadComplete = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
@@ -67,19 +80,43 @@ class AudioPlayActivity : AppCompatActivity() {
 //        registerReceiver(onDownloadComplete, intentFilter)
 //
 //        downloadImage("http://10.0.2.2:8000/apis/download/")
+//        downloadAudio()
+        downloadAudio()
+        binding.audioPlayButton.isSelected = true
+        binding.audioView.text = getString(R.string.read_mode, sec.toString())
+        binding.audioImageView.setImageResource(R.drawable.read0)
 
+        binding.audioPlayButton.setOnClickListener {
+            if (binding.audioPlayButton.isSelected) {
+                    startTimer()
+                    resumeAudio()
+            } else {
+                pauseAudio()
+                stopTimer()
+            }
+            binding.audioPlayButton.isSelected = !binding.audioPlayButton.isSelected
+        }
 
-        binding.buttonTmp.setOnClickListener {
-            playAudio()
+        binding.audioStopButton.setOnClickListener {
+            // 일단 정지 후
+            pauseAudio()
+            stopTimer()
+            binding.audioPlayButton.isSelected = !binding.audioPlayButton.isSelected
+            // 팝업창 띄워서 진짜 책 다읽었냐고 물어보기
+            showPopup()
+            // 1. 다 읽었으면 stopAudio 후 커멘트작성페이지로 넘어가기
+//            stopAudio()
+            // 2. 다 취소 누르면 그냥 그대로
+
         }
     }
 
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(onDownloadComplete)
-    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        unregisterReceiver(onDownloadComplete)
+//    }
 
     private fun downloadImage(url: String) {
 
@@ -98,13 +135,12 @@ class AudioPlayActivity : AppCompatActivity() {
 
     }
 
-    fun playAudio() {
+    fun downloadAudio() {
         val filepath = File(getExternalFilesDir(Environment.DIRECTORY_MUSIC), "latest_audio.mp3").path
         mediaPlayer = MediaPlayer()
-        mediaPlayer.setDataSource("http://10.0.2.2:8000/apis/download/")
+        mediaPlayer.setDataSource("http://192.168.35.188:8000/apis/download/")
         mediaPlayer.prepare()
-        mediaPlayer.start()
-        Toast.makeText(this, "재생!!", Toast.LENGTH_LONG).show()
+        mediaPlayer.isLooping = true
     }
 
     fun pauseAudio() {
@@ -126,12 +162,77 @@ class AudioPlayActivity : AppCompatActivity() {
             mediaPlayer.stop()
             mediaPlayer.release()
             position = 0
-            // 여기서 다음으로 넘어가야됨
         }
     }
 
+    private fun changeImage() {
+        var a = (0..5).random()
+        when (a) {
+            0 -> {
+                binding.audioImageView.setImageResource(R.drawable.read0)
+            }
+            1 -> {
+                binding.audioImageView.setImageResource(R.drawable.read1)
+            }
+            2 -> {
+                binding.audioImageView.setImageResource(R.drawable.read2)
+            }
+            3 -> {
+                binding.audioImageView.setImageResource(R.drawable.read3)
+            }
+            4 -> {
+                binding.audioImageView.setImageResource(R.drawable.read4)
+            }
+            5 -> {
+                binding.audioImageView.setImageResource(R.drawable.read5)
+            }
 
+        }
+    }
 
+    private fun startTimer() {
+        timerTask = timer(period = 1000) {
+
+            sec++
+            if (sec == 60) {
+                min++
+                sec = 0
+            }
+            if (sec % 5 == 0) {
+                handler.obtainMessage().sendToTarget()
+            }
+            // 일단은 빨리 확인하기 위해 초단위로
+            runOnUiThread {
+                binding.audioView.text = getString(R.string.read_mode, sec.toString())
+            }
+        }
+    }
+
+    private fun stopTimer() {
+        timerTask?.cancel()
+    }
+
+    private fun showPopup() {
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.alert_popup, null)
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("그만 들으시겠어요?")
+            .setPositiveButton("확인") {dialog, which ->
+                stopAudio()
+                val bookId = intent.getIntExtra("bookId", 0)
+                val commentIntent = Intent(this, CommentActivity::class.java)
+                commentIntent.putExtra("time", min+1)
+                commentIntent.putExtra("bookId", bookId)
+                startActivity(commentIntent)
+                finish()
+            }
+            .setNeutralButton("취소", null)
+            .create()
+
+        alertDialog.setView(view)
+        alertDialog.show()
+    }
 //    private fun getStatus(id: Long): String {
 //        val query: DownloadManager.Query = DownloadManager.Query()
 //        query.setFilterById(id)
