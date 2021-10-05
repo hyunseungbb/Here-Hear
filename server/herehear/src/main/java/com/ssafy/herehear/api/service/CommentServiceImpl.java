@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.herehear.api.request.CommentPostReq;
 import com.ssafy.herehear.api.response.CommentGetRes;
-import com.ssafy.herehear.db.entity.Account;
 import com.ssafy.herehear.db.entity.Comment;
 import com.ssafy.herehear.db.repository.AccountRepository;
 import com.ssafy.herehear.db.repository.BookRepository;
@@ -72,6 +71,29 @@ public class CommentServiceImpl implements CommentService {
 		
 		for(Comment comment : commentList) {
 			if(comment.getBook().getId() == bookId && comment.getAccount().getId() == userId) {
+				tmpRes = new CommentGetRes();
+				tmpRes.setId(comment.getId());
+				tmpRes.setUsername(comment.getAccount().getUsername());
+				tmpRes.setBookId(comment.getBook().getId());
+				tmpRes.setContent(comment.getContent());
+				tmpRes.setDate(comment.getDate());
+				tmpRes.setReading_time(comment.getReading_time());
+				tmpRes.setIsshow(comment.getIsshow());
+				res.add(tmpRes);
+			}
+		}
+		return res;
+	}
+	
+	@Override
+	public List<CommentGetRes> getAllMyComment(Long userId) {
+		List<Comment> commentList = commentRepository.findAll();
+		List<CommentGetRes> res = new ArrayList<>();
+		
+		CommentGetRes tmpRes;
+		
+		for(Comment comment : commentList) {
+			if(comment.getAccount().getId() == userId) {
 				tmpRes = new CommentGetRes();
 				tmpRes.setId(comment.getId());
 				tmpRes.setUsername(comment.getAccount().getUsername());
