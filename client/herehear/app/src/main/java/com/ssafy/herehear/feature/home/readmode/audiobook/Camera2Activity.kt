@@ -112,8 +112,10 @@ class Camera2Activity : BaseActivity() {
     fun goAudioPlayActivity() {
         // jpg 파일 혹은 파일 uri랑 bookId를 넘겨줘야함
         val bookId = intent.getIntExtra("bookId", 0)
+        val libraryId = intent.getIntExtra("libraryId", 0)
         val playIntent = Intent(this, AudioPlayActivity::class.java)
         playIntent.putExtra("bookId", bookId)
+        playIntent.putExtra("libraryId", libraryId)
         playIntent.putExtra("path", realPath)
         val returnIntent = Intent()
         setResult(RESULT_CANCELED, returnIntent)

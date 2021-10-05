@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.ssafy.herehear.HereHear
 
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentLibraryMainBinding
@@ -18,7 +19,6 @@ import com.ssafy.herehear.model.data.MainBook
 import com.ssafy.herehear.model.network.RetrofitClient
 import com.ssafy.herehear.model.network.response.GetMyLibraryResponse
 import com.ssafy.herehear.model.network.response.GetMyLibraryResponseItem
-import com.ssafy.herehear.util.GlideApp
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

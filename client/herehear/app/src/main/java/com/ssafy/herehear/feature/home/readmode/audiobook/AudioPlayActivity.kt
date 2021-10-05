@@ -221,9 +221,11 @@ class AudioPlayActivity : AppCompatActivity() {
             .setPositiveButton("확인") {dialog, which ->
                 stopAudio()
                 val bookId = intent.getIntExtra("bookId", 0)
+                val libraryId = intent.getIntExtra("libraryId", 0)
                 val commentIntent = Intent(this, CommentActivity::class.java)
                 commentIntent.putExtra("time", min+1)
                 commentIntent.putExtra("bookId", bookId)
+                commentIntent.putExtra("libraryId", libraryId)
                 startActivity(commentIntent)
                 finish()
             }

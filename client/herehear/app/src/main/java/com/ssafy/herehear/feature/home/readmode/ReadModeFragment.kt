@@ -55,20 +55,20 @@ class ReadModeFragment : Fragment() {
         setFragmentResultListener("readModeRequest") {key, bundle ->
             val bookId = bundle.getInt("bookId")
             val bookImgUrl = bundle.getString("bookImgUrl")
-
+            val libraryId = bundle.getInt("libraryId")
             binding.readModeBackButton.setOnClickListener{
-                (parentFragment as HomeFragment).goDetailFragment(bookId)
+                (parentFragment as HomeFragment).goDetailFragment(bookId, libraryId)
             }
 
             binding.audioButton.setOnClickListener {
-                mainActivity.goCameraActivity(bookId)
+                mainActivity.goCameraActivity(bookId, libraryId)
             }
 
             binding.paperButton.setOnClickListener {
                 if (bookImgUrl != null) {
-                    mainActivity.goTimerActivity(bookId, bookImgUrl)
+                    mainActivity.goTimerActivity(bookId, bookImgUrl, libraryId)
                 } else {
-                    mainActivity.goTimerActivity(bookId, "")
+                    mainActivity.goTimerActivity(bookId, "", libraryId)
                 }
             }
         }

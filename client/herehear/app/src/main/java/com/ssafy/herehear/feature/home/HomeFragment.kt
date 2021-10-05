@@ -76,13 +76,16 @@ class HomeFragment : Fragment() {
 //            .commit()
 //    }
 
-    fun goDetailFragment(bookId: Int) {
+    fun goDetailFragment(bookId: Int, id: Int) {
         val childTransaction = childFragmentManager.beginTransaction()
         childTransaction.replace(R.id.frameHome, libraryDetailFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .addToBackStack(null)
             .commit()
-        libraryMainFragment.setFragmentResult("request", bundleOf("valueKey" to bookId))
+        val bundle = Bundle()
+        bundle.putInt("valueKey", bookId)
+        bundle.putInt("libraryId", id)
+        libraryMainFragment.setFragmentResult("request", bundle)
     }
     fun goMainFragment() {
         val childTransaction = childFragmentManager.beginTransaction()
@@ -91,7 +94,7 @@ class HomeFragment : Fragment() {
             .commit()
     }
 
-    fun goReadModeFragment(bookId: Int, bookImgUrl: String) {
+    fun goReadModeFragment(bookId: Int, bookImgUrl: String, libraryId: Int) {
         val childTransaction = childFragmentManager.beginTransaction()
         childTransaction.replace(R.id.frameHome, readModeFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -99,6 +102,7 @@ class HomeFragment : Fragment() {
         val bundle = Bundle()
         bundle.putInt("bookId", bookId)
         bundle.putString("bookImgUrl", bookImgUrl)
+        bundle.putInt("libraryId", libraryId)
         libraryMainFragment.setFragmentResult("readModeRequest", bundle)
     }
 

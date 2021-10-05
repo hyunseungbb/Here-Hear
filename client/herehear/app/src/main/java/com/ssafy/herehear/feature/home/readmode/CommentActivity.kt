@@ -28,6 +28,7 @@ class CommentActivity : AppCompatActivity() {
     private fun commentRequest() {
         val time = intent.getIntExtra("time", 0)
         val bookId = intent.getIntExtra("bookId", 0)
+        val libraryId = intent.getIntExtra("libraryId", 0)
         val comment = binding.commentText.text.toString()
         val body = CreateCommentRequest(comment, true, time)
 

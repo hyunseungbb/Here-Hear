@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import com.bumptech.glide.Glide
 
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.ActivityCamera2Binding
 import com.ssafy.herehear.databinding.ActivityTimerBinding
 import com.ssafy.herehear.feature.home.readmode.CommentActivity
-import com.ssafy.herehear.util.GlideApp
 import java.util.*
 import kotlin.concurrent.timer
 
@@ -29,14 +29,16 @@ class TimerActivity : AppCompatActivity() {
             stopTimer()
             // 책 아이디, 독서시간 가지고 감상문 작성하러가기
             val bookId = intent.getIntExtra("bookId", 0)
+            val libraryId = intent.getIntExtra("libraryId", 0)
             val commentIntent = Intent(this, CommentActivity::class.java)
             commentIntent.putExtra("time", min+1)
             commentIntent.putExtra("bookId", bookId)
+            commentIntent.putExtra("libraryId", libraryId)
             startActivity(commentIntent)
             finish()
         }
         val bookImgUrl = intent.getStringExtra("bookImgUrl")
-        GlideApp.with(binding.timerImageView).load(bookImgUrl)
+        Glide.with(binding.timerImageView).load(bookImgUrl)
             .into(binding.timerImageView)
 
         binding.timerButton.setOnClickListener {
