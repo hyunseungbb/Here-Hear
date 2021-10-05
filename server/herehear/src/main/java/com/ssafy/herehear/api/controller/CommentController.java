@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,9 +47,17 @@ public class CommentController {
 	
 	@GetMapping("/my/{bookId}")
 	@ApiOperation(value = "나의 감상평 조회")
-	public ResponseEntity<List<CommentGetRes>> gellAllMyComment(@PathVariable(name = "bookId") Long bookId, @ApiIgnore Authentication authentication) {
+	public ResponseEntity<List<CommentGetRes>> gellAllMyCommentOfBook(@PathVariable(name = "bookId") Long bookId, @ApiIgnore Authentication authentication) {
 		Long userId = Long.parseLong(authentication.getName());
 		List<CommentGetRes> commentList = commentService.getAllMyCommentOfBook(bookId, userId);
+		return ResponseEntity.status(200).body(commentList);
+	}
+	
+	@GetMapping("/my")
+	@ApiOperation(value = "나의 감상평 전체 조회")
+	public ResponseEntity<List<CommentGetRes>> getAllMyComment(@ApiIgnore Authentication authentication) {
+		Long userId = Long.parseLong(authentication.getName());
+		List<CommentGetRes> commentList = commentService.getAllMyComment(userId);
 		return ResponseEntity.status(200).body(commentList);
 	}
 }
