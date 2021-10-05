@@ -36,7 +36,10 @@ def recommend(request):
         col = ['user_id', 'book_id', 'stars']
 
         # 추천 알고리즘 구현을 위한 pivot table 변환
-        rating_matrix = libraries.pivot_table('stars', index='user_id', columns='book_id').fillna(0)
+        try:
+            rating_matrix = libraries.pivot_table('stars', index='user_id', columns='book_id').fillna(0)
+        except:
+            return JsonResponse([{}], safe=False)
         R = rating_matrix.values
 
         K = 20                  # 잠재요인 차원
