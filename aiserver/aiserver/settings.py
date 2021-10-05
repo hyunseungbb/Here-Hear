@@ -29,8 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '10.0.2.2',
     '127.0.0.1',
-    'aiserver',
-    'S05P21B105',
+    'j5b105.p.ssafy.io',
 ]
 
 
