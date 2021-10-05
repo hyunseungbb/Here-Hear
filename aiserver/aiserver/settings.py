@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [
     '[::1]'
     'aiserver',
     'S05P21B105',
+    'j5b105.p.ssafy.io',
 ]
 
 
@@ -66,7 +67,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
-    'http://j2b105.p.ssafy.io',
+    'http://j5b105.p.ssafy.io',
 ]
 
 ROOT_URLCONF = 'aiserver.urls'
