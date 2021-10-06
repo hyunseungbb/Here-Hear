@@ -9,7 +9,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-from .models import Account, Library
+from .serializers import BookSerializer
+from .models import Account, Library, Book
 
 
 # 알고리즘 평가하기 위한 mse metric
@@ -92,10 +93,11 @@ def recommend(request):
         print(recom_books)
         res = []
         for rec_id in list(recom_books.index):
+            book = get_object_or_404(Book, pk=rec_id)
+            serializer = BookSerializer(book)
+
             res.append(
-                {
-                    'book_id': rec_id
-                }
+                serializer.data
             )
 
         return JsonResponse(res, safe=False)
