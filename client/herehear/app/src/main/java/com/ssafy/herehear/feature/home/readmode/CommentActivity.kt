@@ -34,6 +34,7 @@ class CommentActivity : AppCompatActivity() {
 
         val url = "comment/${bookId}"
         val mainIntent = Intent(this, MainActivity::class.java)
+
         RetrofitClient.api.createComment(url, body).enqueue(object: Callback<CreateCommentResponse> {
             override fun onResponse(
                 call: Call<CreateCommentResponse>,

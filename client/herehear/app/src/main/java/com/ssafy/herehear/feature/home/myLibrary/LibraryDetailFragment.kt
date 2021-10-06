@@ -47,9 +47,6 @@ class LibraryDetailFragment : Fragment() {
     ): View? {
         inflaterr = inflater
         binding = FragmentLibraryDetailBinding.inflate(inflater, container, false)
-
-        binding.ratingBar.rating = HereHear.getBookStars().toFloat()
-
         return binding.root
     }
 
@@ -105,7 +102,7 @@ class LibraryDetailFragment : Fragment() {
                     t.printStackTrace()
                 }
             })
-
+            binding.ratingBar.rating = HereHear.getBookStars().toFloat()
             binding.ratingBar.setOnRatingBarChangeListener { ratingBar, fl, b ->
                 // 평점을 바꾸시겠습니까?
                 showPopup(fl.toInt(), libraryId)
@@ -113,7 +110,7 @@ class LibraryDetailFragment : Fragment() {
 
             binding.readDoneButton.setOnClickListener {
                 // 요청 보내기
-                val data = UpdateBookStatusRequest(bookId, 2, 0)
+                val data = UpdateBookStatusRequest(libraryId, 2, binding.ratingBar.rating.toInt())
                 RetrofitClient.api.updateBookStatus(data).enqueue(object: Callback<UpdateBookStatusResponse> {
                     override fun onResponse(
                         call: Call<UpdateBookStatusResponse>,
@@ -134,7 +131,20 @@ class LibraryDetailFragment : Fragment() {
             binding.goReadModeButton.setOnClickListener {
                 // readmodefragment로 replace 똑같은 Home fragment를 부모프래그먼트로 가지고 있음
                 // 책 id도 보내줘야함
-                homeFragment.goReadModeFragment(bookId, bookImgUrl, libraryId)
+
+                val data = UpdateBookStatusRequest(libraryId, 1, binding.ratingBar.rating.toInt())
+                RetrofitClient.api.updateBookStatus(data).enqueue(object: Callback<UpdateBookStatusResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateBookStatusResponse>,
+                        response: Response<UpdateBookStatusResponse>
+                    ) {
+                        homeFragment.goReadModeFragment(bookId, bookImgUrl, libraryId)
+                    }
+
+                    override fun onFailure(call: Call<UpdateBookStatusResponse>, t: Throwable) {
+                        t.printStackTrace()
+                    }
+                })
             }
         }
 
@@ -147,7 +157,6 @@ class LibraryDetailFragment : Fragment() {
         Glide.with(binding.detailBookImageView).load(body.img_url)
             .into(binding.detailBookImageView)
         binding.descriptionTextView.text = body.description
-        binding.ratingBar.numStars = body.stars_count
         binding.detailBookTitleTextView.text = body.title
 
     }
@@ -166,6 +175,7 @@ class LibraryDetailFragment : Fragment() {
                         response: Response<UpdateBookStatusResponse>
                     ) {
                         if (response.isSuccessful) {
+                            HereHear.setBookStars(binding.ratingBar.rating.toInt())
                             Toast.makeText(activity, "평점이 등록되었습니다.", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(activity, "등록 실패", Toast.LENGTH_SHORT).show()
@@ -177,7 +187,9 @@ class LibraryDetailFragment : Fragment() {
                     }
                 })
             }
-            .setNeutralButton("취소", null)
+            .setNeutralButton("취소") {dialog, which ->
+                binding.ratingBar.rating = HereHear.getBookStars().toFloat()
+            }
             .create()
 
         alertDialog.setView(view)
