@@ -92,7 +92,6 @@ class MainSearchFragment : Fragment() {
         }
 
         binding.searchView.setQuery ( "", false)
-
         // 검색바에서 텍스트 입력시 수행하는 함수
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
