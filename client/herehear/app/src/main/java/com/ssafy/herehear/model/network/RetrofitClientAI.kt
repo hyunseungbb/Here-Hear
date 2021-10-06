@@ -23,7 +23,7 @@ object RetrofitClientAI {
             .build()
         val retrofit = Retrofit.Builder()
 //            .baseUrl("http://j5b105.p.ssafy.io/apis/")
-            .baseUrl("http://192.168.35.188:8000/apis/")
+            .baseUrl("http://10.0.2.2:8000/apis/")
 //            .baseUrl("http://192.168.35.188:8000/apis/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())

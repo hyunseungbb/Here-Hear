@@ -23,11 +23,6 @@ interface RetrofitInterface {
         @Query("keyword") keyword: String
     ): Call<SearchResponse>
 
-    @GET("recommend")
-    fun getRecommend(
-        @Query("username") username: String
-    ): Call<SearchResponse>
-
     @GET
     fun getSearchDetail(@Url url: String): Call<SearchDetailResponse>
 

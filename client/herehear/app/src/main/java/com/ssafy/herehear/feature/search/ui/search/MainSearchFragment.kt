@@ -16,8 +16,11 @@ import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentMainSearchBinding
 import com.ssafy.herehear.feature.search.adapater.SearchAdapter
 import com.ssafy.herehear.model.network.RetrofitClient
+import com.ssafy.herehear.model.network.RetrofitClientAI
+import com.ssafy.herehear.model.network.RetrofitClientRecommend
 import com.ssafy.herehear.model.network.response.SearchResponse
 import com.ssafy.herehear.model.network.response.SearchResponseItem
+import com.ssafy.herehear.model.network.response.TempResponseItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,13 +51,12 @@ class MainSearchFragment : Fragment() {
 
         // 검색하기 전에 보여질 화면 - 사용자에 맞는 추천책 렌더링
         val username = HereHear.prefs.getString("userId", "")
-        RetrofitClient.api.getRecommend(username).enqueue(object:
-            Callback<SearchResponse> {
+        Log.d("username", "${username}")
+        RetrofitClientRecommend.api.getRecommend(username).enqueue(object : Callback<SearchResponse>{
             override fun onResponse(
                 call: Call<SearchResponse>,
                 response: Response<SearchResponse>
             ) {
-                Log.d("response", "왔냐")
                 if (response.isSuccessful){
                     Log.d("시작화면", "${response.body()}")
                     var bookData: MutableList<SearchResponseItem> = mutableListOf()
@@ -67,6 +69,7 @@ class MainSearchFragment : Fragment() {
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 t.printStackTrace()
             }
+
 
         })
 
@@ -88,7 +91,7 @@ class MainSearchFragment : Fragment() {
             }
         }
 
-//        binding.searchView.text
+        binding.searchView.setQuery ( "", false)
 
         // 검색바에서 텍스트 입력시 수행하는 함수
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
