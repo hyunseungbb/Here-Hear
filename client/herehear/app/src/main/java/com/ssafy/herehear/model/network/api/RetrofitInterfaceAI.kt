@@ -8,8 +8,9 @@ import java.io.File
 
 interface RetrofitInterfaceAI {
     @Multipart
-    @POST("ocr_tts/")
+    @POST
     fun downloadAudio(
+        @Url url: String,
         @Part file: MultipartBody.Part
     ): Call<OCRTTSResponse>
 }

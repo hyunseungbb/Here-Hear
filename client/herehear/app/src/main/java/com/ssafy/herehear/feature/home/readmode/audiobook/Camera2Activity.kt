@@ -90,10 +90,12 @@ class Camera2Activity : BaseActivity() {
 //        binding.progressFrameLayout.visibility = View.INVISIBLE
         binding.cameraNextButton.setOnClickListener {
             binding.progressLayout.visibility = View.VISIBLE
+            val userId = HereHear.prefs.getString("userId", "")
+            val url = "ocr_tts/${userId}/"
             var file = File(realPath)
             Log.d("test", "오디오변환 요청 전 파일경로 : ${file.path}")
             var fileBody = FormDataUtil.getImageBody("imgs", file)
-            RetrofitClientAI.api.downloadAudio(fileBody).enqueue(object: Callback<OCRTTSResponse> {
+            RetrofitClientAI.api.downloadAudio(url, fileBody).enqueue(object: Callback<OCRTTSResponse> {
                 override fun onResponse(
                     call: Call<OCRTTSResponse>,
                     response: Response<OCRTTSResponse>
@@ -102,7 +104,7 @@ class Camera2Activity : BaseActivity() {
                     if (response.isSuccessful) {
                         goAudioPlayActivity()
                     } else {
-                        Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "오디오북 요청 실패! ${response.code()}", Toast.LENGTH_SHORT).show()
                     }
                 }
 
