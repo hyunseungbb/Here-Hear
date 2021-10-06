@@ -22,6 +22,7 @@ import com.ssafy.herehear.feature.mypage.MyPageFragment
 import com.ssafy.herehear.feature.search.SearchFragment
 
 lateinit var homeFragment : HomeFragment
+lateinit var searchFragment : SearchFragment
 
 class MainActivity : AppCompatActivity() {
     private var backButtonTime = 0L
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 //        }.attach()
         val transaction = supportFragmentManager.beginTransaction()
         homeFragment = HomeFragment()
+
         transaction.add(R.id.frameMain, homeFragment)
         transaction.commit()
         binding.tabLayout.getTabAt(0)?.setIcon(R.drawable.home)
@@ -83,7 +85,8 @@ class MainActivity : AppCompatActivity() {
                 transaction.replace(R.id.frameMain, CalenderFragment())
             }
             2 -> {
-                transaction.replace(R.id.frameMain, SearchFragment())
+                searchFragment = SearchFragment()
+                transaction.replace(R.id.frameMain, searchFragment)
             }
             3 -> {
                 transaction.replace(R.id.frameMain, MyPageFragment())
