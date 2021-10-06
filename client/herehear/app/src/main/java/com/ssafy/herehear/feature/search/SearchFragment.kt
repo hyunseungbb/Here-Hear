@@ -35,13 +35,13 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-    fun goInfoFragment(bookId: Long, bookImageUrl: String, bookTitle: String) {
+    fun goInfoFragment(bookId: Int, bookImageUrl: String, bookTitle: String) {
         val childTransaction = childFragmentManager.beginTransaction()
         childTransaction.replace(R.id.frameSearch, searchInfoFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
         val bundle = Bundle()
-        bundle.putLong("bookId", bookId)
+        bundle.putInt("bookId", bookId.toInt())
         bundle.putString("bookImageUrl", bookImageUrl)
         bundle.putString("bookTitle", bookTitle)
         mainSearchFragment.setFragmentResult("readModeRequest", bundle)

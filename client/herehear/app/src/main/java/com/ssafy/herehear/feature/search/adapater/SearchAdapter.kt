@@ -1,13 +1,13 @@
 package com.ssafy.herehear.feature.search.adapater
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ssafy.herehear.HereHear
-import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.SearchRecyclerBinding
+import com.ssafy.herehear.feature.search.mainSearchFragment
 import com.ssafy.herehear.model.network.response.SearchResponseItem
 import com.ssafy.herehear.searchFragment
 
@@ -46,6 +46,7 @@ class SearchAdapter: RecyclerView.Adapter<SearchAdapter.ViewHolder>(){
 
         fun setClick(bookData: SearchResponseItem) {
             binding.searchBookImage.setOnClickListener {
+                mainSearchFragment.setFragmentResult("request", bundleOf("valueKey" to bookData.id))
                 searchFragment.goInfoFragment(bookData.id, bookData.img_url, bookData.title)
             }
         }

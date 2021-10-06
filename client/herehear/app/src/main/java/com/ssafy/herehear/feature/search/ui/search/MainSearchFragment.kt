@@ -10,7 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.Glide
+import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentMainSearchBinding
 import com.ssafy.herehear.feature.search.adapater.SearchAdapter
@@ -45,6 +45,30 @@ class MainSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 검색하기 전에 보여질 화면 - 사용자에 맞는 추천책 렌더링
+        val username = HereHear.prefs.getString("userId", "")
+        RetrofitClient.api.getRecommend(username).enqueue(object:
+            Callback<SearchResponse> {
+            override fun onResponse(
+                call: Call<SearchResponse>,
+                response: Response<SearchResponse>
+            ) {
+                Log.d("response", "왔냐")
+                if (response.isSuccessful){
+                    Log.d("시작화면", "${response.body()}")
+                    var bookData: MutableList<SearchResponseItem> = mutableListOf()
+                    var body = response.body()
+
+                    setView(bookData, body)
+                }
+            }
+
+            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                t.printStackTrace()
+            }
+
+        })
+
         // spinner (드롭다운) 바인딩
         val items = resources.getStringArray(R.array.searchCategory)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, items)
@@ -68,7 +92,6 @@ class MainSearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // 검색 버튼 누를 때 호출
                 val searchText = binding.searchView.query
-                Log.d("text", "${searchText.toString()}")
 
                 RetrofitClient.api.getSearch(type, searchText.toString()).enqueue(object:
                     Callback<SearchResponse> {
@@ -78,24 +101,9 @@ class MainSearchFragment : Fragment() {
                     ) {
                         if (response.isSuccessful){
                             var bookData: MutableList<SearchResponseItem> = mutableListOf()
-                            // need to modify
-                            // To print book image
                             var body = response.body()
-                            if (body != null){
-                                for (item in body){
-                                    bookData.add(item)
-                                }
-                            } else {
-                                Log.d("error", "response is null")
-                            }
 
-                            // recycler adapter를 통한 바인딩
-                            var recyclerAdapter = SearchAdapter()
-                            Log.d("adapter아래", "여긴오지?")
-                            recyclerAdapter.listData = bookData
-                            Log.d("recycler", "${recyclerAdapter.listData}")
-                            binding.recycler.adapter = recyclerAdapter
-                            binding.recycler.layoutManager = GridLayoutManager(requireContext(), 3)
+                            setView(bookData, body)
                         }
 
                     }
@@ -116,6 +124,22 @@ class MainSearchFragment : Fragment() {
         })
 
 
+    }
+
+    private fun setView(bookData: MutableList<SearchResponseItem>, body: SearchResponse?){
+        if (body != null){
+            for (item in body){
+                bookData.add(item)
+            }
+        } else {
+            Log.d("error", "response is null")
+        }
+
+        // recycler adapter를 통한 바인딩
+        var recyclerAdapter = SearchAdapter()
+        recyclerAdapter.listData = bookData
+        binding.recycler.adapter = recyclerAdapter
+        binding.recycler.layoutManager = GridLayoutManager(requireContext(), 3)
     }
 
 }

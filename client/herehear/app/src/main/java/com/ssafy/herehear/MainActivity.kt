@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 //        }.attach()
         val transaction = supportFragmentManager.beginTransaction()
         homeFragment = HomeFragment()
-        searchFragment = SearchFragment()
+
         transaction.add(R.id.frameMain, homeFragment)
         transaction.addToBackStack(null)
         transaction.commit()
@@ -83,7 +83,8 @@ class MainActivity : AppCompatActivity() {
                 transaction.replace(R.id.frameMain, CalenderFragment())
             }
             2 -> {
-                transaction.replace(R.id.frameMain, SearchFragment())
+                searchFragment = SearchFragment()
+                transaction.replace(R.id.frameMain, searchFragment)
             }
             3 -> {
                 transaction.replace(R.id.frameMain, MyPageFragment())
