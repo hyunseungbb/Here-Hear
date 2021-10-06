@@ -138,7 +138,9 @@ class AudioPlayActivity : AppCompatActivity() {
     fun downloadAudio() {
         val filepath = File(getExternalFilesDir(Environment.DIRECTORY_MUSIC), "latest_audio.mp3").path
         mediaPlayer = MediaPlayer()
-        mediaPlayer.setDataSource("http://192.168.35.188:8000/apis/download/")
+        val userId = HereHear.prefs.getString("userId", "")
+        mediaPlayer.setDataSource("http://192.168.35.188:8000/apis/download/${userId}")
+//        mediaPlayer.setDataSource("http://j5b105.p.ssafy.io/apis/download/")
         mediaPlayer.prepare()
         mediaPlayer.isLooping = true
     }
