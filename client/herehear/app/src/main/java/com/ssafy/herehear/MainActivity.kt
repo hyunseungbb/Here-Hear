@@ -22,11 +22,15 @@ import com.ssafy.herehear.feature.mypage.MyPageFragment
 import com.ssafy.herehear.feature.search.SearchFragment
 
 lateinit var homeFragment : HomeFragment
+lateinit var searchFragment : SearchFragment
 
 class MainActivity : AppCompatActivity() {
+    private var backButtonTime = 0L
+    private var fragmentCount = 0
 
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var getResultText: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -40,8 +44,8 @@ class MainActivity : AppCompatActivity() {
 //        }.attach()
         val transaction = supportFragmentManager.beginTransaction()
         homeFragment = HomeFragment()
+
         transaction.add(R.id.frameMain, homeFragment)
-        transaction.addToBackStack(null)
         transaction.commit()
         binding.tabLayout.getTabAt(0)?.setIcon(R.drawable.home)
         binding.tabLayout.getTabAt(1)?.setIcon(R.drawable.calender)
@@ -81,13 +85,14 @@ class MainActivity : AppCompatActivity() {
                 transaction.replace(R.id.frameMain, CalenderFragment())
             }
             2 -> {
-                transaction.replace(R.id.frameMain, SearchFragment())
+                searchFragment = SearchFragment()
+                transaction.replace(R.id.frameMain, searchFragment)
             }
             3 -> {
                 transaction.replace(R.id.frameMain, MyPageFragment())
             }
         }
-        transaction.addToBackStack(null)
+//        transaction.addToBackStack(null)
         transaction.commit()
     }
 
@@ -96,9 +101,9 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, Camera2Activity::class.java)
         intent.putExtra("bookId", bookId)
         intent.putExtra("libraryId", libraryId)
-//        startActivity(intent)
-//        finish()
-        getResultText.launch(intent)
+        startActivity(intent)
+        finish()
+//        getResultText.launch(intent)
     }
 
     fun goTimerActivity(bookId: Int, bookImgUrl: String, libraryId: Int) {
@@ -116,23 +121,35 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-
-//    fun setFragment() {
+//    interface onKeyBackPressedListener {
+//        fun onBackKey()
+//    }
+//    private lateinit var mOnKeyBackPressedListener: onKeyBackPressedListener
+//    fun setOnKeyBackPressedListener(listener: onKeyBackPressedListener) {
+//        mOnKeyBackPressedListener = listener
+//    }
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//        val currentTime = System.currentTimeMillis()
+//        val gapTime = currentTime - backButtonTime
 //
+//        if (gapTime in 0..2000) {
+//            if (this.fragmentCount <= 0) finish()
+//        } else {
+//            backButtonTime = currentTime
+//            if(this.fragmentCount <= 1) {
+//                Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT)
+//                    .show()
+//            } else {
+//                super.onBackPressed()
+//            }
+//        }
 //    }
 //
-//    fun goReadMode() {
-//        Log.d("mytest", "여기로 오나??")
-//        val readModeFragment = ReadModeFragment()
-//        val transaction = supportFragmentManager.beginTransaction()
-//        transaction.add(R.id.viewPager, readModeFragment)
-//        Log.d("test", "추가가 되나?")
-//        transaction.addToBackStack("readmode")
-//        transaction.commit()
+//    fun increaseFragmentCount() {
+//        this.fragmentCount += 1
 //    }
-//
-//    fun goBack() {
-//        onBackPressed()
+//    fun decreaseFragmentCount() {
+//        this.fragmentCount -= 1
 //    }
-
 }

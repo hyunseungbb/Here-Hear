@@ -62,6 +62,7 @@ class HomeFragment : Fragment() {
         // readmode 프래그먼트를 프레임에 일단 추가. 원래는 홈메인임
         childFragmentManager.beginTransaction()
             .add(R.id.frameHome, libraryMainFragment)
+            .addToBackStack(null)
             .commit()
 
         return binding.root
@@ -80,7 +81,6 @@ class HomeFragment : Fragment() {
         val childTransaction = childFragmentManager.beginTransaction()
         childTransaction.replace(R.id.frameHome, libraryDetailFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .addToBackStack(null)
             .commit()
         val bundle = Bundle()
         bundle.putInt("valueKey", bookId)

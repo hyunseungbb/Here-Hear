@@ -23,14 +23,14 @@
         android:text="한줄 감상평"
         android:textSize="24sp" />
 
+
     <EditText
         android:id="@+id/commentText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
+        android:inputType="textPersonName"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <LinearLayout

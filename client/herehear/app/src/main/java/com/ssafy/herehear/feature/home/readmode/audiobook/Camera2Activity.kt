@@ -22,6 +22,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ssafy.herehear.BaseActivity
 import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.databinding.ActivityCamera2Binding
 import com.ssafy.herehear.model.network.RetrofitClientAI
 import com.ssafy.herehear.model.network.response.OCRTTSResponse
@@ -83,17 +84,19 @@ class Camera2Activity : BaseActivity() {
         setContentView(binding.root)
         requirePermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), PERM_STORAGE)
         binding.cameraBackButton.setOnClickListener {
-            val returnIntent = Intent()
-            setResult(RESULT_OK, returnIntent)
+            val mainIntent = Intent(this, MainActivity::class.java)
+            startActivity(mainIntent)
             finish()
         }
 //        binding.progressFrameLayout.visibility = View.INVISIBLE
         binding.cameraNextButton.setOnClickListener {
             binding.progressLayout.visibility = View.VISIBLE
+            val userId = HereHear.prefs.getString("userId", "")
+            val url = "ocr_tts/${userId}/"
             var file = File(realPath)
             Log.d("test", "오디오변환 요청 전 파일경로 : ${file.path}")
             var fileBody = FormDataUtil.getImageBody("imgs", file)
-            RetrofitClientAI.api.downloadAudio(fileBody).enqueue(object: Callback<OCRTTSResponse> {
+            RetrofitClientAI.api.downloadAudio(url, fileBody).enqueue(object: Callback<OCRTTSResponse> {
                 override fun onResponse(
                     call: Call<OCRTTSResponse>,
                     response: Response<OCRTTSResponse>
@@ -102,7 +105,7 @@ class Camera2Activity : BaseActivity() {
                     if (response.isSuccessful) {
                         goAudioPlayActivity()
                     } else {
-                        Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "오디오북 요청 실패! ${response.code()}", Toast.LENGTH_SHORT).show()
                     }
                 }
 

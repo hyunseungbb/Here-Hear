@@ -195,5 +195,4 @@ class LibraryDetailFragment : Fragment() {
         alertDialog.setView(view)
         alertDialog.show()
     }
-
 }
