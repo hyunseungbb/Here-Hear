@@ -16,6 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -31,6 +32,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -38,21 +40,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginStart="5dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/comfortaa_bold"
                 android:text="읽고 있는 책"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mainRecyclerView0"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="160dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/shelf">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -60,20 +71,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/comfortaa_bold"
                 android:text="읽기 전 책"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mainRecyclerView1"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="160dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/shelf">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -81,13 +101,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/comfortaa_bold"
                 android:text="다 읽은 책"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mainRecyclerView2"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="160dp"
+            android:background="@drawable/shelf" />
+
     </LinearLayout>
 </ScrollView>

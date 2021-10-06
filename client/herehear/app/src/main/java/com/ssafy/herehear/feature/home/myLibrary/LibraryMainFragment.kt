@@ -51,9 +51,9 @@ class LibraryMainFragment : Fragment() {
                     if (body != null) {
                         for (item in body) {
                             if (item.read_status == 0) {
-                                data0.add(item)
-                            } else if (item.read_status == 1) {
                                 data1.add(item)
+                            } else if (item.read_status == 1) {
+                                data0.add(item)
                             } else if (item.read_status == 2) {
                                 data2.add(item)
                             }
