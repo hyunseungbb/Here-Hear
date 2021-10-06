@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:orientation="horizontal"
             android:weightSum="4">
 
@@ -92,20 +92,38 @@
 
         <RatingBar
             android:id="@+id/ratingBar"
+            style="@style/Widget.AppCompat.RatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:numStars="5"
+            android:progressTint="#FFEB3B"
+            android:secondaryProgressTint="#FFEB3B"
             android:stepSize="1"
             tools:ignore="SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:text="줄거리" />
 
         <TextView
             android:id="@+id/descriptionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="description" />
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/comfortaa_bold"
+            android:text="감상평" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/commentRecyclerView"

@@ -56,7 +56,7 @@ class MainCalenderFragment : Fragment() {
                         Log.d("test", "${dateArray[0]}, ${dateArray[1]}, ${dateArray[2]}")
                         calendar.set(dateArray[0].toInt(), dateArray[1].toInt()-1, dateArray[2].toInt())
 
-                        events.add(EventDay(calendar, R.drawable.audiobook))
+                        events.add(EventDay(calendar, R.drawable.book_check))
                         binding.calendarView.setEvents(events)
                         binding.calendarView.setDate(calendar)
                     }
