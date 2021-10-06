@@ -101,9 +101,9 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, Camera2Activity::class.java)
         intent.putExtra("bookId", bookId)
         intent.putExtra("libraryId", libraryId)
-//        startActivity(intent)
-//        finish()
-        getResultText.launch(intent)
+        startActivity(intent)
+        finish()
+//        getResultText.launch(intent)
     }
 
     fun goTimerActivity(bookId: Int, bookImgUrl: String, libraryId: Int) {

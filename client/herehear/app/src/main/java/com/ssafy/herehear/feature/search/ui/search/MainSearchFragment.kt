@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentMainSearchBinding
@@ -144,7 +145,7 @@ class MainSearchFragment : Fragment() {
         var recyclerAdapter = SearchAdapter()
         recyclerAdapter.listData = bookData
         binding.recycler.adapter = recyclerAdapter
-        binding.recycler.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recycler.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
     }
 
 }
