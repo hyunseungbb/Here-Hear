@@ -22,6 +22,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ssafy.herehear.BaseActivity
 import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.databinding.ActivityCamera2Binding
 import com.ssafy.herehear.model.network.RetrofitClientAI
 import com.ssafy.herehear.model.network.response.OCRTTSResponse
@@ -83,8 +84,8 @@ class Camera2Activity : BaseActivity() {
         setContentView(binding.root)
         requirePermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), PERM_STORAGE)
         binding.cameraBackButton.setOnClickListener {
-            val returnIntent = Intent()
-            setResult(RESULT_OK, returnIntent)
+            val mainIntent = Intent(this, MainActivity::class.java)
+            startActivity(mainIntent)
             finish()
         }
 //        binding.progressFrameLayout.visibility = View.INVISIBLE
