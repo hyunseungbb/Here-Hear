@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="130dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/border_bottom"
     android:orientation="horizontal"
     android:weightSum="4">
 
@@ -11,6 +13,7 @@
         android:id="@+id/calendarBookImageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_weight="1"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -19,6 +22,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_weight="3"
         android:orientation="vertical"
         android:weightSum="10">
@@ -27,8 +31,8 @@
             android:id="@+id/calendarBookTitleView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
-            android:fontFamily="@font/bmjua"
+            android:layout_weight="3"
+            android:fontFamily="@font/bmhannaair"
             android:gravity="center_vertical"
             android:text="TextView"
             android:textSize="14sp" />
@@ -47,9 +51,10 @@
             android:id="@+id/calendarBookContentView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6"
+            android:layout_weight="5"
             android:fontFamily="@font/bmhannaair"
             android:gravity="center_vertical"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

@@ -9,7 +9,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-from .models import Account, Library
+from .serializers import BookSerializer
+from .models import Account, Library, Book
 
 
 # 알고리즘 평가하기 위한 mse metric
@@ -27,8 +28,9 @@ def get_rmse(R, P, Q, non_zeros):
 
 @api_view(['GET'])
 def recommend(request):
+    username = request.GET.get('username', None)
     if request.method == 'GET':
-        account = get_object_or_404(Account, username=request.data.get('username'))
+        account = get_object_or_404(Account, username=username)
 
         # 데이터 변환
         libraries = pd.DataFrame(list(Library.objects.all().values()))
@@ -92,10 +94,11 @@ def recommend(request):
         print(recom_books)
         res = []
         for rec_id in list(recom_books.index):
+            book = get_object_or_404(Book, pk=rec_id)
+            serializer = BookSerializer(book)
+
             res.append(
-                {
-                    'book_id': rec_id
-                }
+                serializer.data
             )
 
         return JsonResponse(res, safe=False)

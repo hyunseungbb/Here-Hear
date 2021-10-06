@@ -22,7 +22,6 @@ class CustomDetailAdapter: RecyclerView.Adapter<CustomDetailAdapter.Holder>() {
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        Log.d("test", "onBindViewHolder! ${position}")
         val comment = listData.get(position)
         holder.setText(comment)
 //        holder.setClick(comment)
@@ -41,7 +40,6 @@ class CustomDetailAdapter: RecyclerView.Adapter<CustomDetailAdapter.Holder>() {
 
         // 화면에 데이터 세팅
         fun setText(comment: AllCommentsResponseItem) {
-            Log.d("test", "dfsdfsdf ${comment.content} ${comment.username}")
             binding.commentDateTextView.text = comment.date.split('T')[0]
             binding.commentNameTextView.text = comment.username
             binding.commentTextView.text = comment.content
