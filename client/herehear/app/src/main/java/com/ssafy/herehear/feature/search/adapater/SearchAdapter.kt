@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.ssafy.herehear.databinding.SearchRecyclerBinding
 import com.ssafy.herehear.feature.search.mainSearchFragment
 import com.ssafy.herehear.model.network.response.SearchResponseItem
+import com.ssafy.herehear.model.network.response.TempResponseItem
 import com.ssafy.herehear.searchFragment
 
 class SearchAdapter: RecyclerView.Adapter<SearchAdapter.ViewHolder>(){
@@ -50,5 +51,6 @@ class SearchAdapter: RecyclerView.Adapter<SearchAdapter.ViewHolder>(){
                 searchFragment.goInfoFragment(bookData.id, bookData.img_url, bookData.title)
             }
         }
+
     }
 }
