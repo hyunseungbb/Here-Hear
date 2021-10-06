@@ -12,8 +12,8 @@ import com.ssafy.herehear.databinding.FragmentSearchBinding
 import com.ssafy.herehear.feature.search.ui.search.MainSearchFragment
 import com.ssafy.herehear.feature.search.ui.search.SearchInfoFragment
 
-val mainSearchFragment = MainSearchFragment()
-val searchInfoFragment = SearchInfoFragment()
+lateinit var mainSearchFragment: MainSearchFragment
+lateinit var searchInfoFragment: SearchInfoFragment
 
 class SearchFragment : Fragment() {
 
@@ -28,6 +28,7 @@ class SearchFragment : Fragment() {
 
         val binding = FragmentSearchBinding.inflate(inflater, container, false)
 
+        mainSearchFragment = MainSearchFragment()
         childFragmentManager.beginTransaction()
             .add(R.id.frameSearch, mainSearchFragment)
             .commit()
@@ -37,6 +38,7 @@ class SearchFragment : Fragment() {
 
     fun goInfoFragment(bookId: Int, bookImageUrl: String, bookTitle: String) {
         val childTransaction = childFragmentManager.beginTransaction()
+        searchInfoFragment = SearchInfoFragment()
         childTransaction.replace(R.id.frameSearch, searchInfoFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
@@ -49,6 +51,7 @@ class SearchFragment : Fragment() {
 
     fun goMainFragment() {
         val childTransaction = childFragmentManager.beginTransaction()
+        mainSearchFragment = MainSearchFragment()
         childTransaction.replace(R.id.frameSearch, mainSearchFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()

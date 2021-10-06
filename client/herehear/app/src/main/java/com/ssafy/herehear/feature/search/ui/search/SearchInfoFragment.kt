@@ -1,5 +1,7 @@
 package com.ssafy.herehear.feature.search.ui.search
 
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +13,9 @@ import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.MainActivity
+import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentSearchInfoBinding
 import com.ssafy.herehear.feature.search.SearchFragment
 import com.ssafy.herehear.feature.search.adapater.SearchDetailAdapter
@@ -22,6 +27,8 @@ import retrofit2.Response
 
 class SearchInfoFragment : Fragment() {
 
+    lateinit var mContext: Context
+    private lateinit var inflaterr: LayoutInflater
     private lateinit var binding: FragmentSearchInfoBinding
     private var flag = false
     private var libraryId = 0
@@ -54,7 +61,6 @@ class SearchInfoFragment : Fragment() {
                         response: Response<SearchDetailResponse>
                     ) {
                         if (response.isSuccessful) {
-                            Log.d("detail", "${response.body()}")
                             var body = response.body()
                             if (body != null) {
                                 setView(body)
@@ -75,6 +81,11 @@ class SearchInfoFragment : Fragment() {
                     }
 
                 })
+
+            // 내 서재에 책 등록/삭제
+            binding.good.setOnClickListener {
+                registerBookClick(bookId, libraryId, flag)
+            }
 
 
         }
@@ -166,7 +177,7 @@ class SearchInfoFragment : Fragment() {
         })
     }
 
-    // 내 서재에 등록된 책인지 확인하는 함수 return - true:등록 , false:미등록
+    // 내 서재에 등록된 책인지 확인하는 함수 flag - true:등록 , false:미등록
     private fun getMyLibraryBooks(bookId: Int) {
         var result = false
         RetrofitClient.api.getMyLibrary().enqueue(object : Callback<GetMyLibraryResponse> {
@@ -190,14 +201,11 @@ class SearchInfoFragment : Fragment() {
                         flag = result
 
                         if (flag){
-                            binding.good.setColorFilter(Color.parseColor("#C73E3E"))
+                            binding.good.setColorFilter(Color.parseColor("#6264A7"))
                         } else {
-                            binding.good.setColorFilter(Color.parseColor("#EEDCDC"))
+                            binding.good.setColorFilter(Color.parseColor("#000000"))
                         }
 
-                        binding.good.setOnClickListener {
-                            registerBookClick(bookId, libraryId, flag)
-                        }
                     }
 
                 }
@@ -223,10 +231,11 @@ class SearchInfoFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d("책등록", "성공")
-                        Toast.makeText(activity, "서재에 책이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                        setLibraryId(bookId)
+                        Toast.makeText(mContext, "서재에 책이 등록되었습니다.", Toast.LENGTH_SHORT).show()
                         flag = true
                         if (flag){
-                            binding.good.setColorFilter(Color.parseColor("#C73E3E"))
+                            binding.good.setColorFilter(Color.parseColor("#6264A7"))
                         }
                     }
                 }
@@ -248,10 +257,10 @@ class SearchInfoFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d("책삭제", "성공")
-                        Toast.makeText(activity, "서재에서 책을 제거하였습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(mContext, "서재에서 책을 제거하였습니다.", Toast.LENGTH_SHORT).show()
                         flag = false
                         if (!flag){
-                            binding.good.setColorFilter(Color.parseColor("#EEDCDC"))
+                            binding.good.setColorFilter(Color.parseColor("#000000"))
                         }
                     }
                 }
@@ -264,5 +273,44 @@ class SearchInfoFragment : Fragment() {
             })
         }
 
+    }
+
+    // 서재에서 삭제하고 다시 등록하면 libraryId가 갱신돼서 다시 찾아주는 함수
+    private fun setLibraryId(bookId: Int) {
+        RetrofitClient.api.getMyLibrary().enqueue(object : Callback<GetMyLibraryResponse> {
+            override fun onResponse(
+                call: Call<GetMyLibraryResponse>,
+                response: Response<GetMyLibraryResponse>
+            ) {
+                if (response.isSuccessful) {
+                    var bookData = mutableListOf<GetMyLibraryResponseItem>()
+                    var body = response.body()
+
+                    if (body != null) {
+                        for (item in body) {
+                            bookData.add(item)
+                            if (bookId == item.book_id) {
+                                libraryId = item.id
+                                Log.d("함수 내 libraryId", "${libraryId}")
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+            override fun onFailure(call: Call<GetMyLibraryResponse>, t: Throwable) {
+                t.printStackTrace()
+            }
+
+        })
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        mContext = context
     }
 }
