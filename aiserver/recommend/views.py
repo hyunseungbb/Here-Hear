@@ -28,8 +28,9 @@ def get_rmse(R, P, Q, non_zeros):
 
 @api_view(['GET'])
 def recommend(request):
+    username = request.GET.get('username', None)
     if request.method == 'GET':
-        account = get_object_or_404(Account, username=request.data.get('username'))
+        account = get_object_or_404(Account, username=username)
 
         # 데이터 변환
         libraries = pd.DataFrame(list(Library.objects.all().values()))
