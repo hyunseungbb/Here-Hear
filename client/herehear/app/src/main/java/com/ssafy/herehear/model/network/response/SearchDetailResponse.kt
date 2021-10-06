@@ -1,10 +1,10 @@
 package com.ssafy.herehear.model.network.response
 
 class SearchDetailResponse (
-    val description: String,
-    val id: Long,
-    val img_url: String,
-    val stars_count: Int,
-    val stars_sum: Int,
-    val title: String
+    var description: String,
+    var id: Long,
+    var img_url: String,
+    var stars_count: Int,
+    var stars_sum: Int,
+    var title: String
         )

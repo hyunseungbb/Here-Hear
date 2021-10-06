@@ -22,6 +22,7 @@ import com.ssafy.herehear.feature.mypage.MyPageFragment
 import com.ssafy.herehear.feature.search.SearchFragment
 
 lateinit var homeFragment : HomeFragment
+lateinit var searchFragment : SearchFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 //        }.attach()
         val transaction = supportFragmentManager.beginTransaction()
         homeFragment = HomeFragment()
+        searchFragment = SearchFragment()
         transaction.add(R.id.frameMain, homeFragment)
         transaction.addToBackStack(null)
         transaction.commit()

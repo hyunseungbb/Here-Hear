@@ -13,12 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentMainSearchBinding
-import com.ssafy.herehear.feature.search.SearchFragment
-import com.ssafy.herehear.feature.search.adapater.BookUrl
 import com.ssafy.herehear.feature.search.adapater.SearchAdapter
 import com.ssafy.herehear.model.network.RetrofitClient
-import com.ssafy.herehear.model.network.response.SearchRequest
 import com.ssafy.herehear.model.network.response.SearchResponse
+import com.ssafy.herehear.model.network.response.SearchResponseItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,7 +25,6 @@ class MainSearchFragment : Fragment() {
 
     private var type: String = "title"
     private lateinit var binding: FragmentMainSearchBinding
-    private var urlList: MutableList<String> = mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,33 +63,41 @@ class MainSearchFragment : Fragment() {
             }
         }
 
-        var url = "http://image.aladin.co.kr/product/10789/58/cover/8964359208_1.jpg"
-        Glide.with(requireContext()).load(url).override(150, 200).into(binding.imageView2)
-
         // 검색바에서 텍스트 입력시 수행하는 함수
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // 검색 버튼 누를 때 호출
                 val searchText = binding.searchView.query
-                val searchData = SearchRequest(searchText.toString(), type)
+                Log.d("text", "${searchText.toString()}")
 
-
-                RetrofitClient.api.search(searchText.toString(), type).enqueue(object:
+                RetrofitClient.api.getSearch(type, searchText.toString()).enqueue(object:
                     Callback<SearchResponse> {
                     override fun onResponse(
                         call: Call<SearchResponse>,
                         response: Response<SearchResponse>
                     ) {
                         if (response.isSuccessful){
+                            var bookData: MutableList<SearchResponseItem> = mutableListOf()
                             // need to modify
                             // To print book image
                             var body = response.body()
                             if (body != null){
                                 for (item in body){
-                                    urlList.add(item.img_url)
+                                    bookData.add(item)
                                 }
+                            } else {
+                                Log.d("error", "response is null")
                             }
+
+                            // recycler adapter를 통한 바인딩
+                            var recyclerAdapter = SearchAdapter()
+                            Log.d("adapter아래", "여긴오지?")
+                            recyclerAdapter.listData = bookData
+                            Log.d("recycler", "${recyclerAdapter.listData}")
+                            binding.recycler.adapter = recyclerAdapter
+                            binding.recycler.layoutManager = GridLayoutManager(requireContext(), 3)
                         }
+
                     }
 
                     override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
@@ -100,9 +105,6 @@ class MainSearchFragment : Fragment() {
                     }
                 })
 
-                for (index in 0..urlList.size){
-                    Glide.with(requireContext()).load(url).into(binding.bookImage)
-                }
 
                 return true
             }
@@ -113,30 +115,7 @@ class MainSearchFragment : Fragment() {
             }
         })
 
-        // 책 이미지 클릭시 goInfo 로 책정보 화면으로 가기
-        binding.bookImage.setOnClickListener{
-            (parentFragment as SearchFragment).goInfo()
-        }
 
-        // recycler adapter를 통한 바인딩
-        val data:MutableList<BookUrl> = loadData(url)
-        var recyclerAdapter = SearchAdapter()
-        recyclerAdapter.listData = data
-        binding.recycler.adapter = recyclerAdapter
-        binding.recycler.layoutManager = GridLayoutManager(requireContext(), 3)
-
-    }
-
-    // recycler 이용하기 위한 데이터로드 함수
-    private fun loadData(url: String): MutableList<BookUrl>{
-        val data: MutableList<BookUrl> = mutableListOf()
-
-        for (index in 1..10){
-            var bookUrl = BookUrl(url)
-            data.add(bookUrl)
-        }
-
-        return data
     }
 
 }

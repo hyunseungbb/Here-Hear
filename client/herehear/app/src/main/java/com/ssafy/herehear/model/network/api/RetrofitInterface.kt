@@ -18,12 +18,14 @@ interface RetrofitInterface {
         @Body signupBody: SignupRequest
     ): Call<SignupResponse>
 
-    @GET("search")
-    @Headers("Content-type: application/json")
-    fun search(
-        @Query("keyword") searchText: String,
-        @Query("type") searchType: String
+    @GET("books/search")
+    fun getSearch(
+        @Query("type") type: String,
+        @Query("keyword") keyword: String
     ): Call<SearchResponse>
+
+    @GET
+    fun getSearchDetail(@Url url: String): Call<SearchDetailResponse>
 
     @GET("libraries/mine")
     fun getMyLibrary(): Call<GetMyLibraryResponse>

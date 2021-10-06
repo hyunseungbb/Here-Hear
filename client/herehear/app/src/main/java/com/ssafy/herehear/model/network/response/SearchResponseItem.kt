@@ -1,6 +1,7 @@
 package com.ssafy.herehear.model.network.response
 
-class SearchResponseItem (
+data class SearchResponseItem (
+    val id: Long,
     val img_url: String,
-    val type: String
+    val title: String
         )
