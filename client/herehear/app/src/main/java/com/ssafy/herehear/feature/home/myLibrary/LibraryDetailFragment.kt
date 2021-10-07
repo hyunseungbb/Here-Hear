@@ -188,7 +188,7 @@ class LibraryDetailFragment : Fragment() {
                 })
             }
             .setNeutralButton("취소") {dialog, which ->
-                binding.ratingBar.rating = HereHear.getBookStars().toFloat()
+//                binding.ratingBar.rating = HereHear.getBookStars().toFloat()
             }
             .create()
 

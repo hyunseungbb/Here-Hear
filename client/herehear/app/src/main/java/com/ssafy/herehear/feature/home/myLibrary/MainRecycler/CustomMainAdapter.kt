@@ -51,7 +51,6 @@ class CustomMainAdapter: RecyclerView.Adapter<CustomMainAdapter.Holder>() {
 
         // 화면에 데이터 세팅
         fun setImage(mainBook: GetMyLibraryResponseItem) {
-            Log.d("test", "dfsdfsdf ${mainBook.img_url} ${mainBook.book_id}")
             // url로 어떻게 이미지 세팅하는 지 내일 알아보기
             Glide.with(binding.homeBookImageView).load(mainBook.img_url)
                 .into(binding.homeBookImageView)

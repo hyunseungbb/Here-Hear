@@ -25,7 +25,7 @@
             android:id="@+id/searchView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="7"
+            android:layout_weight="6.5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></SearchView>
@@ -34,7 +34,7 @@
             android:id="@+id/spinner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="3.5"
             android:entries="@array/searchCategory"
             android:minHeight="32dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_weight="9"
