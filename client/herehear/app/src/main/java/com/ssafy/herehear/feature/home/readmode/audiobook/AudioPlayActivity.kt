@@ -139,8 +139,10 @@ class AudioPlayActivity : AppCompatActivity() {
         val filepath = File(getExternalFilesDir(Environment.DIRECTORY_MUSIC), "latest_audio.mp3").path
         mediaPlayer = MediaPlayer()
         val userId = HereHear.prefs.getString("userId", "")
-        mediaPlayer.setDataSource("http://192.168.35.188:8000/apis/download/${userId}")
-//        mediaPlayer.setDataSource("http://j5b105.p.ssafy.io/apis/download/")
+        val url = "http://j5b105.p.ssafy.io:8000/apis/download/${userId}/"
+        Log.d("test", "id: ${userId}")
+//        mediaPlayer.setDataSource("http://192.168.35.188:8000/apis/download/${userId}/")
+        mediaPlayer.setDataSource(url)
         mediaPlayer.prepare()
         mediaPlayer.isLooping = true
     }
@@ -199,13 +201,13 @@ class AudioPlayActivity : AppCompatActivity() {
             if (sec == 60) {
                 min++
                 sec = 0
+
             }
             if (sec % 5 == 0) {
                 handler.obtainMessage().sendToTarget()
             }
-            // 일단은 빨리 확인하기 위해 초단위로
             runOnUiThread {
-                binding.audioView.text = getString(R.string.read_mode, sec.toString())
+                binding.audioView.text = getString(R.string.read_mode, min.toString())
             }
         }
     }

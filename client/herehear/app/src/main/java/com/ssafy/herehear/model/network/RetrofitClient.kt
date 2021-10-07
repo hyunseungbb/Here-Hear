@@ -18,8 +18,9 @@ object RetrofitClient {
     init {
 
         retrofit = Retrofit.Builder()
+            .baseUrl("http://j5b105.p.ssafy.io:8081/api/v1/")
+//            .baseUrl("http://10.0.2.2:8081/api/v1/")
 //            .baseUrl("http://192.168.35.188:8081/api/v1/")
-            .baseUrl("http://10.0.2.2:8081/api/v1/")
             .client(provideOkHttpClient(AppInterceptor()))
 //            .client(OkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
