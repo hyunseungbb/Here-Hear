@@ -3,6 +3,7 @@ package com.ssafy.herehear.feature.home.myLibrary
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Context.LAYOUT_INFLATER_SERVICE
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,8 +18,10 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.GenericTransitionOptions.with
 import com.bumptech.glide.Glide
 import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentLibraryDetailBinding
+
 import com.ssafy.herehear.feature.home.libraryDetailFragment
 import com.ssafy.herehear.feature.home.myLibrary.MainRecycler.CustomDetailAdapter
 import com.ssafy.herehear.feature.home.readmode.CommentActivity
@@ -29,14 +32,20 @@ import com.ssafy.herehear.util.MyGlideApp
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.properties.Delegates
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 lateinit var binding: FragmentLibraryDetailBinding
+
 class LibraryDetailFragment : Fragment() {
+
+    lateinit var mainActivity: MainActivity
     lateinit var inflaterr: LayoutInflater
     lateinit var bookImgUrl: String
+    var bookId by Delegates.notNull<Int>()
+    var libraryId by Delegates.notNull<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -55,8 +64,8 @@ class LibraryDetailFragment : Fragment() {
 
         setFragmentResultListener("request") {key, bundle ->
 
-            val bookId = bundle.getInt("valueKey")
-            val libraryId = bundle.getInt("libraryId")
+            bookId = bundle.getInt("valueKey")
+            libraryId = bundle.getInt("libraryId")
             var url = "books/${bookId}"
             RetrofitClient.api.getHomeBookDetail(url).enqueue(object: Callback<BookDetailResponse>{
                 override fun onResponse(
@@ -131,20 +140,7 @@ class LibraryDetailFragment : Fragment() {
             binding.goReadModeButton.setOnClickListener {
                 // readmodefragment로 replace 똑같은 Home fragment를 부모프래그먼트로 가지고 있음
                 // 책 id도 보내줘야함
-
-                val data = UpdateBookStatusRequest(libraryId, 1, binding.ratingBar.rating.toInt())
-                RetrofitClient.api.updateBookStatus(data).enqueue(object: Callback<UpdateBookStatusResponse> {
-                    override fun onResponse(
-                        call: Call<UpdateBookStatusResponse>,
-                        response: Response<UpdateBookStatusResponse>
-                    ) {
-                        homeFragment.goReadModeFragment(bookId, bookImgUrl, libraryId)
-                    }
-
-                    override fun onFailure(call: Call<UpdateBookStatusResponse>, t: Throwable) {
-                        t.printStackTrace()
-                    }
-                })
+                showPopup2()
             }
         }
 
@@ -188,11 +184,53 @@ class LibraryDetailFragment : Fragment() {
                 })
             }
             .setNeutralButton("취소") {dialog, which ->
-                binding.ratingBar.rating = HereHear.getBookStars().toFloat()
+//                binding.ratingBar.rating = HereHear.getBookStars().toFloat()
             }
             .create()
 
         alertDialog.setView(view)
         alertDialog.show()
     }
+
+    private fun showPopup2() {
+        val view = inflaterr.inflate(R.layout.alert_popup, null)
+        val mList = arrayOf<String>("종이책", "오디오")
+        val alertDialog = AlertDialog.Builder(activity)
+            .setItems(mList, DialogInterface.OnClickListener { dialogInterface, i ->
+                val data = UpdateBookStatusRequest(libraryId, 1, binding.ratingBar.rating.toInt())
+                RetrofitClient.api.updateBookStatus(data).enqueue(object: Callback<UpdateBookStatusResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateBookStatusResponse>,
+                        response: Response<UpdateBookStatusResponse>
+                    ) {
+                        when (i) {
+                            0 -> {
+                                mainActivity.goTimerActivity(bookId, bookImgUrl, libraryId)
+                            }
+
+                            1 -> {
+                                mainActivity.goCameraActivity(bookId, libraryId)
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateBookStatusResponse>, t: Throwable) {
+                        t.printStackTrace()
+                    }
+                })
+            })
+            .setTitle("독서 방식을 선택해주세요.")
+            .create()
+
+        alertDialog.setView(view)
+        alertDialog.show()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            mainActivity = context
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ssafy.herehear">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,35 +21,45 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Herehear"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="n">
         <activity
             android:name=".util.ProgressBarActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".feature.home.readmode.CommentActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".feature.home.readmode.paperbook.TimerActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".feature.home.readmode.audiobook.AudioPlayActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".feature.login.ui.login.LoginActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:label="LoginActivity" />
         <activity
             android:name=".feature.signup.SignupActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:label="SignupActivity" />
         <activity
             android:name=".feature.home.readmode.audiobook.Camera2Activity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true" />
         <activity
             android:name=".IntroActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
