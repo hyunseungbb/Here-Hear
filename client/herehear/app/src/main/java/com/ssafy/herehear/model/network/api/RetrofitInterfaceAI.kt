@@ -15,4 +15,10 @@ interface RetrofitInterfaceAI {
         @Part file: MultipartBody.Part
     ): Call<OCRTTSResponse>
 
+    @Multipart
+    @POST
+    fun downloadAudio2(
+        @Url url: String,
+        @Part file: MultipartBody.Part
+    ): Call<OCRTTSResponse>
 }
