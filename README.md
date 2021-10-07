@@ -10,9 +10,13 @@
 
 
 
-## 프로젝트 UCC 영상
+## :clapper: 프로젝트 UCC 영상
 
 
+
+## :link: 구글플레이스토어 URL
+
+https://play.google.com/store/apps/details?id=com.ssafy.herehear
 
 
 
