@@ -29,14 +29,14 @@
         <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2" />
+            android:layout_weight="3" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/paperButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:contentDescription="paperbook"
             android:drawableTop="@drawable/paperbook"
             android:fontFamily="@font/bmjua"
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:contentDescription="audiobook"
             android:drawableTop="@drawable/audiobook"
             android:fontFamily="@font/bmjua"
@@ -63,10 +63,11 @@
             android:textColor="@color/main"
             android:textSize="20sp"
             app:backgroundTint="@color/white" />
+
         <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2" />
+            android:layout_weight="3" />
 
     </LinearLayout>
 

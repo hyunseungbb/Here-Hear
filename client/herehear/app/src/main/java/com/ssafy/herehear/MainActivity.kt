@@ -121,35 +121,15 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-//    interface onKeyBackPressedListener {
-//        fun onBackKey()
-//    }
-//    private lateinit var mOnKeyBackPressedListener: onKeyBackPressedListener
-//    fun setOnKeyBackPressedListener(listener: onKeyBackPressedListener) {
-//        mOnKeyBackPressedListener = listener
-//    }
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//        val currentTime = System.currentTimeMillis()
-//        val gapTime = currentTime - backButtonTime
-//
-//        if (gapTime in 0..2000) {
-//            if (this.fragmentCount <= 0) finish()
-//        } else {
-//            backButtonTime = currentTime
-//            if(this.fragmentCount <= 1) {
-//                Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT)
-//                    .show()
-//            } else {
-//                super.onBackPressed()
-//            }
-//        }
-//    }
-//
-//    fun increaseFragmentCount() {
-//        this.fragmentCount += 1
-//    }
-//    fun decreaseFragmentCount() {
-//        this.fragmentCount -= 1
-//    }
+    override fun onBackPressed() {
+        val currentTime = System.currentTimeMillis()
+        val gapTime = currentTime - backButtonTime
+        Log.d("test", "뒤로가기버튼 ${gapTime}")
+        if (gapTime in 0..2000) {
+            super.onBackPressed()
+        } else {
+            backButtonTime = currentTime
+            Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
