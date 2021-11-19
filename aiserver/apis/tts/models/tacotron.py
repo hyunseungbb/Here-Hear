@@ -1,6 +1,7 @@
 from tensorflow.keras.layers import Embedding, GRU
-from models.modules import *
-from util.hparams import *
+# from models.modules import *
+from .modules import *
+from ..util.hparams import *
 
 
 class Encoder(tf.keras.Model):

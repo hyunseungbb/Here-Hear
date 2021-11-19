@@ -14,4 +14,4 @@ decoder_dim = 256
 symbol_length = 70
 batch_size = 32
 checkpoint_step = 500
-max_iter = 100
+max_iter = 50

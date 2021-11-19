@@ -1,11 +1,11 @@
 import tensorflow as tf
 import numpy as np
 from jamo import hangul_to_jamo
-from models.tacotron import Tacotron
-from util.hparams import *
-from util.text import sequence_to_text, text_to_sequence
-import test22
-sentences = '정말로 사랑한담 기다려주세요'
+from .models.tacotron import Tacotron
+from .util.hparams import *
+from .util.text import sequence_to_text, text_to_sequence
+from . import test22
+# sentences = '정말로 사랑한담 기다려주세요'
 
 
 checkpoint_dir = './checkpoint/1'
@@ -28,12 +28,18 @@ def test_step(text):
     pred = np.reshape(np.asarray(pred), [-1, mel_dim])
     test22.test_step(pred)
 
+def naive_tts_run(sentences):
+    checkpoint = tf.train.Checkpoint(model=model)
+    checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir)).expect_partial()
 
+
+    jamo = ''.join(list(hangul_to_jamo(sentences)))
+    test_step(jamo)
 
 model = Tacotron(K=16, conv_dim=[128, 128])
-checkpoint = tf.train.Checkpoint(model=model)
-checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir)).expect_partial()
+# checkpoint = tf.train.Checkpoint(model=model)
+# checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir)).expect_partial()
 
 
-jamo = ''.join(list(hangul_to_jamo(sentences)))
-test_step(jamo)
+# jamo = ''.join(list(hangul_to_jamo(sentences)))
+# test_step(jamo)
