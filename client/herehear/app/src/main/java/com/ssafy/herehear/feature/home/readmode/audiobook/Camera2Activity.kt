@@ -99,7 +99,7 @@ class Camera2Activity : BaseActivity() {
 //        binding.progressFrameLayout.visibility = View.INVISIBLE
         binding.cameraNextButton.setOnClickListener {
 
-        showPopup()
+            showPopup()
 //            binding.progressLayout.visibility = View.VISIBLE
 //            val userId = HereHear.prefs.getString("userId", "")
 //            val url = "ocr_tts/${userId}/"
@@ -243,56 +243,62 @@ class Camera2Activity : BaseActivity() {
             .setItems(mList, DialogInterface.OnClickListener { dialogInterface, i ->
                 binding.progressLayout.visibility = View.VISIBLE
                 val userId = HereHear.prefs.getString("userId", "")
-                var file = File(realPath)
-                Log.d("test", "오디오변환 요청 전 파일경로 : ${file.path}")
-                var fileBody = FormDataUtil.getImageBody("imgs", file)
-                when (i) {
-                    0 -> {
-                        val url = "ocr_tts/${userId}/"
-                        RetrofitClientAI.api.downloadAudio(url, fileBody).enqueue(object: Callback<OCRTTSResponse> {
-                            override fun onResponse(
-                                call: Call<OCRTTSResponse>,
-                                response: Response<OCRTTSResponse>
-                            ) {
-                                binding.progressLayout.visibility = View.INVISIBLE
-                                if (response.isSuccessful) {
-                                    goAudioPlayActivity()
-                                } else {
-                                    Toast.makeText(applicationContext, "오디오북 요청 실패! ${response.code()}", Toast.LENGTH_SHORT).show()
+                lateinit var file: File
+                try {
+                    file = File(realPath)
+                    Log.d("test", "오디오변환 요청 전 파일경로 : ${file.path}")
+                    var fileBody = FormDataUtil.getImageBody("imgs", file)
+                    when (i) {
+                        0 -> {
+                            val url = "ocr_tts/${userId}/"
+                            RetrofitClientAI.api.downloadAudio(url, fileBody).enqueue(object: Callback<OCRTTSResponse> {
+                                override fun onResponse(
+                                    call: Call<OCRTTSResponse>,
+                                    response: Response<OCRTTSResponse>
+                                ) {
+                                    binding.progressLayout.visibility = View.INVISIBLE
+                                    if (response.isSuccessful) {
+                                        goAudioPlayActivity()
+                                    } else {
+                                        Toast.makeText(applicationContext, "오디오북 요청 실패! ${response.code()}", Toast.LENGTH_SHORT).show()
+                                    }
                                 }
-                            }
 
-                            override fun onFailure(call: Call<OCRTTSResponse>, t: Throwable) {
-                                binding.progressLayout.visibility = View.INVISIBLE
-                                t.printStackTrace()
-                                Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
-                            }
-                        })
-                    }
-
-                    1 -> {
-                        val url = "ocr_tts2/${userId}/"
-                        RetrofitClientAI.api.downloadAudio2(url, fileBody).enqueue(object: Callback<OCRTTSResponse> {
-                            override fun onResponse(
-                                call: Call<OCRTTSResponse>,
-                                response: Response<OCRTTSResponse>
-                            ) {
-                                binding.progressLayout.visibility = View.INVISIBLE
-                                if (response.isSuccessful) {
-                                    goAudioPlayActivity()
-                                } else {
-                                    Toast.makeText(applicationContext, "오디오북 요청 실패! ${response.code()}", Toast.LENGTH_SHORT).show()
+                                override fun onFailure(call: Call<OCRTTSResponse>, t: Throwable) {
+                                    binding.progressLayout.visibility = View.INVISIBLE
+                                    t.printStackTrace()
+                                    Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
                                 }
-                            }
+                            })
+                        }
 
-                            override fun onFailure(call: Call<OCRTTSResponse>, t: Throwable) {
-                                binding.progressLayout.visibility = View.INVISIBLE
-                                t.printStackTrace()
-                                Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
-                            }
-                        })
+                        1 -> {
+                            val url = "easy_ocr_tts/${userId}/"
+                            RetrofitClientAI.api.downloadAudio2(url, fileBody).enqueue(object: Callback<OCRTTSResponse> {
+                                override fun onResponse(
+                                    call: Call<OCRTTSResponse>,
+                                    response: Response<OCRTTSResponse>
+                                ) {
+                                    binding.progressLayout.visibility = View.INVISIBLE
+                                    if (response.isSuccessful) {
+                                        goAudioPlayActivity()
+                                    } else {
+                                        Toast.makeText(applicationContext, "오디오북 요청 실패! ${response.code()}", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<OCRTTSResponse>, t: Throwable) {
+                                    binding.progressLayout.visibility = View.INVISIBLE
+                                    t.printStackTrace()
+                                    Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
+                                }
+                            })
+                        }
                     }
+                } catch(e: Exception) {
+                    Toast.makeText(applicationContext, "사진을 선택해주세요.", Toast.LENGTH_SHORT).show()
                 }
+
             })
 //            .setPositiveButton("확인", null)
 //            .setNeutralButton("취소", null)

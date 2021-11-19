@@ -12,6 +12,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 import mimetypes
+# from .tts.test import naive_tts_run
 # dotenv 처리해서 보안 높이기
 # APPKEY = os.environ.get("APPKEY")
 APPKEY = '6ca73d4487a205586f13f1aebfe2f18a'
@@ -91,8 +92,19 @@ def ocr_tts(request, username):
     return JsonResponse(context)
     # return response
 
-def naive_tts(request):
-    pass
+# @require_GET
+# def naive_tts(request):
+#     naive_tts_run('정말로 사랑한담 기다려주세요')
+#     file_path = f'./tts/output/tmp'
+#     fs = FileSystemStorage(file_path)
+#     response = FileResponse(fs.open(file_path, 'rb'))
+#     response['Content-Disposition'] = f'attachment; filename=test.wav'
+#     # file = open(file_path, 'r', encoding='cp949')
+#     # mime_type, _ = mimetypes.guess_type(file_path)
+#     # response = HttpResponse(file, content_type=mime_type)
+#     # response['Content-Disposition'] = f'attachment; filename={username}.mp3'
+#     return response
+
 
 @require_GET
 def download(request, username):
