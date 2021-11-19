@@ -21,6 +21,8 @@ public class QAccount extends EntityPathBase<Account> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
+    public final EnumPath<Account.Authority> authority = createEnum("authority", Account.Authority.class);
+
     //inherited
     public final NumberPath<Long> id = _super.id;
 
