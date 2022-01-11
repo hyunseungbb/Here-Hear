@@ -15,9 +15,9 @@ buildscript{
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVer}"
         classpath "io.spring.gradle:dependency-management-plugin:${springDependencyMgmtVer}.RELEASE"
         classpath "org.springframework:springloaded:${springLoadedVer}.RELEASE"
-        //ÀÌÅ¬¸³½ºÀÎ °æ¿ì¸¦ À§ÇÑ QueryDSL ÇÃ·¯±×ÀÎ. IntelliJ´Â ºÒÇÊ¿ä. [½ÃÀÛ]
+        //å ì™ì˜™í´å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™ï§¥ï¿½ å ì™ì˜™å ì™ì˜™ QueryDSL å ì‹œë¤„ì˜™å ì™ì˜™å ì™ì˜™. IntelliJå ì™ì˜™ å ì™ì˜™å ì‹­ìš¸ì˜™. [å ì™ì˜™å ì™ì˜™]
         classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVer}"
-        //[³¡] 
+        //[å ì™ì˜™] 
         classpath "com.github.node-gradle:gradle-node-plugin:3.1.0"
     }
 }
@@ -31,7 +31,7 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'eclipse'
 apply plugin: 'com.github.node-gradle.node'
-//ÀÌÅ¬¸³½ºÀÎ °æ¿ì¸¦ À§ÇÑ QueryDSL ÇÃ·¯±×ÀÎ. IntelliJ´Â ºÒÇÊ¿ä.
+//å ì™ì˜™í´å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™ï§¥ï¿½ å ì™ì˜™å ì™ì˜™ QueryDSL å ì‹œë¤„ì˜™å ì™ì˜™å ì™ì˜™. IntelliJå ì™ì˜™ å ì™ì˜™å ì‹­ìš¸ì˜™.
 apply plugin: 'com.ewerk.gradle.plugins.querydsl'
 
 group = 'com.ssafy'
@@ -47,7 +47,7 @@ repositories {
     maven { url "https://build.shibboleth.net/nexus/content/repositories/releases" }
 }
 
-//ÀÌÅ¬¸³½ºÀÎ °æ¿ì¸¦ À§ÇÑ QueryDSL ¼³Á¤. IntelliJ´Â ºÒÇÊ¿ä. [½ÃÀÛ]
+//å ì™ì˜™í´å ì™ì˜™å ì™ì˜™å ì™ì˜™ å ì™ì˜™ï§¥ï¿½ å ì™ì˜™å ì™ì˜™ QueryDSL å ì™ì˜™å ì™ì˜™. IntelliJå ì™ì˜™ å ì™ì˜™å ì‹­ìš¸ì˜™. [å ì™ì˜™å ì™ì˜™]
 def querydslDir = 'src/main/generated'
 querydsl {
     library = "com.querydsl:querydsl-apt"
@@ -70,7 +70,7 @@ compileQuerydsl {
 configurations {
     querydsl.extendsFrom compileClasspath
 }
-//[³¡]
+//[å ì™ì˜™]
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -111,9 +111,11 @@ dependencies {
 	implementation("io.springfox:springfox-boot-starter:3.0.0")
 	
 	compile("javax.annotation:javax.annotation-api:1.2")
-
-    implementation("org.projectlombok:lombok:1.18.20")
-    annotationProcessor("org.projectlombok:lombok:1.18.20")
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+	annotationProcessor 'org.projectlombok:lombok:1.18.22'
+	
+	testCompileOnly 'org.projectlombok:lombok:1.18.22'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
     
     // jwt
     implementation("io.jsonwebtoken:jjwt-api:0.11.2")
