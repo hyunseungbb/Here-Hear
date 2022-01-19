@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.app.DownloadManager
 import android.content.*
+import android.content.ContentValues.TAG
 import android.media.MediaPlayer
 import android.net.Uri
 import android.net.Uri.withAppendedPath
@@ -19,7 +20,15 @@ import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.ActivityAudioPlayBinding
 import com.ssafy.herehear.feature.home.readmode.CommentActivity
+import com.ssafy.herehear.model.network.RetrofitClientAI
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import java.util.*
 import kotlin.concurrent.timer
 
@@ -141,8 +150,8 @@ class AudioPlayActivity : AppCompatActivity() {
         val userId = HereHear.prefs.getString("userId", "")
         val url = "http://j5b105.p.ssafy.io:8000/apis/download/${userId}/"
         Log.d("test", "id: ${userId}")
-//        mediaPlayer.setDataSource("http://192.168.35.188:8000/apis/download/${userId}/")
-        mediaPlayer.setDataSource(url)
+        mediaPlayer.setDataSource("http://10.0.2.2:8000/apis/download/${userId}/")
+//        mediaPlayer.setDataSource(url)
         mediaPlayer.prepare()
         mediaPlayer.isLooping = true
     }

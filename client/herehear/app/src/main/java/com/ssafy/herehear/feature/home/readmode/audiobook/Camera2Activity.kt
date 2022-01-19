@@ -24,6 +24,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.ssafy.herehear.BaseActivity
 import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.MainActivity
@@ -35,6 +39,7 @@ import com.ssafy.herehear.model.network.response.OCRTTSResponse
 import com.ssafy.herehear.model.network.response.UpdateBookStatusRequest
 import com.ssafy.herehear.model.network.response.UpdateBookStatusResponse
 import com.ssafy.herehear.util.FormDataUtil
+import com.ssafy.herehear.worker.UploadWorker
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -237,7 +242,13 @@ class Camera2Activity : BaseActivity() {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.alert_popup, null)
         val mList = arrayOf<String>("상용 버전", "베타 버전")
-
+        val inputData = Data.Builder()
+            .putString("realPath", realPath)
+            .putString("userId", HereHear.prefs.getString("userId", ""))
+            .build()
+        val uploadWorkRequest: WorkRequest = OneTimeWorkRequestBuilder<UploadWorker>()
+            .setInputData(inputData)
+            .build()
         val alertDialog = AlertDialog.Builder(this)
             .setTitle("버전을 선택해주세요.")
             .setItems(mList, DialogInterface.OnClickListener { dialogInterface, i ->
@@ -250,26 +261,28 @@ class Camera2Activity : BaseActivity() {
                     var fileBody = FormDataUtil.getImageBody("imgs", file)
                     when (i) {
                         0 -> {
-                            val url = "ocr_tts/${userId}/"
-                            RetrofitClientAI.api.downloadAudio(url, fileBody).enqueue(object: Callback<OCRTTSResponse> {
-                                override fun onResponse(
-                                    call: Call<OCRTTSResponse>,
-                                    response: Response<OCRTTSResponse>
-                                ) {
-                                    binding.progressLayout.visibility = View.INVISIBLE
-                                    if (response.isSuccessful) {
-                                        goAudioPlayActivity()
-                                    } else {
-                                        Toast.makeText(applicationContext, "오디오북 요청 실패! ${response.code()}", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<OCRTTSResponse>, t: Throwable) {
-                                    binding.progressLayout.visibility = View.INVISIBLE
-                                    t.printStackTrace()
-                                    Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
-                                }
-                            })
+                            WorkManager.getInstance(applicationContext)
+                                .enqueue(uploadWorkRequest)
+//                            val url = "ocr_tts/${userId}/"
+//                            RetrofitClientAI.api.downloadAudio(url, fileBody).enqueue(object: Callback<OCRTTSResponse> {
+//                                override fun onResponse(
+//                                    call: Call<OCRTTSResponse>,
+//                                    response: Response<OCRTTSResponse>
+//                                ) {
+//                                    binding.progressLayout.visibility = View.INVISIBLE
+//                                    if (response.isSuccessful) {
+//                                        goAudioPlayActivity()
+//                                    } else {
+//                                        Toast.makeText(applicationContext, "오디오북 요청 실패! ${response.code()}", Toast.LENGTH_SHORT).show()
+//                                    }
+//                                }
+//
+//                                override fun onFailure(call: Call<OCRTTSResponse>, t: Throwable) {
+//                                    binding.progressLayout.visibility = View.INVISIBLE
+//                                    t.printStackTrace()
+//                                    Toast.makeText(applicationContext, "오디오북 요청 실패", Toast.LENGTH_SHORT).show()
+//                                }
+//                            })
                         }
 
                         1 -> {
