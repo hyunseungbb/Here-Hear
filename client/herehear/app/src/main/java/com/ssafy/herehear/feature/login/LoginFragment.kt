@@ -18,7 +18,6 @@ import retrofit2.Response
 
 class LoginFragment : Fragment() {
     // TODO: Rename and change types of parameters
-
     lateinit var binding:FragmentLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -21,6 +21,7 @@ import com.ssafy.herehear.feature.home.readmode.paperbook.TimerActivity
 import com.ssafy.herehear.feature.mypage.MyPageFragment
 import com.ssafy.herehear.feature.search.SearchFragment
 
+
 lateinit var homeFragment : HomeFragment
 lateinit var searchFragment : SearchFragment
 
@@ -38,7 +39,6 @@ class MainActivity : AppCompatActivity() {
 //        val adapter = FragmentAdapter(this)
 //        adapter.fragmentList = tabFragmentList
 //        binding.viewPager.adapter = adapter
-
         // 탭과 프래그먼트들을 연결하는 메서드
 //        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
 //        }.attach()

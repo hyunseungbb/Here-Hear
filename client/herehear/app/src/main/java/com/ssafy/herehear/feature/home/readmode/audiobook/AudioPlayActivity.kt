@@ -15,6 +15,9 @@ import android.widget.Toast
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.widget.TextView
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
+import androidx.work.CoroutineWorker
 import com.ssafy.herehear.BaseActivity
 import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.R
@@ -120,17 +123,12 @@ class AudioPlayActivity : AppCompatActivity() {
         }
     }
 
-
-
 //    override fun onDestroy() {
 //        super.onDestroy()
 //        unregisterReceiver(onDownloadComplete)
 //    }
-
     private fun downloadImage(url: String) {
-
         file = File(getExternalFilesDir(Environment.DIRECTORY_MUSIC), "latest_audio.mp3")
-
         val request = DownloadManager.Request(Uri.parse(url))
             .setTitle("Downloading a video")
             .setDescription("Downloading Dev Summit")

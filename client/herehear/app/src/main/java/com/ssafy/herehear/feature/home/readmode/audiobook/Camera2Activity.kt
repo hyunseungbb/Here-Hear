@@ -24,10 +24,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkRequest
+import androidx.lifecycle.Observer
+import androidx.work.*
 import com.ssafy.herehear.BaseActivity
 import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.MainActivity
@@ -39,6 +37,7 @@ import com.ssafy.herehear.model.network.response.OCRTTSResponse
 import com.ssafy.herehear.model.network.response.UpdateBookStatusRequest
 import com.ssafy.herehear.model.network.response.UpdateBookStatusResponse
 import com.ssafy.herehear.util.FormDataUtil
+import com.ssafy.herehear.worker.DownloadWorker
 import com.ssafy.herehear.worker.UploadWorker
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,9 +47,9 @@ import java.io.File
 import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
+import kotlin.coroutines.CoroutineContext
 
 class Camera2Activity : BaseActivity() {
-
     val PERM_STORAGE = 99 // 외부 저장소 권한 처리
     val PERM_CAMERA = 100 // 카메라 권한 처리
     val REQ_CAMERA = 101 // 카메라 촬영 요청
@@ -189,7 +188,6 @@ class Camera2Activity : BaseActivity() {
 
     fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
         createImageUri(newFileName(), "image/jpg")?.let { uri ->
             realUri = uri
             intent.putExtra(MediaStore.EXTRA_OUTPUT, realUri)
@@ -246,9 +244,19 @@ class Camera2Activity : BaseActivity() {
             .putString("realPath", realPath)
             .putString("userId", HereHear.prefs.getString("userId", ""))
             .build()
-        val uploadWorkRequest: WorkRequest = OneTimeWorkRequestBuilder<UploadWorker>()
+        val uploadWorkRequest: OneTimeWorkRequest = OneTimeWorkRequestBuilder<UploadWorker>()
             .setInputData(inputData)
             .build()
+        val downloadWorkRequest: OneTimeWorkRequest = OneTimeWorkRequestBuilder<DownloadWorker>()
+            .build()
+        WorkManager.getInstance(applicationContext)
+            .getWorkInfoByIdLiveData(downloadWorkRequest.id)
+            .observe(this, Observer { workInfo ->
+                if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
+                    // 여기서 UI 변경이 가능하다.
+                    Log.d("test", "work 완료!!!")
+                }
+            })
         val alertDialog = AlertDialog.Builder(this)
             .setTitle("버전을 선택해주세요.")
             .setItems(mList, DialogInterface.OnClickListener { dialogInterface, i ->
@@ -262,7 +270,9 @@ class Camera2Activity : BaseActivity() {
                     when (i) {
                         0 -> {
                             WorkManager.getInstance(applicationContext)
-                                .enqueue(uploadWorkRequest)
+                                .beginWith(uploadWorkRequest)
+                                .then(downloadWorkRequest)
+                                .enqueue()
 //                            val url = "ocr_tts/${userId}/"
 //                            RetrofitClientAI.api.downloadAudio(url, fileBody).enqueue(object: Callback<OCRTTSResponse> {
 //                                override fun onResponse(
