@@ -108,6 +108,7 @@ def ocr_tts(request, username):
 
 @require_GET
 def download(request, username):
+    print(username)
     file_path = f'{settings.MEDIA_ROOT}/tmp/{username}.mp3'
     fs = FileSystemStorage(file_path)
     response = FileResponse(fs.open(file_path, 'rb'))

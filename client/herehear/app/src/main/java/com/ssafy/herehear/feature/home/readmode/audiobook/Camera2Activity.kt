@@ -244,10 +244,14 @@ class Camera2Activity : BaseActivity() {
             .putString("realPath", realPath)
             .putString("userId", HereHear.prefs.getString("userId", ""))
             .build()
+        val inputData2 = Data.Builder()
+            .putString("userId", HereHear.prefs.getString("userId", ""))
+            .build()
         val uploadWorkRequest: OneTimeWorkRequest = OneTimeWorkRequestBuilder<UploadWorker>()
             .setInputData(inputData)
             .build()
         val downloadWorkRequest: OneTimeWorkRequest = OneTimeWorkRequestBuilder<DownloadWorker>()
+            .setInputData(inputData2)
             .build()
         WorkManager.getInstance(applicationContext)
             .getWorkInfoByIdLiveData(downloadWorkRequest.id)
@@ -271,7 +275,7 @@ class Camera2Activity : BaseActivity() {
                         0 -> {
                             WorkManager.getInstance(applicationContext)
                                 .beginWith(uploadWorkRequest)
-                                .then(downloadWorkRequest)
+//                                .then(downloadWorkRequest)
                                 .enqueue()
 //                            val url = "ocr_tts/${userId}/"
 //                            RetrofitClientAI.api.downloadAudio(url, fileBody).enqueue(object: Callback<OCRTTSResponse> {
