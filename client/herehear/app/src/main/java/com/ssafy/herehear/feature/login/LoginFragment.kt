@@ -22,7 +22,6 @@ class LoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding.loginBtn.setOnClickListener {
             val id = binding.idForm.text.toString()
             val password = binding.passwordForm.text.toString()

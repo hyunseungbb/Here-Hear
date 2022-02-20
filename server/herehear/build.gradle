@@ -15,9 +15,9 @@ buildscript{
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVer}"
         classpath "io.spring.gradle:dependency-management-plugin:${springDependencyMgmtVer}.RELEASE"
         classpath "org.springframework:springloaded:${springLoadedVer}.RELEASE"
-        //占쏙옙클占쏙옙占쏙옙占쏙옙 占쏙옙痢� 占쏙옙占쏙옙 QueryDSL 占시뤄옙占쏙옙占쏙옙. IntelliJ占쏙옙 占쏙옙占십울옙. [占쏙옙占쏙옙]
-        classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVer}"
-        //[占쏙옙] 
+        //이클립스인 경우를 위한 QueryDSL 플러그인. IntelliJ는 불필요. [시작]
+//        classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVer}"
+        //[끝]
         classpath "com.github.node-gradle:gradle-node-plugin:3.1.0"
     }
 }
@@ -31,8 +31,8 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'eclipse'
 apply plugin: 'com.github.node-gradle.node'
-//占쏙옙클占쏙옙占쏙옙占쏙옙 占쏙옙痢� 占쏙옙占쏙옙 QueryDSL 占시뤄옙占쏙옙占쏙옙. IntelliJ占쏙옙 占쏙옙占십울옙.
-apply plugin: 'com.ewerk.gradle.plugins.querydsl'
+//이클립스인 경우를 위한 QueryDSL 플러그인. IntelliJ는 불필요.
+//apply plugin: 'com.ewerk.gradle.plugins.querydsl'
 
 group = 'com.ssafy'
 version = '0.0.1-SNAPSHOT'
@@ -47,30 +47,30 @@ repositories {
     maven { url "https://build.shibboleth.net/nexus/content/repositories/releases" }
 }
 
-//占쏙옙클占쏙옙占쏙옙占쏙옙 占쏙옙痢� 占쏙옙占쏙옙 QueryDSL 占쏙옙占쏙옙. IntelliJ占쏙옙 占쏙옙占십울옙. [占쏙옙占쏙옙]
-def querydslDir = 'src/main/generated'
-querydsl {
-    library = "com.querydsl:querydsl-apt"
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
-
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java', querydslDir]
-        }
-    }
-}
-
-compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl
-}
-
-configurations {
-    querydsl.extendsFrom compileClasspath
-}
-//[占쏙옙]
+//이클립스인 경우를 위한 QueryDSL 설정. IntelliJ는 불필요. [시작]
+//def querydslDir = 'src/main/generated'
+//querydsl {
+//    library = "com.querydsl:querydsl-apt"
+//    jpa = true
+//    querydslSourcesDir = querydslDir
+//}
+//
+//sourceSets {
+//    main {
+//        java {
+//            srcDirs = ['src/main/java', querydslDir]
+//        }
+//    }
+//}
+//
+//compileQuerydsl {
+//    options.annotationProcessorPath = configurations.querydsl
+//}
+//
+//configurations {
+//    querydsl.extendsFrom compileClasspath
+//}
+//[끝]
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -110,7 +110,7 @@ dependencies {
 	implementation("io.springfox:springfox-bean-validators:3.0.0")
 	implementation("io.springfox:springfox-boot-starter:3.0.0")
 	
-	compile("javax.annotation:javax.annotation-api:1.2")
+//	compile("javax.annotation:javax.annotation-api:1.2")
     compileOnly 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
 	
