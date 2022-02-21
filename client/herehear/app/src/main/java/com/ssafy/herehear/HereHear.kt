@@ -2,9 +2,29 @@ package com.ssafy.herehear
 
 import android.app.Application
 import android.content.Context
+import androidx.room.Room
 import com.ssafy.herehear.model.Preference
+import com.ssafy.herehear.model.local.dao.LibraryDao
+import com.ssafy.herehear.model.local.database.DatabaseManager
+import com.ssafy.herehear.util.schedulers.IoThreadScheduler
+import com.ssafy.herehear.util.schedulers.NetworkThreadScheduler
+import com.ssafy.herehear.util.schedulers.ThreadScheduler
+import com.ssafy.herehear.util.schedulers.UIThreadScheduler
 
 class HereHear : Application() {
+
+    private lateinit var databaseManager: DatabaseManager
+
+    lateinit var libraryDao: LibraryDao
+
+    lateinit var uiThreadScheduler: ThreadScheduler
+        private set
+
+    lateinit var networkThreadScheduler: ThreadScheduler
+        private set
+
+    lateinit var ioThreadScheduler: ThreadScheduler
+        private set
 
 
     init {
@@ -36,8 +56,19 @@ class HereHear : Application() {
     }
 
     override fun onCreate() {
-        prefs=Preference(applicationContext)
         super.onCreate()
+        prefs=Preference(applicationContext)
+
+        databaseManager = Room.databaseBuilder(this, DatabaseManager::class.java, "database")
+            .fallbackToDestructiveMigration() //
+            .allowMainThreadQueries() // TODO: count()
+            .build();
+        libraryDao = databaseManager.libraryDao
+
+        uiThreadScheduler = UIThreadScheduler()
+        ioThreadScheduler = IoThreadScheduler()
+        networkThreadScheduler = NetworkThreadScheduler()
+
     }
 
 }

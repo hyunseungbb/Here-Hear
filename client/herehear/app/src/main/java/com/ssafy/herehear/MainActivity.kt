@@ -35,13 +35,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-//        val tabFragmentList = listOf(HomeFragment(), CalenderFragment(), SearchFragment(), MyPageFragment())
-//        val adapter = FragmentAdapter(this)
-//        adapter.fragmentList = tabFragmentList
-//        binding.viewPager.adapter = adapter
-        // 탭과 프래그먼트들을 연결하는 메서드
-//        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-//        }.attach()
+
         val transaction = supportFragmentManager.beginTransaction()
         homeFragment = HomeFragment()
 
@@ -92,7 +86,6 @@ class MainActivity : AppCompatActivity() {
                 transaction.replace(R.id.frameMain, MyPageFragment())
             }
         }
-//        transaction.addToBackStack(null)
         transaction.commit()
     }
 
