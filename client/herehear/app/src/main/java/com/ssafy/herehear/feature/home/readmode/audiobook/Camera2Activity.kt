@@ -7,18 +7,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
-import android.hardware.Camera
-import android.hardware.camera2.CameraDevice
-import android.media.Image
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,11 +25,8 @@ import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.ActivityCamera2Binding
-import com.ssafy.herehear.model.network.RetrofitClient
-import com.ssafy.herehear.model.network.RetrofitClientAI
-import com.ssafy.herehear.model.network.response.OCRTTSResponse
-import com.ssafy.herehear.model.network.response.UpdateBookStatusRequest
-import com.ssafy.herehear.model.network.response.UpdateBookStatusResponse
+import com.ssafy.herehear.data.network.RetrofitClientAI
+import com.ssafy.herehear.data.network.response.OCRTTSResponse
 import com.ssafy.herehear.util.FormDataUtil
 import com.ssafy.herehear.worker.DownloadWorker
 import com.ssafy.herehear.worker.UploadWorker
@@ -47,7 +38,6 @@ import java.io.File
 import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
-import kotlin.coroutines.CoroutineContext
 
 class Camera2Activity : BaseActivity() {
     val PERM_STORAGE = 99 // 외부 저장소 권한 처리

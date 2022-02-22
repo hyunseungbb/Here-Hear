@@ -12,7 +12,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.ssafy.herehear.model.network.RetrofitClientAI
+import com.ssafy.herehear.data.network.RetrofitClientAI
 import com.ssafy.herehear.util.FormDataUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

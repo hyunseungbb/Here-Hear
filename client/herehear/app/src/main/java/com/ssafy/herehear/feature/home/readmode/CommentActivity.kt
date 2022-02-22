@@ -3,14 +3,12 @@ package com.ssafy.herehear.feature.home.readmode
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.databinding.ActivityCommentBinding
-import com.ssafy.herehear.databinding.ActivityTimerBinding
-import com.ssafy.herehear.model.network.RetrofitClient
-import com.ssafy.herehear.model.network.response.CreateCommentRequest
-import com.ssafy.herehear.model.network.response.CreateCommentResponse
+import com.ssafy.herehear.data.network.RetrofitClient
+import com.ssafy.herehear.data.network.response.CreateCommentRequest
+import com.ssafy.herehear.data.network.response.CreateCommentResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

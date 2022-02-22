@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -70,6 +71,7 @@ dependencies {
     implementation "androidx.room:room-runtime:2.4.1"
     implementation "androidx.room:room-ktx:2.4.1"
     implementation 'androidx.room:room-rxjava2:2.4.1'
+    kapt "androidx.room:room-compiler:2.4.1"
 
     //rx
     implementation "io.reactivex.rxjava2:rxjava:2.2.19"
@@ -85,5 +87,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-service:2.4.1"
     implementation "androidx.lifecycle:lifecycle-process:2.4.1"
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:2.4.1"
+
+    //DI hilt
+//    implementation "com.google.dagger:hilt-android:2.28-alpha"
+//    kapt "com.google.dagger:hilt-android-compiler:2.28-alpha"
+//    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
+//    // When using Kotlin.
+//    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
 
 }

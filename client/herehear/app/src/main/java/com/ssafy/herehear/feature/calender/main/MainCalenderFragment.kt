@@ -1,6 +1,5 @@
 package com.ssafy.herehear.feature.calender.main
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,17 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
-import com.applandeo.materialcalendarview.builders.DatePickerBuilder
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
-import com.applandeo.materialcalendarview.listeners.OnSelectDateListener
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentMainCalenderBinding
-import com.ssafy.herehear.feature.calender.CalenderFragment
-import com.ssafy.herehear.model.network.RetrofitClient
-import com.ssafy.herehear.model.network.response.MyCommentsResponse
-import com.ssafy.herehear.model.network.response.MyCommentsResponseItem
+import com.ssafy.herehear.data.network.RetrofitClient
+import com.ssafy.herehear.data.network.response.MyCommentsResponse
+import com.ssafy.herehear.data.network.response.MyCommentsResponseItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

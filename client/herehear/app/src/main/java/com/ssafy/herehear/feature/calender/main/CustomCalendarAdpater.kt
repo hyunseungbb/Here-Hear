@@ -1,14 +1,11 @@
 package com.ssafy.herehear.feature.calender.main
 
-import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.CalendarCommentRecyclerBinding
-import com.ssafy.herehear.model.network.response.AllCommentsResponseItem
-import com.ssafy.herehear.model.network.response.MyCommentsResponseItem
+import com.ssafy.herehear.data.network.response.MyCommentsResponseItem
 
 class CustomCalendarAdpater: RecyclerView.Adapter<CustomCalendarAdpater.Holder>() {
 

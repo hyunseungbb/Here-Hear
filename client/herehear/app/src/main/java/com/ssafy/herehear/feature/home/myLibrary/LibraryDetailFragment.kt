@@ -2,9 +2,7 @@ package com.ssafy.herehear.feature.home.myLibrary
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,23 +10,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.bumptech.glide.GenericTransitionOptions.with
 import com.bumptech.glide.Glide
 import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentLibraryDetailBinding
 
-import com.ssafy.herehear.feature.home.libraryDetailFragment
 import com.ssafy.herehear.feature.home.myLibrary.MainRecycler.CustomDetailAdapter
-import com.ssafy.herehear.feature.home.readmode.CommentActivity
 import com.ssafy.herehear.homeFragment
-import com.ssafy.herehear.model.network.RetrofitClient
-import com.ssafy.herehear.model.network.response.*
-import com.ssafy.herehear.util.MyGlideApp
+import com.ssafy.herehear.data.network.RetrofitClient
+import com.ssafy.herehear.data.network.response.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

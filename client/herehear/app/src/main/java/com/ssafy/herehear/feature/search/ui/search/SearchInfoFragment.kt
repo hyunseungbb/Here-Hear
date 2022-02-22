@@ -1,6 +1,5 @@
 package com.ssafy.herehear.feature.search.ui.search
 
-import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -13,14 +12,11 @@ import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.ssafy.herehear.HereHear
-import com.ssafy.herehear.MainActivity
-import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentSearchInfoBinding
 import com.ssafy.herehear.feature.search.SearchFragment
 import com.ssafy.herehear.feature.search.adapater.SearchDetailAdapter
-import com.ssafy.herehear.model.network.RetrofitClient
-import com.ssafy.herehear.model.network.response.*
+import com.ssafy.herehear.data.network.RetrofitClient
+import com.ssafy.herehear.data.network.response.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -180,7 +176,7 @@ class SearchInfoFragment : Fragment() {
     // 내 서재에 등록된 책인지 확인하는 함수 flag - true:등록 , false:미등록
     private fun getMyLibraryBooks(bookId: Int) {
         var result = false
-        RetrofitClient.api.getMyLibrary().enqueue(object : Callback<GetMyLibraryResponse> {
+        RetrofitClient.api.getMyLibrary2().enqueue(object : Callback<GetMyLibraryResponse> {
             override fun onResponse(
                 call: Call<GetMyLibraryResponse>,
                 response: Response<GetMyLibraryResponse>
@@ -277,7 +273,7 @@ class SearchInfoFragment : Fragment() {
 
     // 서재에서 삭제하고 다시 등록하면 libraryId가 갱신돼서 다시 찾아주는 함수
     private fun setLibraryId(bookId: Int) {
-        RetrofitClient.api.getMyLibrary().enqueue(object : Callback<GetMyLibraryResponse> {
+        RetrofitClient.api.getMyLibrary2().enqueue(object : Callback<GetMyLibraryResponse> {
             override fun onResponse(
                 call: Call<GetMyLibraryResponse>,
                 response: Response<GetMyLibraryResponse>

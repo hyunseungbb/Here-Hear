@@ -10,9 +10,9 @@ import com.ssafy.herehear.IntroActivity
 import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.databinding.ActivityLoginBinding
 
-import com.ssafy.herehear.model.network.RetrofitClient
-import com.ssafy.herehear.model.network.response.LoginRequest
-import com.ssafy.herehear.model.network.response.LoginResponse
+import com.ssafy.herehear.data.network.RetrofitClient
+import com.ssafy.herehear.data.network.response.LoginRequest
+import com.ssafy.herehear.data.network.response.LoginResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -3,18 +3,13 @@ package com.ssafy.herehear.feature.signup
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import android.util.Log
 import android.widget.Toast
-import com.ssafy.herehear.HereHear
 import com.ssafy.herehear.IntroActivity
-import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.databinding.ActivitySignupBinding
 
-import com.ssafy.herehear.model.network.RetrofitClient
-import com.ssafy.herehear.model.network.response.LoginRequest
-import com.ssafy.herehear.model.network.response.LoginResponse
-import com.ssafy.herehear.model.network.response.SignupRequest
-import com.ssafy.herehear.model.network.response.SignupResponse
+import com.ssafy.herehear.data.network.RetrofitClient
+import com.ssafy.herehear.data.network.response.SignupRequest
+import com.ssafy.herehear.data.network.response.SignupResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -3,13 +3,8 @@ package com.ssafy.herehear.feature.search.adapater
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.ssafy.herehear.databinding.SearchDetailRecyclerBinding
-import com.ssafy.herehear.databinding.SearchRecyclerBinding
-import com.ssafy.herehear.model.network.response.AllCommentsResponseItem
-import com.ssafy.herehear.model.network.response.SearchDetailResponse
-import com.ssafy.herehear.model.network.response.SearchResponseItem
-import com.ssafy.herehear.searchFragment
+import com.ssafy.herehear.data.network.response.AllCommentsResponseItem
 
 class SearchDetailAdapter: RecyclerView.Adapter<SearchDetailAdapter.ViewHolder>() {
     var listData = mutableListOf<AllCommentsResponseItem>()

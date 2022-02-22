@@ -1,22 +1,17 @@
 package com.ssafy.herehear
 
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.ssafy.herehear.databinding.ActivityIntroBinding
 import com.ssafy.herehear.feature.login.ui.login.LoginActivity
 import com.ssafy.herehear.feature.signup.SignupActivity
-import com.ssafy.herehear.model.Preference
-import com.ssafy.herehear.model.network.RetrofitClient
-import com.ssafy.herehear.model.network.response.LoginRequest
-import com.ssafy.herehear.model.network.response.LoginResponse
+import com.ssafy.herehear.data.network.RetrofitClient
+import com.ssafy.herehear.data.network.response.LoginRequest
+import com.ssafy.herehear.data.network.response.LoginResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

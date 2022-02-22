@@ -1,15 +1,10 @@
 package com.ssafy.herehear.feature.home.myLibrary.MainRecycler
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.herehear.databinding.DetailBookRecyclerBinding
-import com.ssafy.herehear.databinding.HomeBookRecyclerBinding
-import com.ssafy.herehear.model.network.response.AllCommentsResponse
-import com.ssafy.herehear.model.network.response.AllCommentsResponseItem
-import com.ssafy.herehear.model.network.response.GetMyLibraryResponseItem
-import java.util.*
+import com.ssafy.herehear.data.network.response.AllCommentsResponseItem
 
 class CustomDetailAdapter: RecyclerView.Adapter<CustomDetailAdapter.Holder>() {
 

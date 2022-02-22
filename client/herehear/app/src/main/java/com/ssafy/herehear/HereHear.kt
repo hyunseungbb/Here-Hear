@@ -3,9 +3,10 @@ package com.ssafy.herehear
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.ssafy.herehear.model.Preference
-import com.ssafy.herehear.model.local.dao.LibraryDao
-import com.ssafy.herehear.model.local.database.DatabaseManager
+import com.ssafy.herehear.data.Preference
+import com.ssafy.herehear.data.local.dao.LibraryDao
+import com.ssafy.herehear.data.local.database.DatabaseManager
+import com.ssafy.herehear.data.repository.LibraryMainRepository
 import com.ssafy.herehear.util.schedulers.IoThreadScheduler
 import com.ssafy.herehear.util.schedulers.NetworkThreadScheduler
 import com.ssafy.herehear.util.schedulers.ThreadScheduler
@@ -26,6 +27,7 @@ class HereHear : Application() {
     lateinit var ioThreadScheduler: ThreadScheduler
         private set
 
+    lateinit var libraryMainRepository: LibraryMainRepository
 
     init {
         instance = this
@@ -68,7 +70,7 @@ class HereHear : Application() {
         uiThreadScheduler = UIThreadScheduler()
         ioThreadScheduler = IoThreadScheduler()
         networkThreadScheduler = NetworkThreadScheduler()
-
+        libraryMainRepository = LibraryMainRepository(libraryDao, networkThreadScheduler, ioThreadScheduler)
     }
 
 }

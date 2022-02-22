@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.herehear.databinding.SearchRecyclerBinding
 import com.ssafy.herehear.feature.search.mainSearchFragment
-import com.ssafy.herehear.model.network.response.SearchResponseItem
-import com.ssafy.herehear.model.network.response.TempResponseItem
+import com.ssafy.herehear.data.network.response.SearchResponseItem
 import com.ssafy.herehear.searchFragment
 
 class SearchAdapter: RecyclerView.Adapter<SearchAdapter.ViewHolder>(){

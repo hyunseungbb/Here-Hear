@@ -5,7 +5,6 @@ import android.os.Looper
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 
-
 class UIThreadScheduler : ThreadScheduler {
     override fun asRxScheduler(): Scheduler = AndroidSchedulers.mainThread()
 
