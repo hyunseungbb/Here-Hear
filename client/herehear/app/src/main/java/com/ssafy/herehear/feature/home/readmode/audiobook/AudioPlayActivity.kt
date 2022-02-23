@@ -10,7 +10,7 @@ import android.os.*
 import android.util.Log
 import android.widget.Toast
 import android.view.LayoutInflater
-import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.CustomApplication
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.ActivityAudioPlayBinding
 import com.ssafy.herehear.feature.home.readmode.CommentActivity
@@ -128,7 +128,7 @@ class AudioPlayActivity : AppCompatActivity() {
     fun downloadAudio() {
         val filepath = File(getExternalFilesDir(Environment.DIRECTORY_MUSIC), "latest_audio.mp3").path
         mediaPlayer = MediaPlayer()
-        val userId = HereHear.prefs.getString("userId", "")
+        val userId = CustomApplication.prefs.getString("userId", "")
         val url = "http://j5b105.p.ssafy.io:8000/apis/download/${userId}/"
         Log.d("test", "id: ${userId}")
         mediaPlayer.setDataSource("http://10.0.2.2:8000/apis/download/${userId}/")

@@ -20,11 +20,13 @@ import com.ssafy.herehear.feature.home.readmode.audiobook.CameraActivity
 import com.ssafy.herehear.feature.home.readmode.paperbook.TimerActivity
 import com.ssafy.herehear.feature.mypage.MyPageFragment
 import com.ssafy.herehear.feature.search.SearchFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 
 lateinit var homeFragment : HomeFragment
 lateinit var searchFragment : SearchFragment
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var backButtonTime = 0L
     private var fragmentCount = 0

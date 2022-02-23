@@ -1,17 +1,13 @@
 package com.ssafy.herehear.feature.mypage
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ssafy.herehear.HereHear
-import com.ssafy.herehear.IntroActivity
+import com.ssafy.herehear.CustomApplication
 import com.ssafy.herehear.MainActivity
-import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentMyPageBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -46,9 +42,9 @@ class MyPageFragment : Fragment() {
         val binding = FragmentMyPageBinding.inflate(inflater, container, false)
 
         binding.buttonLogout.setOnClickListener {
-            HereHear.prefs.setString("access_token", null)
-            HereHear.prefs.setString("userId", "")
-            HereHear.prefs.setString("userPassword", "")
+            CustomApplication.prefs.setString("access_token", null)
+            CustomApplication.prefs.setString("userId", "")
+            CustomApplication.prefs.setString("userPassword", "")
             mainActivity.goIntroAcitivity()
         }
 

@@ -12,11 +12,13 @@ import com.ssafy.herehear.databinding.FragmentHomeBinding
 import com.ssafy.herehear.feature.calender.readModeFragment
 import com.ssafy.herehear.feature.home.myLibrary.LibraryDetailFragment
 import com.ssafy.herehear.feature.home.myLibrary.LibraryMainFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 val libraryMainFragment = LibraryMainFragment()
 val libraryDetailFragment = LibraryDetailFragment()
 
 lateinit var binding: FragmentHomeBinding
+
 
 class HomeFragment : Fragment() {
 

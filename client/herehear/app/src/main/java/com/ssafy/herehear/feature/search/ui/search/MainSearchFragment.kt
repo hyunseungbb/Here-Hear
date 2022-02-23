@@ -10,7 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SearchView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.CustomApplication
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentMainSearchBinding
 import com.ssafy.herehear.feature.search.adapater.SearchAdapter
@@ -47,7 +47,7 @@ class MainSearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 검색하기 전에 보여질 화면 - 사용자에 맞는 추천책 렌더링
-        val username = HereHear.prefs.getString("userId", "")
+        val username = CustomApplication.prefs.getString("userId", "")
         Log.d("username", "${username}")
         RetrofitClientRecommend.api.getRecommend(username).enqueue(object : Callback<SearchResponse>{
             override fun onResponse(

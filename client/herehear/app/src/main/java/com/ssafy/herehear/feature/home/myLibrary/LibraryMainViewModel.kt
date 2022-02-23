@@ -6,15 +6,18 @@ import androidx.lifecycle.ViewModel
 import com.ssafy.herehear.data.local.entity.Library
 import com.ssafy.herehear.data.repository.LibraryMainRepository
 import com.ssafy.herehear.util.schedulers.ThreadScheduler
+import com.ssafy.herehear.util.schedulers.UIThreadScheduler
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
 import io.reactivex.rxkotlin.subscribeBy
+import javax.inject.Inject
 
 //import javax.inject.Inject
 
-//@HiltViewModel
-class LibraryMainViewModel constructor(
+@HiltViewModel
+class LibraryMainViewModel @Inject constructor(
     private val repository: LibraryMainRepository,
-    private val uiThreadScheduler: ThreadScheduler
+    private val uiThreadScheduler: UIThreadScheduler
 ): ViewModel() {
 
     val library: Flowable<List<Library>> = repository.getLibraryWithChanges()

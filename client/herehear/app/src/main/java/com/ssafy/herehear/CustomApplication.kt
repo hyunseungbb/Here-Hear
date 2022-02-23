@@ -11,23 +11,25 @@ import com.ssafy.herehear.util.schedulers.IoThreadScheduler
 import com.ssafy.herehear.util.schedulers.NetworkThreadScheduler
 import com.ssafy.herehear.util.schedulers.ThreadScheduler
 import com.ssafy.herehear.util.schedulers.UIThreadScheduler
+import dagger.hilt.android.HiltAndroidApp
 
-class HereHear : Application() {
+@HiltAndroidApp
+class CustomApplication : Application() {
 
-    private lateinit var databaseManager: DatabaseManager
-
-    lateinit var libraryDao: LibraryDao
-
-    lateinit var uiThreadScheduler: ThreadScheduler
-        private set
-
-    lateinit var networkThreadScheduler: ThreadScheduler
-        private set
-
-    lateinit var ioThreadScheduler: ThreadScheduler
-        private set
-
-    lateinit var libraryMainRepository: LibraryMainRepository
+//    private lateinit var databaseManager: DatabaseManager
+//
+//    lateinit var libraryDao: LibraryDao
+//
+//    lateinit var uiThreadScheduler: UIThreadScheduler
+//        private set
+//
+//    lateinit var networkThreadScheduler: NetworkThreadScheduler
+//        private set
+//
+//    lateinit var ioThreadScheduler: IoThreadScheduler
+//        private set
+//
+//    lateinit var libraryMainRepository: LibraryMainRepository
 
     init {
         instance = this
@@ -37,7 +39,7 @@ class HereHear : Application() {
         var stars: Int = 0
         var myBookStatus: Int = 0
         lateinit var prefs: Preference
-        var instance: HereHear? = null
+        var instance: CustomApplication? = null
         fun context(): Context {
             return instance!!.applicationContext
         }
@@ -61,16 +63,16 @@ class HereHear : Application() {
         super.onCreate()
         prefs=Preference(applicationContext)
 
-        databaseManager = Room.databaseBuilder(this, DatabaseManager::class.java, "database")
-            .fallbackToDestructiveMigration() //
-            .allowMainThreadQueries() // TODO: count()
-            .build();
-        libraryDao = databaseManager.libraryDao
-
-        uiThreadScheduler = UIThreadScheduler()
-        ioThreadScheduler = IoThreadScheduler()
-        networkThreadScheduler = NetworkThreadScheduler()
-        libraryMainRepository = LibraryMainRepository(libraryDao, networkThreadScheduler, ioThreadScheduler)
+//        databaseManager = Room.databaseBuilder(this, DatabaseManager::class.java, "database")
+//            .fallbackToDestructiveMigration() //
+//            .allowMainThreadQueries() // TODO: count()
+//            .build();
+//        libraryDao = databaseManager.libraryDao
+//
+//        uiThreadScheduler = UIThreadScheduler()
+//        ioThreadScheduler = IoThreadScheduler()
+//        networkThreadScheduler = NetworkThreadScheduler()
+//        libraryMainRepository = LibraryMainRepository(libraryDao, networkThreadScheduler, ioThreadScheduler)
     }
 
 }

@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
-import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.CustomApplication
 import com.ssafy.herehear.IntroActivity
 import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.databinding.ActivityLoginBinding
@@ -46,9 +46,9 @@ class LoginActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         var token = response.body()?.accessToken
-                        HereHear.prefs.setString("access_token", token)
-                        HereHear.prefs.setString("userId", userId)
-                        HereHear.prefs.setString("userPassword", userPassword)
+                        CustomApplication.prefs.setString("access_token", token)
+                        CustomApplication.prefs.setString("userId", userId)
+                        CustomApplication.prefs.setString("userPassword", userPassword)
                         startActivity(mainIntent)
                         finish()
                     } else {

@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
-import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.CustomApplication
 import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.FragmentLibraryDetailBinding
@@ -104,7 +104,7 @@ class LibraryDetailFragment : Fragment() {
                     t.printStackTrace()
                 }
             })
-            binding.ratingBar.rating = HereHear.getBookStars().toFloat()
+            binding.ratingBar.rating = CustomApplication.getBookStars().toFloat()
             binding.ratingBar.setOnRatingBarChangeListener { ratingBar, fl, b ->
                 // 평점을 바꾸시겠습니까?
                 showPopup(fl.toInt(), libraryId)
@@ -156,7 +156,7 @@ class LibraryDetailFragment : Fragment() {
         val alertDialog = AlertDialog.Builder(activity)
             .setTitle("평점을 등록하시겠습니까?")
             .setPositiveButton("확인") {dialog, which ->
-                val bookStatus = HereHear.getBookStatus()
+                val bookStatus = CustomApplication.getBookStatus()
                 val requestBody = UpdateBookStatusRequest(libraryId, bookStatus, rating)
                 RetrofitClient.api.updateBookStatus(requestBody).enqueue(object: Callback<UpdateBookStatusResponse> {
                     override fun onResponse(
@@ -164,7 +164,7 @@ class LibraryDetailFragment : Fragment() {
                         response: Response<UpdateBookStatusResponse>
                     ) {
                         if (response.isSuccessful) {
-                            HereHear.setBookStars(binding.ratingBar.rating.toInt())
+                            CustomApplication.setBookStars(binding.ratingBar.rating.toInt())
                             Toast.makeText(activity, "평점이 등록되었습니다.", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(activity, "등록 실패", Toast.LENGTH_SHORT).show()

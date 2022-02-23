@@ -5,6 +5,7 @@ import android.util.Log
 import com.ssafy.herehear.data.local.dao.LibraryDao
 import com.ssafy.herehear.data.local.entity.Library
 import com.ssafy.herehear.data.network.RetrofitClient
+import com.ssafy.herehear.util.schedulers.IoThreadScheduler
 import com.ssafy.herehear.util.schedulers.NetworkThreadScheduler
 import com.ssafy.herehear.util.schedulers.ThreadScheduler
 import io.reactivex.Flowable
@@ -15,8 +16,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class LibraryMainRepository(
     val libraryDao: LibraryDao,
-    val networkThreadScheduler: ThreadScheduler,
-    val ioThreadScheduler: ThreadScheduler
+    val networkThreadScheduler: NetworkThreadScheduler,
+    val ioThreadScheduler: IoThreadScheduler
 ) {
 
     private val isTaskRunning = AtomicBoolean(false)

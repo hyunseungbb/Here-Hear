@@ -13,10 +13,8 @@ import android.widget.Toast
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import com.ssafy.herehear.HereHear
 import kotlinx.coroutines.delay
 import java.io.File
-import kotlin.properties.Delegates
 
 class DownloadWorker(appContext: Context, workerParams: WorkerParameters):
     CoroutineWorker(appContext, workerParams) {

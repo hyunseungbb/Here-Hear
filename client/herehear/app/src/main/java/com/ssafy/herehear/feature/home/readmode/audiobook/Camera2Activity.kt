@@ -21,7 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.work.*
 import com.ssafy.herehear.BaseActivity
-import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.CustomApplication
 import com.ssafy.herehear.MainActivity
 import com.ssafy.herehear.R
 import com.ssafy.herehear.databinding.ActivityCamera2Binding
@@ -219,7 +219,7 @@ class Camera2Activity : BaseActivity() {
 
     @SuppressLint("Range")
     fun getRealPathFromURI(uri: Uri): String? {
-        val cursor = HereHear.context().contentResolver.query(uri, null, null, null, null)
+        val cursor = CustomApplication.context().contentResolver.query(uri, null, null, null, null)
         cursor?.moveToNext()
         val path = cursor?.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
         cursor?.close()
@@ -232,10 +232,10 @@ class Camera2Activity : BaseActivity() {
         val mList = arrayOf<String>("상용 버전", "베타 버전")
         val inputData = Data.Builder()
             .putString("realPath", realPath)
-            .putString("userId", HereHear.prefs.getString("userId", ""))
+            .putString("userId", CustomApplication.prefs.getString("userId", ""))
             .build()
         val inputData2 = Data.Builder()
-            .putString("userId", HereHear.prefs.getString("userId", ""))
+            .putString("userId", CustomApplication.prefs.getString("userId", ""))
             .build()
         val uploadWorkRequest: OneTimeWorkRequest = OneTimeWorkRequestBuilder<UploadWorker>()
             .setInputData(inputData)
@@ -255,7 +255,7 @@ class Camera2Activity : BaseActivity() {
             .setTitle("버전을 선택해주세요.")
             .setItems(mList, DialogInterface.OnClickListener { dialogInterface, i ->
                 binding.progressLayout.visibility = View.VISIBLE
-                val userId = HereHear.prefs.getString("userId", "")
+                val userId = CustomApplication.prefs.getString("userId", "")
                 lateinit var file: File
                 try {
                     file = File(realPath)

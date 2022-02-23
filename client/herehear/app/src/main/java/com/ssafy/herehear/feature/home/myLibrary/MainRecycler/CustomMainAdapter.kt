@@ -5,13 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.CustomApplication
 import com.ssafy.herehear.data.local.entity.Library
 import com.ssafy.herehear.databinding.HomeBookRecyclerBinding
 import com.ssafy.herehear.homeFragment
-
-
-import com.ssafy.herehear.data.network.response.GetMyLibraryResponseItem
 
 class CustomMainAdapter: RecyclerView.Adapter<CustomMainAdapter.Holder>() {
 
@@ -49,8 +46,8 @@ class CustomMainAdapter: RecyclerView.Adapter<CustomMainAdapter.Holder>() {
 
         fun setClick(mainBook: Library) {
             binding.root.setOnClickListener {
-                HereHear.setBookStars(mainBook.stars)
-                HereHear.setBookStatus(mainBook.read_status)
+                CustomApplication.setBookStars(mainBook.stars)
+                CustomApplication.setBookStatus(mainBook.read_status)
 //                libraryMainFragment.setFragmentResult("request", bundleOf("valueKey" to mainBook.book_id))
                 homeFragment.goDetailFragment(mainBook.book_id, mainBook.id)
             }

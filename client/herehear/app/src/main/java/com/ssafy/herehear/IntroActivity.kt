@@ -24,9 +24,9 @@ class IntroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        val token = HereHear.prefs.getString("access_token", null)
-        val savedUserId: String = HereHear.prefs.getString("userId", "")
-        val savedUserPassword: String = HereHear.prefs.getString("userPassword", "")
+        val token = CustomApplication.prefs.getString("access_token", null)
+        val savedUserId: String = CustomApplication.prefs.getString("userId", "")
+        val savedUserPassword: String = CustomApplication.prefs.getString("userPassword", "")
         val mainIntent = Intent(this, MainActivity::class.java)
         if (savedUserId != "" && savedUserPassword != "") {
             val loginData = LoginRequest(savedUserId, savedUserPassword)
@@ -38,7 +38,7 @@ class IntroActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         Toast.makeText(applicationContext, "자동로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                         var token = response.body()?.accessToken
-                        HereHear.prefs.setString("access_token", token)
+                        CustomApplication.prefs.setString("access_token", token)
                         startActivity(mainIntent)
                         finish()
                     }

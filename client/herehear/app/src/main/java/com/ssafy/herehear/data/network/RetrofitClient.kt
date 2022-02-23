@@ -1,6 +1,6 @@
 package com.ssafy.herehear.data.network
 
-import com.ssafy.herehear.HereHear
+import com.ssafy.herehear.CustomApplication
 import com.ssafy.herehear.data.network.api.RetrofitInterface
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -42,7 +42,7 @@ object RetrofitClient {
     class AppInterceptor : Interceptor {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
-            val token = "Bearer " + HereHear.prefs.getString("access_token", "")
+            val token = "Bearer " + CustomApplication.prefs.getString("access_token", "")
             val newRequest = request().newBuilder()
                 .addHeader("Authorization", token)
                 .build()
