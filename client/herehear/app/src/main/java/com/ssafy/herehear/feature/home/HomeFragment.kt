@@ -14,13 +14,10 @@ import com.ssafy.herehear.feature.home.myLibrary.LibraryDetailFragment
 import com.ssafy.herehear.feature.home.myLibrary.LibraryMainFragment
 import dagger.hilt.android.AndroidEntryPoint
 
-val libraryMainFragment = LibraryMainFragment()
-val libraryDetailFragment = LibraryDetailFragment()
-
-lateinit var binding: FragmentHomeBinding
-
-
 class HomeFragment : Fragment() {
+    lateinit var binding: FragmentHomeBinding
+    private lateinit var libraryMainFragment: LibraryMainFragment
+    private lateinit var libraryDetailFragment: LibraryDetailFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +30,7 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // readmode 프래그먼트를 프레임에 일단 추가. 원래는 홈메인임
+        libraryMainFragment = LibraryMainFragment(this)
         childFragmentManager.beginTransaction()
             .add(R.id.frameHome, libraryMainFragment)
             .addToBackStack(null)
@@ -43,6 +40,7 @@ class HomeFragment : Fragment() {
     }
 
     fun goDetailFragment(bookId: Int, id: Int) {
+        libraryDetailFragment = LibraryDetailFragment()
         val childTransaction = childFragmentManager.beginTransaction()
         childTransaction.replace(R.id.frameHome, libraryDetailFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

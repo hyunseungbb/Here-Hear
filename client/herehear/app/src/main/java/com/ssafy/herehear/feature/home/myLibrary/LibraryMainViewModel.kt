@@ -26,9 +26,11 @@ class LibraryMainViewModel @Inject constructor(
     @SuppressLint("CheckResult")
     fun getMyLibrary() {
         Log.d("test", "확인1")
-        repository.fetch()
-            .subscribeBy(onSuccess = {
-                Log.d("test", "fetch 성공")
-            })
+        if (!repository.isTaskRunning()) {
+            repository.fetch()
+                .subscribeBy(onSuccess = {
+                    Log.d("test", "fetch 성공")
+                })
+        }
     }
 }
