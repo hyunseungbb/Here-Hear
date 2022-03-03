@@ -1,5 +1,6 @@
 package com.ssafy.herehear.feature.home.myLibrary.MainRecycler
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,12 @@ class CustomMainAdapter(private val listener: OnItemClicked): RecyclerView.Adapt
 
     override fun getItemCount(): Int {
         return listData.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(libraries: MutableList<Library>) {
+        this.listData = libraries
+        notifyDataSetChanged()
     }
 
     inner class Holder(val binding: HomeBookRecyclerBinding, val parent: ViewGroup): RecyclerView.ViewHolder(binding.root) {

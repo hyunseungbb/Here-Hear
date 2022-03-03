@@ -37,7 +37,7 @@ interface RetrofitInterface {
     fun getHomeBookDetail(@Url url: String): Call<BookDetailResponse>
 
     @GET
-    fun getAllComments(@Url url: String): Call<AllCommentsResponse>
+    fun getAllComments(@Url url: String): Single<AllCommentsResponse>
 
     @POST
     fun registerBook(

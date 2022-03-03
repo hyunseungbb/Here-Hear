@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +30,9 @@ import java.lang.IllegalArgumentException
 @AndroidEntryPoint
 class LibraryMainFragment(homeFragment: HomeFragment) : Fragment(), CustomMainAdapter.OnItemClicked {
     lateinit var binding: FragmentLibraryMainBinding
-
+    private lateinit var adapter1: CustomMainAdapter
+    private lateinit var adapter2: CustomMainAdapter
+    private lateinit var adapter3: CustomMainAdapter
     private val libraryMainViewModel: LibraryMainViewModel by viewModels()
 /*  Hilt 사용 안 할 때 viewmodel 초기화
     private val libraryMainViewModel: LibraryMainViewModel by viewModels {
@@ -52,8 +55,6 @@ class LibraryMainFragment(homeFragment: HomeFragment) : Fragment(), CustomMainAd
     }
  */
 
-    private val compositeDisposable = CompositeDisposable()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,59 +66,50 @@ class LibraryMainFragment(homeFragment: HomeFragment) : Fragment(), CustomMainAd
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        libraryMainViewModel.getMyLibrary()
+        setAdapter()
 
-        with(binding) {
+        libraryMainViewModel.libraryList.observe(viewLifecycleOwner, Observer { libraryList ->
+            libraryList ?: return@Observer
+            val data0: MutableList<Library> = mutableListOf()
+            val data1: MutableList<Library> = mutableListOf()
+            val data2: MutableList<Library> = mutableListOf()
 
-            // 로컬 library table 변화 시 adapter update
-            compositeDisposable += libraryMainViewModel.library.subscribeBy(onNext = { libraryList ->
-                updateAdapter(libraryList)
-            })
-        }
+            for (item in libraryList) {
+                if (item.read_status == 0) {
+                    data1.add(item)
+                } else if (item.read_status == 1) {
+                    data0.add(item)
+                } else if (item.read_status == 2) {
+                    data2.add(item)
+                }
+            }
+            adapter1.updateData(data0)
+            adapter2.updateData(data1)
+            adapter2.updateData(data2)
+        })
     }
 
-    fun updateAdapter(librayList: List<Library>) {
-        val data0: MutableList<Library> = mutableListOf()
-        val data1: MutableList<Library> = mutableListOf()
-        val data2: MutableList<Library> = mutableListOf()
-
-        for (item in librayList) {
-            if (item.read_status == 0) {
-                data1.add(item)
-            } else if (item.read_status == 1) {
-                data0.add(item)
-            } else if (item.read_status == 2) {
-                data2.add(item)
+    fun setAdapter() {
+        with(binding) {
+            with(mainRecyclerView0) {
+                layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                adapter = CustomMainAdapter(this@LibraryMainFragment).also {
+                    adapter1 = it
+                }
+            }
+            with(mainRecyclerView1) {
+                layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                adapter = CustomMainAdapter(this@LibraryMainFragment).also {
+                    adapter2 = it
+                }
+            }
+            with(mainRecyclerView2) {
+                layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                adapter = CustomMainAdapter(this@LibraryMainFragment).also {
+                    adapter3 = it
+                }
             }
         }
-        val adapter0 = CustomMainAdapter(this@LibraryMainFragment)
-        val adapter1 = CustomMainAdapter(this@LibraryMainFragment)
-        val adapter2 = CustomMainAdapter(this@LibraryMainFragment)
-
-        adapter0.listData = data0
-        adapter1.listData = data1
-        adapter2.listData = data2
-
-        binding.mainRecyclerView0.adapter = adapter0
-        binding.mainRecyclerView1.adapter = adapter1
-        binding.mainRecyclerView2.adapter = adapter2
-        binding.mainRecyclerView0.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        binding.mainRecyclerView1.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        binding.mainRecyclerView2.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-
-    }
-
-    fun goHomeDetailFragment() {
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.frameHome, LibraryDetailFragment())
-            addToBackStack(null)
-            commit()
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        compositeDisposable.clear()
     }
 
     override fun onItemClicked(library: Library) {

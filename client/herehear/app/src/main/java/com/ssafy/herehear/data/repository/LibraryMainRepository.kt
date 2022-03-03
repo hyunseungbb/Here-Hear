@@ -43,7 +43,6 @@ class LibraryMainRepository(
                     }
                     emitter.onSuccess(Unit)
                 }, onError = { throwable ->
-                    Log.d("test", "에러남")
                     emitter.onError(throwable)
                 })
         }

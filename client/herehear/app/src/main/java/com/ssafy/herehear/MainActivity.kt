@@ -41,8 +41,9 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         homeFragment = HomeFragment()
 
-        transaction.add(R.id.frameMain, homeFragment)
-        transaction.commit()
+        transaction
+            .add(R.id.frameMain, homeFragment)
+            .commit()
         binding.tabLayout.getTabAt(0)?.setIcon(R.drawable.home)
         binding.tabLayout.getTabAt(1)?.setIcon(R.drawable.calender)
         binding.tabLayout.getTabAt(2)?.setIcon(R.drawable.search)
@@ -116,15 +117,15 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    override fun onBackPressed() {
-        val currentTime = System.currentTimeMillis()
-        val gapTime = currentTime - backButtonTime
-        Log.d("test", "뒤로가기버튼 ${gapTime}")
-        if (gapTime in 0..2000) {
-            super.onBackPressed()
-        } else {
-            backButtonTime = currentTime
-            Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    override fun onBackPressed() {
+//        val currentTime = System.currentTimeMillis()
+//        val gapTime = currentTime - backButtonTime
+//        Log.d("test", "뒤로가기버튼 ${gapTime}")
+//        if (gapTime in 0..2000) {
+//            super.onBackPressed()
+//        } else {
+//            backButtonTime = currentTime
+//            Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 }

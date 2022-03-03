@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.ssafy.herehear.data.local.dao.LibraryDao
 import com.ssafy.herehear.data.local.database.DatabaseManager
+import com.ssafy.herehear.data.repository.LibraryDetailRepository
 import com.ssafy.herehear.data.repository.LibraryMainRepository
 import com.ssafy.herehear.util.schedulers.IoThreadScheduler
 import com.ssafy.herehear.util.schedulers.NetworkThreadScheduler
@@ -29,6 +30,16 @@ class DiModule {
         ioThreadScheduler: IoThreadScheduler
     ) : LibraryMainRepository {
         return LibraryMainRepository(libraryDao, networkThreadScheduler, ioThreadScheduler)
+    }
+
+    @Singleton
+    @Provides
+    fun provideLibraryDetailRepository(
+        libraryDao: LibraryDao,
+        networkThreadScheduler: NetworkThreadScheduler,
+        ioThreadScheduler: IoThreadScheduler
+    ) : LibraryDetailRepository {
+        return LibraryDetailRepository(libraryDao, networkThreadScheduler, ioThreadScheduler)
     }
 
     @Singleton

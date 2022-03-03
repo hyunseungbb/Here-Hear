@@ -35,19 +35,14 @@ lateinit var binding: FragmentLibraryDetailBinding
 class LibraryDetailFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
-    lateinit var inflaterr: LayoutInflater
     lateinit var bookImgUrl: String
     var bookId by Delegates.notNull<Int>()
     var libraryId by Delegates.notNull<Int>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        inflaterr = inflater
         binding = FragmentLibraryDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -56,10 +51,13 @@ class LibraryDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setFragmentResultListener("request") {key, bundle ->
-
             bookId = bundle.getInt("valueKey")
             libraryId = bundle.getInt("libraryId")
+
+
+
             var url = "books/${bookId}"
+
             RetrofitClient.api.getHomeBookDetail(url).enqueue(object: Callback<BookDetailResponse>{
                 override fun onResponse(
                     call: Call<BookDetailResponse>,
@@ -77,33 +75,33 @@ class LibraryDetailFragment : Fragment() {
             })
 
             url = "comment/${bookId}"
-            RetrofitClient.api.getAllComments(url).enqueue(object: Callback<AllCommentsResponse> {
-                override fun onResponse(
-                    call: Call<AllCommentsResponse>,
-                    response: Response<AllCommentsResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val data: MutableList<AllCommentsResponseItem> = mutableListOf()
-                        var body = response.body()
-                        if (body != null) {
-                            for (item in body) {
-                                data.add(item)
-                            }
-                        }
-                        val adapter = CustomDetailAdapter()
-                        adapter.listData = data
-                        binding.commentRecyclerView.adapter = adapter
-                        binding.commentRecyclerView.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL)
-
-                    } else {
-                        Toast.makeText(activity, "${response.code()}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<AllCommentsResponse>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+//            RetrofitClient.api.getAllComments(url).enqueue(object: Callback<AllCommentsResponse> {
+//                override fun onResponse(
+//                    call: Call<AllCommentsResponse>,
+//                    response: Response<AllCommentsResponse>
+//                ) {
+//                    if (response.isSuccessful) {
+//                        val data: MutableList<AllCommentsResponseItem> = mutableListOf()
+//                        var body = response.body()
+//                        if (body != null) {
+//                            for (item in body) {
+//                                data.add(item)
+//                            }
+//                        }
+//                        val adapter = CustomDetailAdapter()
+//                        adapter.listData = data
+//                        binding.commentRecyclerView.adapter = adapter
+//                        binding.commentRecyclerView.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL)
+//
+//                    } else {
+//                        Toast.makeText(activity, "${response.code()}", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<AllCommentsResponse>, t: Throwable) {
+//                    t.printStackTrace()
+//                }
+//            })
             binding.ratingBar.rating = CustomApplication.getBookStars().toFloat()
             binding.ratingBar.setOnRatingBarChangeListener { ratingBar, fl, b ->
                 // 평점을 바꾸시겠습니까?
@@ -151,7 +149,7 @@ class LibraryDetailFragment : Fragment() {
     }
 
     private fun showPopup(rating: Int, libraryId: Int) {
-        val view = inflaterr.inflate(R.layout.alert_popup, null)
+        val view = layoutInflater.inflate(R.layout.alert_popup, null)
 
         val alertDialog = AlertDialog.Builder(activity)
             .setTitle("평점을 등록하시겠습니까?")
@@ -186,7 +184,7 @@ class LibraryDetailFragment : Fragment() {
     }
 
     private fun showPopup2() {
-        val view = inflaterr.inflate(R.layout.alert_popup, null)
+        val view = layoutInflater.inflate(R.layout.alert_popup, null)
         val mList = arrayOf<String>("종이책", "오디오")
         val alertDialog = AlertDialog.Builder(activity)
             .setItems(mList, DialogInterface.OnClickListener { dialogInterface, i ->
