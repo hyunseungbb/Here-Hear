@@ -1,5 +1,6 @@
 package com.ssafy.herehear.data.network.api
 
+import com.ssafy.herehear.data.local.entity.Library
 import com.ssafy.herehear.data.network.response.*
 import io.reactivex.Single
 import retrofit2.Call
@@ -42,7 +43,7 @@ interface RetrofitInterface {
     @POST
     fun registerBook(
         @Url url: String,
-    ): Call<RegisterBookResponse>
+    ): Call<Library>
 
     @DELETE
     fun deleteBook(
@@ -52,7 +53,7 @@ interface RetrofitInterface {
     @PUT("libraries")
     fun updateBookStatus(
         @Body bookStatusBody: UpdateBookStatusRequest
-    ): Call<UpdateBookStatusResponse>
+    ): Single<UpdateBookStatusResponse>
 
     @POST
     fun createComment(

@@ -28,4 +28,6 @@ public class BookGetRes {
 	@ApiModelProperty(name="별점 갯수")
 	private int stars_count;
 
+	@ApiModelProperty(name="저자")
+	private String author;
 }

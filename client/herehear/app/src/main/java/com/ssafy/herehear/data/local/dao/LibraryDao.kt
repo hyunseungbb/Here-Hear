@@ -19,5 +19,7 @@ interface LibraryDao {
     fun count(): Int
 
     @Query("SELECT * FROM ${Library.TABLE_NAME} WHERE ${Library.COLUMN_BOOK_ID} = :bookId")
-    fun getDetail(bookId: Int): Library
+    fun getDetailWithChanges(bookId: Int): Flowable<Library>
+
+
 }

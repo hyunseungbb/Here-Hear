@@ -55,8 +55,9 @@ public class LibraryController {
 				return ResponseEntity.status(412).body(BaseResponseBody.of(412, "이미 등록된 책 입니다."));
 			}
 		}
-		libraryService.createLibrary(userId, bookId);
-		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+		Library res = libraryService.createLibrary(userId, bookId);
+		LibraryGetRes library = libraryService.getLibraryDetail(res.getId(), userId);
+		return ResponseEntity.status(200).body(library);
 	}
 	
 	@PutMapping()

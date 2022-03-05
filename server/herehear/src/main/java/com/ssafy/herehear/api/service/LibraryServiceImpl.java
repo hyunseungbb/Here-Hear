@@ -2,7 +2,9 @@ package com.ssafy.herehear.api.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import jdk.nashorn.internal.runtime.options.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ public class LibraryServiceImpl implements LibraryService {
 	
 	@Autowired
 	BookRepository bookRepository;
+
 	
 	@Override
 	public List<LibraryGetRes> getLibrary(Long userId) {
@@ -47,7 +50,21 @@ public class LibraryServiceImpl implements LibraryService {
 		}
 		return copy;
 	}
-	
+
+	@Override
+	public LibraryGetRes getLibraryDetail(Long libraryId, Long userId) {
+		Library library =   libraryRepository.findById(libraryId).get();
+		LibraryGetRes ret = new LibraryGetRes();
+		Book book = library.getBook();
+		ret.setBook_id(book.getId());
+		ret.setId(library.getId());
+		ret.setImg_url(book.getImg_url());
+		ret.setRead_status(library.getRead_status());
+		ret.setStars(library.getStars());
+		ret.setUser_id(userId);
+		return ret;
+	}
+
 	@Override
 	public Library createLibrary(Long userId, Long bookId) {
 		Library library = new Library();

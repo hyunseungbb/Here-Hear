@@ -11,7 +11,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.bumptech.glide.Glide
+import com.ssafy.herehear.data.local.dao.BookDao
+import com.ssafy.herehear.data.local.database.DatabaseManager
+import com.ssafy.herehear.data.local.entity.Book
+import com.ssafy.herehear.data.local.entity.Library
 import com.ssafy.herehear.databinding.FragmentSearchInfoBinding
 import com.ssafy.herehear.feature.search.SearchFragment
 import com.ssafy.herehear.feature.search.adapater.SearchDetailAdapter
@@ -62,6 +67,19 @@ class SearchInfoFragment : Fragment() {
                                 setView(body)
                                 getComments(body.id)
                             }
+
+                            // book dao에 만들어서 넣자
+                            val book = Book(body!!.id, body!!.description, body!!.img_url, body!!.title)
+                            val bookList = mutableListOf<Book>(book)
+                            val databaseManager = Room.databaseBuilder(
+                                activity!!.applicationContext,
+                                DatabaseManager::class.java,
+                                "database"
+                            ).fallbackToDestructiveMigration()
+                                .allowMainThreadQueries()
+                                .build()
+                            databaseManager.bookDao.insertBook(bookList)
+//                            BookDao.insertBook(book)
 
                             // 내 서재에 등록된 책인지 체크 true : 등록, false : 미등록
                             getMyLibraryBooks(bookId)
@@ -141,36 +159,36 @@ class SearchInfoFragment : Fragment() {
 
     // 댓글 렌더링 함수
     fun getComments(bookId: Long) {
-        var url = "comment/${bookId}"
-        RetrofitClient.api.getAllComments(url).enqueue(object : Callback<AllCommentsResponse> {
-            override fun onResponse(
-                call: Call<AllCommentsResponse>,
-                response: Response<AllCommentsResponse>
-            ) {
-                if (response.isSuccessful) {
-                    var bookData = mutableListOf<AllCommentsResponseItem>()
-                    var body = response.body()
-
-                    if (body != null) {
-                        for (item in body) {
-                            bookData.add(item)
-                        }
-                    }
-
-                    // recycler adapter를 통한 바인딩
-                    var recyclerAdapter = SearchDetailAdapter()
-                    recyclerAdapter.listData = bookData
-                    binding.bookCommentRecycler.adapter = recyclerAdapter
-                    binding.bookCommentRecycler.layoutManager =
-                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                }
-            }
-
-            override fun onFailure(call: Call<AllCommentsResponse>, t: Throwable) {
-                t.printStackTrace()
-            }
-
-        })
+//        var url = "comment/${bookId}"
+//        RetrofitClient.api.getAllComments(url).enqueue(object : Callback<AllCommentsResponse> {
+//            override fun onResponse(
+//                call: Call<AllCommentsResponse>,
+//                response: Response<AllCommentsResponse>
+//            ) {
+//                if (response.isSuccessful) {
+//                    var bookData = mutableListOf<AllCommentsResponseItem>()
+//                    var body = response.body()
+//
+//                    if (body != null) {
+//                        for (item in body) {
+//                            bookData.add(item)
+//                        }
+//                    }
+//
+//                    // recycler adapter를 통한 바인딩
+//                    var recyclerAdapter = SearchDetailAdapter()
+//                    recyclerAdapter.listData = bookData
+//                    binding.bookCommentRecycler.adapter = recyclerAdapter
+//                    binding.bookCommentRecycler.layoutManager =
+//                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<AllCommentsResponse>, t: Throwable) {
+//                t.printStackTrace()
+//            }
+//
+//        })
     }
 
     // 내 서재에 등록된 책인지 확인하는 함수 flag - true:등록 , false:미등록
@@ -220,10 +238,10 @@ class SearchInfoFragment : Fragment() {
         Log.d("click", "클릭했냐 ${isRegistry}")
         if (!isRegistry) {
             var url = "libraries/${bookId}"
-            RetrofitClient.api.registerBook(url).enqueue(object : Callback<RegisterBookResponse> {
+            RetrofitClient.api.registerBook(url).enqueue(object : Callback<Library> {
                 override fun onResponse(
-                    call: Call<RegisterBookResponse>,
-                    response: Response<RegisterBookResponse>
+                    call: Call<Library>,
+                    response: Response<Library>
                 ) {
                     if (response.isSuccessful) {
                         Log.d("책등록", "성공")
@@ -233,11 +251,20 @@ class SearchInfoFragment : Fragment() {
                         if (flag){
                             binding.good.setColorFilter(Color.parseColor("#6264A7"))
                         }
+                        val library: List<Library> = listOf(response.body()!!)
+                        val databaseManager = Room.databaseBuilder(
+                            activity!!.applicationContext,
+                            DatabaseManager::class.java,
+                            "database"
+                        ).fallbackToDestructiveMigration()
+                            .allowMainThreadQueries()
+                            .build()
+                        databaseManager.libraryDao.insertLibrarys(library)
                     }
                 }
 
                 override fun onFailure(
-                    call: Call<RegisterBookResponse>,
+                    call: Call<Library>,
                     t: Throwable
                 ) {
                     t.printStackTrace()

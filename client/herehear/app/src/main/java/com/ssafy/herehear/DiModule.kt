@@ -2,6 +2,7 @@ package com.ssafy.herehear
 
 import android.content.Context
 import androidx.room.Room
+import com.ssafy.herehear.data.local.dao.BookDao
 import com.ssafy.herehear.data.local.dao.LibraryDao
 import com.ssafy.herehear.data.local.database.DatabaseManager
 import com.ssafy.herehear.data.repository.LibraryDetailRepository
@@ -36,10 +37,11 @@ class DiModule {
     @Provides
     fun provideLibraryDetailRepository(
         libraryDao: LibraryDao,
+        bookDao: BookDao,
         networkThreadScheduler: NetworkThreadScheduler,
         ioThreadScheduler: IoThreadScheduler
     ) : LibraryDetailRepository {
-        return LibraryDetailRepository(libraryDao, networkThreadScheduler, ioThreadScheduler)
+        return LibraryDetailRepository(libraryDao, bookDao, networkThreadScheduler, ioThreadScheduler)
     }
 
     @Singleton
@@ -58,6 +60,12 @@ class DiModule {
     @Provides
     fun provideLibraryDao(databaseManager: DatabaseManager): LibraryDao {
         return databaseManager.libraryDao
+    }
+
+    @Singleton
+    @Provides
+    fun provideBookDao(databaseManager: DatabaseManager): BookDao {
+        return databaseManager.bookDao
     }
 
     @Singleton

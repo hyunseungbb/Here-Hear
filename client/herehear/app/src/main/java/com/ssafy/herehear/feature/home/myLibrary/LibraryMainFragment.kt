@@ -69,6 +69,7 @@ class LibraryMainFragment(homeFragment: HomeFragment) : Fragment(), CustomMainAd
         setAdapter()
 
         libraryMainViewModel.libraryList.observe(viewLifecycleOwner, Observer { libraryList ->
+            Log.d("test", "libraryList : ${libraryList}")
             libraryList ?: return@Observer
             val data0: MutableList<Library> = mutableListOf()
             val data1: MutableList<Library> = mutableListOf()
@@ -85,7 +86,7 @@ class LibraryMainFragment(homeFragment: HomeFragment) : Fragment(), CustomMainAd
             }
             adapter1.updateData(data0)
             adapter2.updateData(data1)
-            adapter2.updateData(data2)
+            adapter3.updateData(data2)
         })
     }
 
