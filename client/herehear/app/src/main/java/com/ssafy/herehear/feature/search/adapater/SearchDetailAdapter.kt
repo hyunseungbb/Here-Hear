@@ -1,5 +1,6 @@
 package com.ssafy.herehear.feature.search.adapater
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,12 @@ class SearchDetailAdapter: RecyclerView.Adapter<SearchDetailAdapter.ViewHolder>(
 
     override fun getItemCount():Int {
         return listData.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(commentList: MutableList<AllCommentsResponseItem>) {
+        this.listData = commentList
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(val binding: SearchDetailRecyclerBinding) : RecyclerView.ViewHolder(binding.root) {

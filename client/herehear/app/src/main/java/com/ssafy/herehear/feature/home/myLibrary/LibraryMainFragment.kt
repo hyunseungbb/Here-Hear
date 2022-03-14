@@ -67,7 +67,6 @@ class LibraryMainFragment(homeFragment: HomeFragment) : Fragment(), CustomMainAd
         super.onViewCreated(view, savedInstanceState)
 
         setAdapter()
-
         libraryMainViewModel.libraryList.observe(viewLifecycleOwner, Observer { libraryList ->
             Log.d("test", "libraryList : ${libraryList}")
             libraryList ?: return@Observer

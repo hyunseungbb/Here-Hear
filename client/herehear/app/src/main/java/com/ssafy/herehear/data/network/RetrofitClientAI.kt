@@ -3,6 +3,7 @@ package com.ssafy.herehear.data.network
 import com.ssafy.herehear.data.network.api.RetrofitInterfaceAI
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -21,6 +22,7 @@ object RetrofitClientAI {
 //            .baseUrl("http://192.168.35.41:8000/apis/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
         api = retrofit.create(RetrofitInterfaceAI::class.java)

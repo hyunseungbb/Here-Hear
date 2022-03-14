@@ -1,9 +1,6 @@
 package com.ssafy.herehear.data.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.ssafy.herehear.data.local.entity.Library
 import io.reactivex.Flowable
 
@@ -21,5 +18,9 @@ interface LibraryDao {
     @Query("SELECT * FROM ${Library.TABLE_NAME} WHERE ${Library.COLUMN_BOOK_ID} = :bookId")
     fun getDetailWithChanges(bookId: Int): Flowable<Library>
 
+    @Query("SELECT * FROM ${Library.TABLE_NAME} WHERE ${Library.COLUMN_BOOK_ID} = :bookId")
+    fun getDetail(bookId: Int): Library?
 
+    @Delete
+    fun deleteLibrary(library: Library)
 }

@@ -23,10 +23,10 @@ interface RetrofitInterface {
     fun getSearch(
         @Query("type") type: String,
         @Query("keyword") keyword: String
-    ): Call<SearchResponse>
+    ): Single<SearchResponse>
 
     @GET
-    fun getSearchDetail(@Url url: String): Call<SearchDetailResponse>
+    fun getSearchDetail(@Url url: String): Single<SearchDetailResponse>
 
     @GET("libraries/mine")
     fun getMyLibrary(): Single<GetMyLibraryResponse>
@@ -43,12 +43,12 @@ interface RetrofitInterface {
     @POST
     fun registerBook(
         @Url url: String,
-    ): Call<Library>
+    ): Single<Library>
 
     @DELETE
     fun deleteBook(
         @Url url: String
-    ): Call<DeleteBookResponse>
+    ): Single<DeleteBookResponse>
 
     @PUT("libraries")
     fun updateBookStatus(

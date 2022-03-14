@@ -7,6 +7,7 @@ import com.ssafy.herehear.data.local.dao.LibraryDao
 import com.ssafy.herehear.data.local.database.DatabaseManager
 import com.ssafy.herehear.data.repository.LibraryDetailRepository
 import com.ssafy.herehear.data.repository.LibraryMainRepository
+import com.ssafy.herehear.data.repository.SearchRepository
 import com.ssafy.herehear.util.schedulers.IoThreadScheduler
 import com.ssafy.herehear.util.schedulers.NetworkThreadScheduler
 import com.ssafy.herehear.util.schedulers.ThreadScheduler
@@ -42,6 +43,17 @@ class DiModule {
         ioThreadScheduler: IoThreadScheduler
     ) : LibraryDetailRepository {
         return LibraryDetailRepository(libraryDao, bookDao, networkThreadScheduler, ioThreadScheduler)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSearchRepository(
+        libraryDao: LibraryDao,
+        bookDao: BookDao,
+        networkThreadScheduler: NetworkThreadScheduler,
+        ioThreadScheduler: IoThreadScheduler
+    ) : SearchRepository {
+        return SearchRepository(libraryDao, bookDao, networkThreadScheduler, ioThreadScheduler)
     }
 
     @Singleton
