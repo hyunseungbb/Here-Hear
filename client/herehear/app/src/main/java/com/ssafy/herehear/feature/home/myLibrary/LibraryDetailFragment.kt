@@ -3,6 +3,7 @@ package com.ssafy.herehear.feature.home.myLibrary
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -25,6 +26,8 @@ import com.ssafy.herehear.feature.home.myLibrary.MainRecycler.CustomDetailAdapte
 import com.ssafy.herehear.homeFragment
 import com.ssafy.herehear.data.network.RetrofitClient
 import com.ssafy.herehear.data.network.response.*
+import com.ssafy.herehear.feature.home.readmode.audiobook.AudioPlayActivity
+import com.ssafy.herehear.feature.home.readmode.audiobook.PlayerActivity
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -171,6 +174,19 @@ class LibraryDetailFragment : Fragment() {
 
                 goReadModeButton.setOnClickListener {
                     showPopup2()
+                }
+
+                listenButton.setOnClickListener {
+                    val activity = requireActivity()
+                    with (activity) {
+                        val intent = Intent(this, PlayerActivity::class.java)
+                        intent.putExtra("bookId", bookId)
+                        startActivity(intent)
+                    }
+                }
+
+                readButton.setOnClickListener {
+                    mainActivity.goTimerActivity(bookId, bookImgUrl, libraryId)
                 }
 
                 homeDetailBackButton.setOnClickListener {

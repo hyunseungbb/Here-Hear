@@ -11,6 +11,7 @@ import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.work.CoroutineWorker
+import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.ssafy.herehear.data.network.RetrofitClientAI
 import com.ssafy.herehear.util.FormDataUtil
@@ -24,6 +25,7 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters):
     private var downloadId: Long = -1L
     private lateinit var downloadManager: DownloadManager
     override suspend fun doWork(): Result {
+        var ret: Result? = null
         return withContext(Dispatchers.IO) {
             val realPath = inputData.getString("realPath")
             val userId = inputData.getString("userId")
@@ -33,26 +35,29 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters):
             val url = "ocr_tts/${userId}/"
             val res = RetrofitClientAI.api.downloadAudio(url, fileBody)
             if (res.isSuccessful) {
-                val file = File(applicationContext.getExternalFilesDir(
-                    Environment.DIRECTORY_MUSIC), "myAudio.wav")
-                val path = file.path
-                Log.d("test", "${path}")
-//        val url = "http://10.0.2.2:8000/media/tmp/file_example_MP3_700KB.mp3"
-//        Log.d("test", "${url}")
-                val url = "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3"
-                val intentFilter = IntentFilter()
-                intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-                applicationContext.registerReceiver(onDownloadComplete, intentFilter)
-                val downloadRequest = DownloadManager.Request(Uri.parse(url))
-                    .setTitle("오디오북 다운로드 중")
-                    .setDescription("오디오파일을 다운로드 중입니다.")
-                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
-                    .setDestinationUri(Uri.fromFile(file))
-                    .setAllowedOverMetered(true)
-                    .setAllowedOverRoaming(true)
-                downloadManager = applicationContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-                downloadId = downloadManager.enqueue(downloadRequest)
                 Result.success()
+//                val file = File(applicationContext.getExternalFilesDir(
+//                    Environment.DIRECTORY_MUSIC), "myAudio.wav")
+////                val path = file.path
+////                Log.d("test", "${path}")
+////        val url = "http://10.0.2.2:8000/media/tmp/file_example_MP3_700KB.mp3"
+////        Log.d("test", "${url}")
+//                val url = "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3"
+//                val intentFilter = IntentFilter()
+//                intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+//                applicationContext.registerReceiver(onDownloadComplete, intentFilter)
+//                val downloadRequest = DownloadManager.Request(Uri.parse(url))
+//                    .setTitle("오디오북 다운로드 중")
+//                    .setDescription("오디오파일을 다운로드 중입니다.")
+//                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+//                    .setDestinationUri(Uri.fromFile(file))
+//                    .setAllowedOverMetered(true)
+//                    .setAllowedOverRoaming(true)
+//                downloadManager = applicationContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+//                downloadId = downloadManager.enqueue(downloadRequest)
+//                val outputData = Data.Builder()
+//                    .putLong("downloadId", downloadId)
+//                    .build()
             } else {
                 Result.failure()
             }
@@ -76,8 +81,11 @@ class UploadWorker(appContext: Context, workerParams: WorkerParameters):
                     if (status == DownloadManager.STATUS_SUCCESSFUL) {
                         Log.d("test", "다운로드 성공")
                         Toast.makeText(context, "Download succeeded", Toast.LENGTH_SHORT).show()
+
+                        // file 데이터를 리턴해주어야 한다.
                         val file = File(applicationContext.getExternalFilesDir(
                             Environment.DIRECTORY_MUSIC), "myAudio.wav")
+
                         val mediaPlayer = MediaPlayer()
                         mediaPlayer.setDataSource(file.path)
                         mediaPlayer.prepare()

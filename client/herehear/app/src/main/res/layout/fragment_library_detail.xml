@@ -90,13 +90,48 @@
             android:text="title"
             android:textSize="20sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/listenButton"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/audiobook_customize"
+                android:fontFamily="@font/bmjua"
+                android:text="책 듣기"
+                android:textSize="14sp"
+                app:iconGravity="textStart" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/readButton"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/paperbook_customize"
+                android:fontFamily="@font/bmjua"
+                android:text="책 읽기"
+                app:iconGravity="textStart" />
+
+        </LinearLayout>
+
         <RatingBar
             android:id="@+id/ratingBar"
             style="@style/Widget.AppCompat.RatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
             android:numStars="5"
             android:progressTint="#FFEB3B"
             android:secondaryProgressTint="#FFEB3B"

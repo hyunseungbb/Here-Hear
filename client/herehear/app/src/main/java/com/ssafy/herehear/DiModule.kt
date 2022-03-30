@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.ssafy.herehear.data.local.dao.BookDao
 import com.ssafy.herehear.data.local.dao.LibraryDao
 import com.ssafy.herehear.data.local.database.DatabaseManager
+import com.ssafy.herehear.data.repository.CameraRepository
 import com.ssafy.herehear.data.repository.LibraryDetailRepository
 import com.ssafy.herehear.data.repository.LibraryMainRepository
 import com.ssafy.herehear.data.repository.SearchRepository
@@ -54,6 +55,15 @@ class DiModule {
         ioThreadScheduler: IoThreadScheduler
     ) : SearchRepository {
         return SearchRepository(libraryDao, bookDao, networkThreadScheduler, ioThreadScheduler)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCameraRepository(
+        networkThreadScheduler: NetworkThreadScheduler,
+        ioThreadScheduler: IoThreadScheduler
+    ): CameraRepository {
+        return CameraRepository(networkThreadScheduler, ioThreadScheduler)
     }
 
     @Singleton

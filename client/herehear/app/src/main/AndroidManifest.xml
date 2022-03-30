@@ -24,43 +24,46 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="n">
         <activity
+            android:name=".feature.home.readmode.audiobook.PlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".util.ProgressBarActivity"
-            android:screenOrientation="portrait"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".feature.home.readmode.CommentActivity"
-            android:screenOrientation="portrait"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".feature.home.readmode.paperbook.TimerActivity"
-            android:screenOrientation="portrait"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".feature.home.readmode.audiobook.AudioPlayActivity"
-            android:screenOrientation="portrait"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".feature.login.ui.login.LoginActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
-            android:label="LoginActivity" />
+            android:label="LoginActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".feature.signup.SignupActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
-            android:label="SignupActivity" />
+            android:label="SignupActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".feature.home.readmode.audiobook.Camera2Activity"
-            android:screenOrientation="portrait"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".IntroActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
