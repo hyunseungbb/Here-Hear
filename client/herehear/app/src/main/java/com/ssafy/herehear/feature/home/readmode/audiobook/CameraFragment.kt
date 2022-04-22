@@ -42,6 +42,7 @@ class CameraFragment : CameraBaseFragment() {
     val PERM_STORAGE = 99 // 외부 저장소 권한 처리
     val PERM_CAMERA = 100 // 카메라 권한 처리
     lateinit var mContext: Context
+    lateinit var workManager: WorkManager
     private val audioPlayViewModel: AudioPlayViewModel by activityViewModels()
     lateinit var binding: FragmentCameraBinding
     var realUri:Uri? = null
@@ -69,7 +70,9 @@ class CameraFragment : CameraBaseFragment() {
         ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
             result.data?.data?.let { uri ->
+
                 realPath = getRealPathFromURI(uri)
+                audioPlayViewModel.realPath = realPath
                 binding.imagePreview.setImageURI(uri)
             }
         }
@@ -88,13 +91,6 @@ class CameraFragment : CameraBaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         requirePermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), PERM_STORAGE)
 
-        binding.cameraBackButton.setOnClickListener {
-            activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.remove(this)
-                ?.commit()
-        }
-
         binding.cameraNextButton.setOnClickListener {
             if (realPath != null) {
                 showPopup()
@@ -102,6 +98,17 @@ class CameraFragment : CameraBaseFragment() {
                 Toast.makeText(mContext.applicationContext, "사진을 선택해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        audioPlayViewModel.downloadStatus.observe(viewLifecycleOwner, Observer { downloadStatus ->
+            if (downloadStatus) {
+                val activity = requireActivity()
+                activity.supportFragmentManager.beginTransaction()
+                    .remove(this)
+                    .commit()
+            } else {
+                Toast.makeText(context, "Download failed", Toast.LENGTH_SHORT).show()
+            }
+        })
 
     }
 
@@ -210,7 +217,7 @@ class CameraFragment : CameraBaseFragment() {
             .setInputData(inputData2)
             .build()
         WorkManager.getInstance(mContext.applicationContext)
-            .getWorkInfoByIdLiveData(downloadWorkRequest.id)
+            .getWorkInfoByIdLiveData(uploadWorkRequest.id)
             .observe(viewLifecycleOwner, Observer { workInfo ->
                 if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
                     // 서버에서 다운로드 하기. 이걸 viewmodel에서 하자.
@@ -219,45 +226,45 @@ class CameraFragment : CameraBaseFragment() {
             })
     }
 
-    private val mReceiver = object: BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent!!.action)) {
-                if (downloadId == id) {
-                    Log.d("test", "!!!!!!!!!")
-                    val query: DownloadManager.Query = DownloadManager.Query()
-                    query.setFilterById(id)
-                    var cursor = downloadManager.query(query)
-                    if (!cursor.moveToFirst()) {
-                        return
-                    }
-
-                    var columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
-                    var status = cursor.getInt(columnIndex)
-                    if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                        Log.d("test", "다운로드 성공")
-                        Toast.makeText(context, "Download succeeded", Toast.LENGTH_SHORT).show()
-
-                        // file 데이터를 리턴해주어야 한다.
-                        val file = File(mContext.applicationContext.getExternalFilesDir(
-                            Environment.DIRECTORY_MUSIC), "myAudio.wav")
-
-                        val mediaPlayer = MediaPlayer()
-                        mediaPlayer.setDataSource(file.path)
-                        mediaPlayer.prepare()
-                        mediaPlayer.seekTo(0)
-                        mediaPlayer.start()
-                    } else if (status == DownloadManager.STATUS_FAILED) {
-                        Log.d("test", "다운로드 실패")
-                        Toast.makeText(context, "Download failed", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(intent.action)) {
-                Toast.makeText(context, "Notification clicked", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    }
+//    private val mReceiver = object: BroadcastReceiver() {
+//        override fun onReceive(context: Context?, intent: Intent?) {
+//            val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+//            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent!!.action)) {
+//                if (downloadId == id) {
+//                    Log.d("test", "!!!!!!!!!")
+//                    val query: DownloadManager.Query = DownloadManager.Query()
+//                    query.setFilterById(id)
+//                    var cursor = downloadManager.query(query)
+//                    if (!cursor.moveToFirst()) {
+//                        return
+//                    }
+//
+//                    var columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+//                    var status = cursor.getInt(columnIndex)
+//                    if (status == DownloadManager.STATUS_SUCCESSFUL) {
+//                        Log.d("test", "다운로드 성공")
+//                        Toast.makeText(context, "Download succeeded", Toast.LENGTH_SHORT).show()
+//
+//                        // file 데이터를 리턴해주어야 한다.
+//                        val file = File(mContext.applicationContext.getExternalFilesDir(
+//                            Environment.DIRECTORY_MUSIC), "myAudio.wav")
+//
+//                        val mediaPlayer = MediaPlayer()
+//                        mediaPlayer.setDataSource(file.path)
+//                        mediaPlayer.prepare()
+//                        mediaPlayer.seekTo(0)
+//                        mediaPlayer.start()
+//                    } else if (status == DownloadManager.STATUS_FAILED) {
+//                        Log.d("test", "다운로드 실패")
+//                        Toast.makeText(context, "Download failed", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            } else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(intent.action)) {
+//                Toast.makeText(context, "Notification clicked", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//
+//    }
 
     private fun showPopup() {
         val inflater = activity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -267,12 +274,12 @@ class CameraFragment : CameraBaseFragment() {
         val alertDialog = AlertDialog.Builder(mContext)
             .setTitle("버전을 선택해주세요.")
             .setItems(mList, DialogInterface.OnClickListener { dialogInterface, i ->
-                binding.progressLayout.visibility = View.VISIBLE
+//                binding.progressLayout.visibility = View.VISIBLE
                 try {
                     when (i) {
                         0 -> {
                             setWorkManager()
-                            WorkManager.getInstance(mContext.applicationContext)
+                            workManager
                                 .beginWith(uploadWorkRequest)
                                 .enqueue()
                         }
@@ -293,5 +300,6 @@ class CameraFragment : CameraBaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
+        workManager = WorkManager.getInstance(mContext.applicationContext)
     }
 }

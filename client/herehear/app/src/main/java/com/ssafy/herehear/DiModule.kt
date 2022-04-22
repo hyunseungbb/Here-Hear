@@ -2,13 +2,11 @@ package com.ssafy.herehear
 
 import android.content.Context
 import androidx.room.Room
+import com.ssafy.herehear.data.local.dao.AudioDao
 import com.ssafy.herehear.data.local.dao.BookDao
 import com.ssafy.herehear.data.local.dao.LibraryDao
 import com.ssafy.herehear.data.local.database.DatabaseManager
-import com.ssafy.herehear.data.repository.CameraRepository
-import com.ssafy.herehear.data.repository.LibraryDetailRepository
-import com.ssafy.herehear.data.repository.LibraryMainRepository
-import com.ssafy.herehear.data.repository.SearchRepository
+import com.ssafy.herehear.data.repository.*
 import com.ssafy.herehear.util.schedulers.IoThreadScheduler
 import com.ssafy.herehear.util.schedulers.NetworkThreadScheduler
 import com.ssafy.herehear.util.schedulers.ThreadScheduler
@@ -68,6 +66,16 @@ class DiModule {
 
     @Singleton
     @Provides
+    fun audioPlayRepository(
+        audioDao: AudioDao,
+        networkThreadScheduler: NetworkThreadScheduler,
+        ioThreadScheduler: IoThreadScheduler
+    ): AudioPlayRepository {
+        return AudioPlayRepository(audioDao, networkThreadScheduler, ioThreadScheduler)
+    }
+
+    @Singleton
+    @Provides
     fun provideDatabaseManager(@ApplicationContext context: Context) : DatabaseManager {
         return Room.databaseBuilder(
             context,
@@ -88,6 +96,12 @@ class DiModule {
     @Provides
     fun provideBookDao(databaseManager: DatabaseManager): BookDao {
         return databaseManager.bookDao
+    }
+
+    @Singleton
+    @Provides
+    fun provideAudioDao(databaseManager: DatabaseManager): AudioDao {
+        return databaseManager.audioDao
     }
 
     @Singleton

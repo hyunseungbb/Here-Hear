@@ -1,6 +1,5 @@
 package com.ssafy.herehear.data.local.entity
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.ssafy.herehear.data.local.entity.Audio.Companion.TABLE_NAME
@@ -8,9 +7,9 @@ import com.ssafy.herehear.data.local.entity.Audio.Companion.TABLE_NAME
 @Entity(tableName = TABLE_NAME)
 data class Audio(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long = 0,
     val title: String,
-    val book_id: Long,
+    val book_id: Int,
     val directory: String
 ) {
     companion object {

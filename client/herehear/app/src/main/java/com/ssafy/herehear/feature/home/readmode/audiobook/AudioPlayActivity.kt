@@ -25,7 +25,7 @@ class AudioPlayActivity : AppCompatActivity() {
     private lateinit var downloadManager: DownloadManager
     private lateinit var binding: ActivityAudioPlayBinding
     private lateinit var file: File
-    private lateinit var mediaPlayer: MediaPlayer
+    lateinit var mediaPlayer: MediaPlayer
     private var position = 0
     val handler = Handler(Looper.getMainLooper()) {
         changeImage()

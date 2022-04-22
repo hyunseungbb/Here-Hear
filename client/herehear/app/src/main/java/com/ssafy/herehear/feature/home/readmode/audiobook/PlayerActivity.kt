@@ -2,6 +2,7 @@ package com.ssafy.herehear.feature.home.readmode.audiobook
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.ssafy.herehear.BaseActivity
@@ -18,6 +19,7 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_player)
 
         bookId = intent.getIntExtra("bookId", -1)
+        Log.d("test", "현재 bookId는 ${bookId}")
         audioPlayViewModel.saveBookId(bookId)
 
         if (savedInstanceState == null) {
@@ -25,8 +27,6 @@ class PlayerActivity : AppCompatActivity() {
                 .add(R.id.playerFrameLayout, AudioPlayFragment())
                 .commit()
         }
-
-
     }
 
 }
