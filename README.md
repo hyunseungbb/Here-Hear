@@ -1,22 +1,13 @@
 # Here Hear
 
-> 쉽고 간편한 독서기록을 통해 책 읽는 습관을 길러주는 서비스
->
-> 실시간 오디오북 변환 기능을 통해 원하는 오디오북을 만들 수 있는 서비스
->
-> 개발팀 : 내경에 귀읽기
->
-> 개발 기간: 2021.08.30 ~ 2021.10.08
+![herehear](README.assets/herehear.png)
 
-
-
-## :clapper: UCC
-
-
-
-## :link: 구글플레이스토어 
-
-https://play.google.com/store/apps/details?id=com.ssafy.herehear
+> - 독서 기록 및 오디오북 변환 안드로이드 App
+>- 독서 습관 형성 및 독서 환경 제공 서비스
+> - 개발팀 : 내경에 귀읽기
+>- 개발 기간: 2021.08.30 ~ 2021.10.08
+> - [:clapper: UCC](https://youtu.be/drAe9w6C9G0)
+>- [:link: 플레이스토어](https://play.google.com/store/apps/details?id=com.ssafy.herehear )
 
 
 
@@ -41,15 +32,25 @@ https://play.google.com/store/apps/details?id=com.ssafy.herehear
 
 
 
-## :man_technologist: 기술스택
+## ✋ 맡은 역할
 
-`Kotlin`, `MVVM`, `RxJava`, `AAC`, `ViewModel`, `LiveData`, `MediaPlayer`, `WorkManager`, `Coroutine`, `OkHttp`, `Retrofit2`, `Hilt`
+- 기획
+- 안드로이드 개발
+  - 오디오 변환 및 플레이 기능
+  - 캘린더 기능
 
 
 
 ## 프로젝트 구조
 
-![img](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/5394f114-4928-4e0a-b784-8ee9efcd418b/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220322%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220322T095116Z&X-Amz-Expires=86400&X-Amz-Signature=360e0e14a6c671a2fb3d0fbcd2d1d01785c159ea9656e9e5190937c8a00e76fb&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
+![image-20220424231921859](README.assets/image-20220424231921859.png)
 
 
 
+## 안드로이드 구조
+
+![image-20220424232036135](README.assets/image-20220424232036135.png)
+
+### :man_technologist: 기술스택
+
+`Kotlin`, `MVVM`, `RxJava`, `AAC`, `ViewModel`, `LiveData`, `MediaPlayer`, `WorkManager`, `Coroutine`, `OkHttp`, `Retrofit2`, `Hil
